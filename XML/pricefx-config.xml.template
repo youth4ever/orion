@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<pricefx-configuration>
+	<!-- NOTE: The commited version MUST be with QA system configuration !! -->
+
+	<!-- A logical name for this node -->
+	<nodeName>%%nodeName%%</nodeName>
+	
+	<!-- 	Setting this to false will enable additional sanity + security checks
+			i.e. authentication will always be required Calling this development_mode
+			and not production_mode to be on the safe side (default for non-configured
+			boolean values is false) 
+	-->
+	<developmentMode>%%developmentMode%%</developmentMode>
+	
+	<!--	Sets the readonly mode of the entire JVM. If set to true no data modifications to the DB will be made.
+			This mode can also be set via the UI/API 
+	 -->
+	<readOnlyMode>%%readOnlyMode%%</readOnlyMode>
+	
+	<!-- Disable authentication. Only available in dev mode -->
+	<authenticationDisabled>%%authenticationDisabled%%</authenticationDisabled>
+	
+	<!-- Disables authorization checks (roles).  Only available in dev mode -->
+	<authorizationDisabled>%%authorizationDisabled%%</authorizationDisabled>
+	
+	<!-- Enables initial bootstrapping of the application. Will be skipped if bootstrapping ran once, but can be disabled here as well -->
+	<allowBootstrap>%%allowBootstrap%%</allowBootstrap>
+	
+	<!-- Default system locale (for error messages, etc) -->
+	<defaultLocale>%%defaultLocale%%</defaultLocale>
+	
+	<!-- A list of all available locales -->
+	<configuredLocales>%%configuredLocales%%</configuredLocales>
+	
+	<!-- The external URL this system is accessed from (e.g. used for links in workflow emails) -->
+	<baseURL>%%baseURL%%</baseURL>
+	
+	<!-- Allow the connection of a remote script debugger. Only available in dev mode  -->
+	<allowRemoteScriptDebugging>%%allowRemoteScriptDebugging%%</allowRemoteScriptDebugging>
+	
+	<!-- Connection port for a remote script debugger -->
+	<rmiRegistryPort>%%rmiRegistryPort%%</rmiRegistryPort>
+	
+	<!-- 	This setting allows to enable different code blocks per node, i.e. to separate load or perform background work
+		  	only on non-user nodes
+		  	Note: The embedded Jetty will always start, so the usernode setting can only be disabled by not
+		  	specifying the particular node in Apache's proxy config
+		  	
+		  	Currently existing server roles:
+		  	- UserNode (cannot be disabled here; listed just for completeness)
+		  	- ListProcessor
+		  	- EmailProcessor
+		  	- DatamartHost
+		  	- EventProcessor
+		  	- DatamartCalculationFlowProcessor
+		  	- CalculationSlave
+	-->
+	<serverRoles>%%serverRoles%%</serverRoles>
+	<!-- This node to log events from all nodes in the cluster? 
+	     Note: must only have one event logger in the whole cluster! -->
+	<logEvents>%%logEvents%%</logEvents>
+	<!-- If Jolokia is not not enabled, MBeans will be registerd on the MBeanlatformServer.
+	     This may be desirable in environments with traditional JMX integegraiton -->
+	<jolokia>
+		<enabled>%%jolokiaenabled%%</enabled>
+	</jolokia>
+	
+	
+	<!-- Configuration entries for background processes -->
+	<backgroundWorkers>
+		<!-- Check interval for new tasks in ms -->
+		<pollingPeriod>%%pollingPeriod%%</pollingPeriod>
+		<calculationWorker>
+			<!-- number of max background calculation threads per partition -->
+			<numberOfThreadsPerPartition>%%numberOfThreadsPerPartition%%</numberOfThreadsPerPartition>	
+		</calculationWorker>
+	</backgroundWorkers>
+	<calculationTasks>
+		<commitBatchSize>%%commitBatchSize%%</commitBatchSize>
+	</calculationTasks>
+	
+	<!--  Configuration values applicable if the node is a calculation slave --> 
+	<calculationSlave>
+		<!-- Number of maximum concurrent slave threads (global) -->
+		<maxSlaveThreads>%%maxSlaveThreads%%</maxSlaveThreads>
+		<!-- Backlog scheduling strategy. I.e. in which order are calculation requests processed if they cannot be served immediately?
+			 Possible values: FIFO, LIFO, RANDOM, NONE
+			 If NONE is selected the node does not accept backlogged threads -->
+		<schedulingStrategy>%%schedulingStrategy%%</schedulingStrategy>
+		<!-- Timeout in seconds when the queues are timedout -->
+		<requestQueueTimeoutSec>%%requestQueueTimeoutSec%%</requestQueueTimeoutSec>
+		<responseQueueTimeoutSec>%%responseQueueTimeoutSec%%</responseQueueTimeoutSec>
+	</calculationSlave>
+	
+	<!-- Determines the number of entries the server processes in a in-memory list or switches to streaming mode -->
+	<maxNonStreamFetchSize>%%maxNonStreamFetchSize%%</maxNonStreamFetchSize>
+	
+	<!-- The HTTP port that the backend listens to -->
+	<jetty>
+		<port>%%jettyport%%</port>
+	</jetty>
+	
+	<!-- Outgoing email configuration -->
+	<email>
+		<!-- DNS or IP of outbound email smarthost -->
+		<smartHost>%%smartHost%%</smartHost>
+		<!-- true is smart host requires a user name/password authentication -->
+		<authRequired>%%authRequired%%</authRequired>
+		<username></username>
+		<password></password>
+		
+		<!-- Port of smart host. Usually 25 SMTP -->
+		<port>%%emailport%%</port>
+		
+		<!-- Transport layer type of email connection to smart host. Can be SSL or TLS. Default is PLAIN -->		
+		<transport></transport>
+		
+		<!-- Max number of email a thread sends per invokation -->
+		<batchSize>%%batchSize%%</batchSize>
+		
+		<!-- Retry period in seconds -->
+		<retryDelayInSecs>%%retryDelayInSecs%%</retryDelayInSecs>
+		
+		<!-- System-wide email redirection. If value is set ALL emails go to this email instead -->
+		<redirectTo></redirectTo>
+		
+		<!-- System wide email bcc. All emails will be bcc'ed to this address -->
+		<bcc></bcc>
+		
+		<!-- From address and name of sent emails -->
+		<fromAddress>%%fromAddress%%</fromAddress>
+		<fromName>%%fromName%%</fromName>
+	</email>
+	
+	<!--  Outgoing Event processing options-->
+	<event>
+		<!-- Enable/Disable purgin of old (=no retries left) events -->
+		<purgeOldEvents>%%purgeOldEvents%%</purgeOldEvents>
+		
+		<!-- Controls how many days an old event is kept (if purging is active) depending on event state. Sucessful events are those that have been delivered with HTTP status 200 -->
+		<retainEventsInDays>
+			<successful>%%retainEventssuccessful%%</successful>
+			<failed>%%retainEventsfailed%%</failed>
+		</retainEventsInDays>
+	</event>
+	
+	<!-- Excel related configuration -->
+    <excel>
+    	<!-- Excel responses create a temp file when being constructed. Should this temp file be deleted afterwards? -->
+        <deleteTemplateAfterSerialization>%%deleteTemplateAfterSerialization%%</deleteTemplateAfterSerialization>
+        <defaultDateFormatPattern>%%defaultDateFormatPattern%%</defaultDateFormatPattern>
+        
+        <!-- Temporary files directory -->
+        <tempDirectory>%%exceltempDirectory%%</tempDirectory>
+        
+        <!-- Default fallback template (if no partition specifc template is configured) -->
+        <templateFile>%%exceltemplateFile%%</templateFile>
+        
+        <!-- Excel client source file location -->
+        <client>%%excelclient%%</client>
+    </excel>
+    
+    <!-- c3po connection pool configuration. See also http://www.mchange.com/projects/c3p0/-->
+	<c3p0>
+		<maxPoolSize>%%maxPoolSize%%</maxPoolSize>
+		<minPoolSize>%%minPoolSize%%</minPoolSize>
+		<maxIdleTime>%%maxIdleTime%%</maxIdleTime>
+        <maxAdministrativeTaskTime>%%maxAdministrativeTaskTime%%</maxAdministrativeTaskTime>
+		<idleConnectionTestPeriod>%%idleConnectionTestPeriod%%</idleConnectionTestPeriod>
+	</c3p0>	   
+	
+	<!-- boneCP connection pool configuration. See also http://jolbox.com/configuration.html-->
+	<!-- 
+	<bonecp>
+		<setIdleMaxAgeInMinutes>4</setIdleMaxAgeInMinutes>
+		<setIdleConnectionTestPeriodInMinutes>1</setIdleConnectionTestPeriodInMinutes>
+		<partitionCount>3</partitionCount>
+		<acquireIncrement>2</acquireIncrement>
+		<maxConnectionsPerPartition>10</maxConnectionsPerPartition>
+		<minConnectionsPerPartition>4</minConnectionsPerPartition>
+		<statementsCacheSize>50</statementsCacheSize>
+		<releaseHelperThreads>1</releaseHelperThreads>
+	</bonecp>
+	-->
+	<bonecp>
+		<idleMaxAgeInMinutes>%%bonecpidleMaxAgeInMinutes%%</idleMaxAgeInMinutes>
+		<idleConnectionTestPeriodInMinutes>%%bonecpidleConnectionTestPeriodInMinutes%%</idleConnectionTestPeriodInMinutes>
+		<partitionCount>%%bonecppartitionCount%%</partitionCount>
+		<acquireIncrement>%%bonecpacquireIncrement%%</acquireIncrement>
+		<maxConnectionsPerPartition>%%bonecpmaxConnectionsPerPartition%%</maxConnectionsPerPartition>
+		<minConnectionsPerPartition>%%bonecpminConnectionsPerPartition%%</minConnectionsPerPartition>
+        	<statementsCacheSize>%%bonecpstatementsCacheSize%%</statementsCacheSize>
+		<releaseHelperThreads>%%bonecpreleaseHelperThreads%%</releaseHelperThreads>
+	</bonecp>
+
+	
+	<!-- Use hibernate override configuration (only relevant in an Oracle setup) -->
+	<hibernateOverride>%%hibernateOverride%%</hibernateOverride>
+	
+	<!-- Production systems will always skip anyway. But for multi-node dev instances it may be desirable that only one node performs schema updates -->
+	<hibernateSkipSchemaUpdate>%%hibernateSkipSchemaUpdate%%</hibernateSkipSchemaUpdate>
+	
+	<!-- Hibernate configuration. See also http://docs.jboss.org/hibernate/core/4.3/manual/en-US/html/ -->
+	<hibernate>
+		<cache>
+			<region>
+				<!-- <factory_class>com.hazelcast.hibernate.HazelcastLocalCacheRegionFactory</factory_class>  -->
+				<factory_class>%%factory_class%%</factory_class>
+			</region>
+			<hazelcast>
+				<instance_name>%%instance_name%%</instance_name>
+				<shutdown_on_session_factory_close>%%shutdown_on_session_factory_close%%</shutdown_on_session_factory_close>
+			</hazelcast>
+			<use_second_level_cache>%%use_second_level_cache%%</use_second_level_cache>
+			<use_query_cache>%%use_query_cache%%</use_query_cache>
+			<use_minimal_puts>%%use_minimal_puts%%</use_minimal_puts>			
+		</cache>
+		<connection>
+			<!-- NOTE: The commited version MUST be with QA system configuration !! -->
+			<!-- QA System config -->
+			<driver_class>%%driver_class%%</driver_class>
+			<url>%%mysqlurl%%</url>
+			<username>%%mysqlusername%%</username>
+			<password>%%mysqlpassword%%</password>
+			<schema>%%schema%%</schema>
+			<!-- using BoneCP rather than C3P0 for JDBC4 support -->				
+			<!-- <provider_class>org.hibernate.c3p0.internal.C3P0ConnectionProvider</provider_class> -->
+			
+			<!-- Uncomment once BoneCP is fully compatible with latest Hibernate releases! -->
+			<!-- <provider_class>com.jolbox.bonecp.provider.BoneCPConnectionProvider</provider_class> -->
+			<provider_class>%%provider_class%%</provider_class>
+		</connection>
+	
+		<current_session_context_class>%%current_session_context_class%%</current_session_context_class>
+		<dialect>%%dialect%%</dialect>
+		<generate_statistics>%%generate_statistics%%</generate_statistics>
+		<!-- in production mode this setting will be ignored !!
+			 we do not allow any auto schema updates in production mode. 
+			 THEY NEED TO BE MANUAL -->
+		<hbm2ddl>			
+			<auto>%%hbm2ddlauto%%</auto>
+		</hbm2ddl>
+		<id>
+			<new_generator_mappings>%%new_generator_mappings%%</new_generator_mappings>
+		</id>
+		<jdbc>
+			<batch_size>%%jdbcbatch_size%%</batch_size>
+			<batch_versioned_data>%%batch_versioned_data%%</batch_versioned_data>
+		</jdbc>
+		<order_updates>%%order_updates%%</order_updates>
+		<show_sql>%%show_sql%%</show_sql>
+
+	</hibernate>
+	
+	<!-- package path for domain classes. Do not change. -->
+	<domainClassesPaths>
+		%%domainClassesPaths%%		
+	</domainClassesPaths>
+	
+	<!-- Configuration settings for main formula angine -->
+	<formulaEngine>
+		<!-- Engine class. Do not change -->
+		<engine>%%engine%%</engine>
+		
+		<!-- Formulas can be auto-dumped to file upon saving. E.g. for audit tracking -->
+		<dumpFormulasFolder>%%dumpFormulasFolder%%</dumpFormulasFolder>
+		<dumpFormulas>%%dumpFormulas%%</dumpFormulas>
+		
+		<!-- Size of LRU cache for formula objects (e.g. VLookup values etc) -->
+		<cacheSize>%%cacheSize%%</cacheSize>
+		
+		<!-- Sandbox limitations for groovy scrips -->
+		<script>
+			%%script%%		
+		</script>
+	</formulaEngine>
+	
+	<!-- Password checking service implementation -->
+	<passwordService>%%passwordService%%</passwordService>
+	
+	<!-- Request dispatcher options -->
+	<commandDispatcher>
+		<!-- Package path of request handlers. Do not change -->
+		<commandsPath>%%commandsPath%%</commandsPath>
+		
+		<!-- Request interceptors -->
+		<interceptors>
+			%%interceptors%%
+		</interceptors>
+	</commandDispatcher>
+	
+	<!-- Known currency configuration -->
+	<currency>
+		<pathToDefault>%%pathToDefault%%</pathToDefault>
+		<defaultBaseCurrencyCode>%%defaultBaseCurrencyCode%%</defaultBaseCurrencyCode>
+	</currency>
+	
+	<!-- UOM configuration -->
+	<unitOfMeasure>
+		<defaultBaseUOMCode>%%defaultBaseUOMCode%%</defaultBaseUOMCode>
+	</unitOfMeasure>
+	
+	<!-- Filearea configuration. Currently not used. Do not change -->
+	<filespace>
+		<rootPath>%%rootPath%%</rootPath>
+		<spaceSuffix>%%spaceSuffix%%</spaceSuffix>
+		<uploadScript>%%uploadScript%%</uploadScript>
+	</filespace>
+	<datamart>
+		<database>
+			<type>%%type%%</type>
+			<driver_class>%%driver_class_lucid%%</driver_class>
+			<url>%%luciddburl%%</url>
+			<skipBootstrapping>%%skipBootstrapping%%</skipBootstrapping>
+			<system>
+				<serverHttpPort>%%serverHttpPort%%</serverHttpPort>
+				<cachePagesMax>%%cachePagesMax%%</cachePagesMax>
+				<cachePagesInit>%%cachePagesInit%%</cachePagesInit>
+				<tempInitSize>%%tempInitSize%%</tempInitSize>
+				<codeCacheMaxBytes>%%codeCacheMaxBytes%%</codeCacheMaxBytes>
+				<prefetchPagesMax>%%prefetchPagesMax%%</prefetchPagesMax>
+				<databaseIncrementSize>%%databaseIncrementSize%%</databaseIncrementSize>
+				<databaseTxnLogInitSize>%%databaseTxnLogInitSize%%</databaseTxnLogInitSize>
+				<databaseTxnLogIncrementSize>%%databaseTxnLogIncrementSize%%</databaseTxnLogIncrementSize>
+				<databaseShadowLogInitSize>%%databaseShadowLogInitSize%%</databaseShadowLogInitSize>
+				<databaseShadowLogIncrementSize>%%databaseShadowLogIncrementSize%%</databaseShadowLogIncrementSize>
+				<tempIncrementSize>%%tempIncrementSize%%</tempIncrementSize>
+				<expectedConcurrentStatements>%%expectedConcurrentStatements%%</expectedConcurrentStatements>
+				<cacheReservePercentage>%%cacheReservePercentage%%</cacheReservePercentage>
+				<deviceSchedulerType>%%deviceSchedulerType%%</deviceSchedulerType>
+			</system>
+			<backup>
+				<destination>%%destination%%</destination>
+			</backup>
+		</database>
+		<schema>
+			<pathToSchemasFolder>%%pathToSchemasFolder%%</pathToSchemasFolder>
+		</schema>
+		
+		<!-- PA data load paramaters -->
+		<dataLoad>
+			<!-- Max number of rows that can be loaded in a single batch (datamart.loaddata request)  -->
+			<maxRowsPerBatch>%%maxRowsPerBatch%%</maxRowsPerBatch>
+			
+			<!-- Max batch size used by data load clients when splitting up large files before upload to Price f(x) -->
+			<maxRowsPerDataChunk>%%maxRowsPerDataChunk%%</maxRowsPerDataChunk>
+
+		</dataLoad>
+		<persistence>
+			<rowDeleteBatchSize>%%rowDeleteBatchSize%%</rowDeleteBatchSize>
+			<logSQL>%%logSQL%%</logSQL>
+		</persistence>
+		<discretization>
+			<resolution>%%resolution%%</resolution>
+			<maxPointsPerDimUnit>%%maxPointsPerDimUnit%%</maxPointsPerDimUnit>
+			<maxLabelsInSummary>%%maxLabelsInSummary%%</maxLabelsInSummary>
+		</discretization>
+		<query>
+			<!-- Enable/disable local query result cache on a non-PA node -->
+			<resultCacheEnabled>%%resultCacheEnabled%%</resultCacheEnabled>
+			
+			<!-- Max nummbers of rows in an internal query result, i.e. before any post-processing (for example discretization) -->
+			<internalRowLimit>%%internalRowLimit%%</internalRowLimit>
+			
+			<!-- Max nummbers of rows in the result set returned to the client; this includes a client requested export to Excel -->
+			<externalRowsLimit>%%externalRowsLimit%%</externalRowsLimit>
+
+			<!-- Max nummbers of rows in a fetch response -->
+			<fetchRowLimit>%%fetchRowLimit%%</fetchRowLimit>			
+		</query>
+
+	</datamart>	
+	
+	
+</pricefx-configuration>

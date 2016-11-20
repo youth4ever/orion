@@ -1,0 +1,112 @@
+.LOG
+10:08 AM 12/5/2014
+
+==============================================================
+#	LIST	(MUTABLE OBJECTS)
+In [20]: a = [66.25, 333, 333, 1, 1234.5, 'sd', '###']
+
+In [21]: type(a)
+Out[21]: list
+In[22]: len(a)
+Out[22]: 7
+#	Call an element of the list
+In [34]: a[3]
+Out[34]: 1
+In [35]: a
+Out[35]: [66.25, 333, 333, 1, 1234.5, 'sd', '###']
+#	Modify	an element of the list
+In [36]: a[3] = '343re%'
+#	Print the new list
+In [37]: a
+Out[37]: [66.25, 333, 333, '343re%', 1234.5, 'sd', '###']
+
+
+==============================================================
+#	STRING
+In [23]: b='123213sdfds%^&'
+In [25]: print(b)
+123213sdfds%^&
+In [24]: type(b)
+Out[24]: str
+
+==============================================================
+
+#	TUPLE		(IMMUTABLE OBJECT)	
+months = ('January','February','March','April','May','June',\
+'July','August','September','October','November','  December')
+In [31]: type(months)
+Out[31]: tuple
+In [40]: months[2]
+Out[40]: 'March'
+
+#	Trying to modify an element generates an error:	
+In [41]: months[2] = 'Martie'
+TypeError: 'tuple' object does not support item assignment
+
+==============================================================
+
+#	DICTIONARY 	(MUTABLE)
+ages = {}
+#Add a couple of names to the dictionary
+ages['Sue'] = 23
+ages['Peter'] = 19
+ages['Andrew'] = 78
+ages['Karren'] = 45
+In [67]: type(ages)
+Out[67]: dict
+In [66]: print(ages.keys())
+dict_keys(['Andrew', 'Sue', 'Karren', 'Peter'])
+#	Modify a key:
+In [68]: ages['Karren'] = 453
+In [69]: ages
+Out[69]: {'Andrew': 78, 'Sue': 23, 'Karren': 453, 'Peter': 19}
+
+
+==============================================================
+
+# 	ARRAYS	(Are actually lists with homogeneous elements, same type)
+matrix=[[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+In [165]: type(matrix)
+Out[165]: list
+In [168]: for i in matrix:
+   .....:     print(i)
+   .....:
+[1, 3, 4, 5]
+[5, 6, 7, 8]
+[8, 9, 10, 11]
+
+==============================================================
+
+#	SETS (unordered collection with no duplicate elements)
+#Set objects also support mathematical operations like union, intersection, difference, and symmetric #difference.
+basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+In [172]: type(basket)
+Out[172]: set
+print(basket)                      # show that duplicates have been removed
+{'orange', 'banana', 'pear', 'apple'}
+>>> 'orange' in basket                 # fast membership testing
+True'
+#	Another way of making a set:
+>>> a = set('abracadabra')
+>>> b = set('alacazam')
+>>> a                                  # unique letters in a
+{'a', 'r', 'b', 'c', 'd'}
+>>> a - b                              # letters in a but not in b
+{'r', 'd', 'b'}
+>>> a | b                              # letters in either a or b
+{'a', 'c', 'r', 'd', 'b', 'm', 'z', 'l'}
+>>> a & b                              # letters in both a and b
+{'a', 'c'}
+>>> a ^ b                              # letters in a or b but not both
+{'r', 'd', 'b', 'm', 'z', 'l'}
+{'a', 'r', 'b', 'c', 'd'}
+
+#Similarly to list comprehensions, set comprehensions are also supported:
+
+>>>
+>>> a = {x for x in 'abracadabra' if x not in 'abc'}
+>>> a
+{'r', 'd'}
+
+==============================================================
+2:34 PM 12/9/2014

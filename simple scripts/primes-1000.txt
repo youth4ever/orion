@@ -1,0 +1,40 @@
+'''
+Python script to find the first 1000 prime numbers
+By Robert Huberdeau November 22, 2011
+
+EDITED 2/21
+I received an email from Warrick Holfeld that pointed out a few errors in my script. I was including 1 as a prime number, which is incorrect. I was missing the number 2, as I skipped it, and I was only getting the first 999 prime numbers. Warrick's updated code is below.
+
+I recently found out that MIT has some course material online for free. This includes lectures, projects and exams ( depending on the class ). I decided to take a look and so far I've watched the first Introduction to Computer Science class. Even though I work in tech, my degree is in psychology, so I thought this wouldn't be an awful class to start with.
+
+The scripting language used for this class is Python. I had no experience with Python so I'm learning as I'm going.
+The first real homework assignment is to write a script to find the first 1,000 prime numbers.
+This was a lot harder than I thought it would be- after a couple of hours, this is what I came up with:
+'''
+
+prime_count = 1
+start_number = 2
+number_to_check = 2
+while prime_count <= 1000:
+    result = number_to_check % start_number
+
+    if result > 0:
+        start_number +=1
+
+    elif result == 0:
+        if start_number == number_to_check:
+            print (number_to_check)
+            number_to_check +=1
+            prime_count +=1
+            start_number =2
+        else:
+            number_to_check +=1
+            start_number = 2
+'''
+The % command divides two integers and returns the remainder. So,  I start at 1 and then use a series of checks. 
+If the remainder is greater than zero, then I increment the count. So 5 divided by 3 gives a remainder of 2. In this case, I move from dividing by 3 to 4.
+If the result is zero and I'm dividing a number by itself, then I've found a prime number and increment in the prime number count, move to the next number and reset the divider back to 1.
+Otherwise, if the result is zero and the denominator is less than the numerator and I'm not dividing by 1, then I move to the next number. So, if I divide 9 by 3, I get a zero and move to the next number. 
+If I am dividing by 1, then I increment the divider by 1
+Tags: python prime numbers
+'''
