@@ -73,7 +73,6 @@ for i in range(0,len(mT)):
             continue
         elif j == 0 and i > 0 :
 
-
             #print(m[i][j])
             mT[i][j] += min ( mT[i-1][j], mT[i][j+1] )
         elif j == len(m)-1 and i > 0 :
