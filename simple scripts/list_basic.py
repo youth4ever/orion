@@ -185,6 +185,14 @@ for i in range(len(berbec)) :
         jaguar.remove(berbec[i])
 print(jaguar)
 
+print('\n ------------------------ REMOVE/ DELETE MANY ITEMS at ONCE  -------------')
+A = [3,5,4,7,9,8,1,2,10]
+print('Original List : ', A)
+rem = [3,4,5]
+print('Items to remove/ delete at once: ', rem)
+new_A = [i for i in A if i not in rem]
+print('The new_A list after we deleted the elements from rem list: ', new_A)
+
 
 print('\n ----------------------- Get the INDEX in a nested list : ------------------------')
 my_array=[['1', '2', '3', '7'], ['0', '1', '6', '9'], ['0', '1', '3', '9'], ['1', '2', '5', '8'], ['0', '1', '5', '8']]

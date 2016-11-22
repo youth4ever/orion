@@ -29,7 +29,150 @@ import time
 print('--------------------------TESTS------------------------------')
 
 
+from math import pi, sqrt, cos, sin, floor
+
+def toRadians(degrees):
+        return (degrees / 180.0) * pi
+
+def polar_to_X(r, theta):
+    alpha = (theta / 180.0) * pi
+    x = r * cos(alpha)
+    return x
+
+def polar_to_Y(r, theta):
+    alpha = (theta / 180.0) * pi
+    y = r * sin(alpha)
+    return y
+
+
+print('toRadians Function Test : ', toRadians(30))
+print('polar_to_X Function Test : ', polar_to_X(1, 1))
+print('polar_to_Y Function Test : ', polar_to_Y(1, 1))
+
+D = lambda deg : (deg / 180.0) * pi
+X = lambda r, theta :  r * cos(theta *pi / 180)
+Y = lambda r, theta :  r * sin(theta *pi / 180)
+
+print('lambda function to transform degrees to radians : ', D(180))
+print('lambda function to compute x coordinate : ', X(1, 90))
+print('lambda function to compute y coordinate : ', Y(1, 90),'\n')
+
+print('\n---------------   FUNCTIONS   ----------------')
+
+def trapez_path_area( coord1 , coord2 ):
+    a = abs( coord1[1] - coord2[1] )
+    b = abs( coord2[0] - coord1[0] )
+    c = sqrt(a*a+b*b)   # path
+    d = min( coord1[1], coord2[1]  )
+    Area = b*d + a*b/2
+    return Area, c
+
+c1 = trapez_path_area( (0, 250), (175, 250) )
+c2 = trapez_path_area( (175, 250), (250, 175) )
+print('\nTest for trapez_path_area Function Test : ' , trapez_path_area( (0, 250), (175, 250) )  ) # Looks good
+print('Test for trapez_path_area Function Test : ' , trapez_path_area( (175, 250), (250, 175) )  ) # Looks good
+#   The result from the Pb Example :                    Area/Path= 130.8746930309140822725709812975
+print(' Test Example Area : ',  c1[0]+c2[0] )
+print(' Test Example Path : ',  c1[1]*2+c2[1] )
+print(' Test Example Area/ Path : ',  (c1[0]+c2[0])/ (c1[1]*2+c2[1])  )
+
+##########################
+
+print('\n---------------- LIST COMPREHENSION CONSTRUCTION & TEST ------------------ ')
+
+T = [(50, 1, 0.12760710918852797), (50, 2, 0.18712193255732423), (50, 3, 0.10698612156756475), (50, 4, 0.17231669455435997), \
+     (49, 9, 0.19743351713887505), (49, 10, 0.03182672992502995), (48, 14, 0.22707124932629325), (48, 14, 0.20926071581091635), \
+     (47, 17, 0.10216972444784307), (46, 19, 0.23585791148561427), (46, 20, 0.15974973532676542), (45, 22, 0.10133468201072084),\
+     (44, 24, 0.1538819817007775), (42, 27, 0.2167603502850745), (42, 27, 0.24128839310243), (40, 30, 0.11353569783893745), (39, 31, 0.18114827894609165)]
+print('Minimum error in the entire list: ', [ i for i in T if i[2] == min( [j[2] for j in T ] ) ]   )
+print(  'Only errors with x=250 : ' ,     [ i  for i in T if  i[0]==50  ] )
+
+# SUPER TARE LIST COMPREHENSION, @ 2016-11-21, by Bogdan Trif
+print('Smallest error for x=250 : ',[ i for i in [ k  for k in T if  k[0]==50 ]  if i[2] == min( [ k[2]  for k in T if  k[0]==50 ])] )  #@ 2016-11-21, by Bogdan Trif
+
+######################################
+
+
+
 print('\n================  My FIRST SOLUTION,   ===============\n')
+t1  = time.time()
+
+
+def mouse_on_the_moon(epsilon) :
+    A =[]
+    for theta in range(1, 4501):
+    # for theta in range(1, 46, 15):
+        theta = theta/100
+        # theta = theta
+        x = X(250, theta)
+        y = Y(250, theta)
+        error = sqrt(  (abs(x - round(x)) )**2 + (abs(y - round(y)) )**2 )
+        print('x= ',x,'    y= ' ,y ,'            x_=', abs(x - round(x)) , '   y_= ',abs(y - round(y))   , '   xy_= ',error  )
+        if theta < 45 :
+            if error < epsilon : #( abs(x - round(x)) < epsilon  and   error < 0.25 ) :
+                xye = (round(x), round(y), error  )
+                A.append(xye)
+                print('------------      ' , round(x) , round(y),  '       -----------  x_ ', abs(x - round(x)) , '   y_  ',abs(y - round(y))   , '   xy_  ',error,'\n')
+
+    # print('\n\nInitial A array : ', A)
+
+    vals = (sorted(set([i[0] for i in A])))[::-1]
+    # print('\nOnly the filtered values that we need : ',vals )
+
+    # print('\n----------Extracting only the UNIQUE values with smallest deviation -----------')
+
+    B=[]
+    for val_ in vals :
+        SLC = [ i[0:2] for i in [ k  for k in A if  k[0]== val_ ]  if i[2] == min( [ k[2]  for k in A if  k[0]==val_ ])]
+        B.append(SLC[0])
+    # print('\nOnly the ( 0, pi/4 ) theta range integer values for the circle : \n',B)
+    for i in reversed(range(len(B))):   B.append( ( B[i][1] , B[i][0])  )
+
+    B.append((0,250))        # We append the starting point (0,50)
+    B = B[::-1]             # we reverse it as we start from theta =pi/2 and go clockwise
+    print('\n All the values from the I-st quarter of the trigonometric circle : \n', B)
+
+    Area, Edges = 0, 0
+    for i in range(1, len(B)) :
+        coord2 = B[i]
+        coord1 = B[i-1]
+        polygon = trapez_path_area(coord1, coord2)
+        Area += polygon[0]
+        Edges += polygon[1]
+        # print('Coordinates :   ',coord2, coord1, '   ;        Polygon:   ', polygon)
+    Edges += abs(B[1][0]-B[0][0])       # Here we add the last edge which was not calculated because the ending coordinate is missing
+    # print('Total Area : ', Area ,'        Total Edges run : ' , Edges , '     Ratio :  ', Area/Edges)
+    return Area, Edges, Area/Edges
+
+print('\nAnswer: ',mouse_on_the_moon(0.0666),'\n\n')
+
+
+max_ratio=0
+for m in range(500, 800):
+    m = m / 10000
+    R = mouse_on_the_moon( m )
+    res = R[2]
+    if res > max_ratio :
+        max_ratio = res
+        print('epsilon :    ', m ,'    Total Area, Total Edges run, Ratio :     '    , R  )
+
+print('\n',max_ratio)
+
+ # ######         ANSWERS :             #########
+
+# epsilon :     0.0666  , theta/100  , Total Area, Total Edges run, Ratio :      (49070.5, 392.69456422334963, 124.95843963882979)
+# epsilon :     0.06655                     Total Area, Total Edges run, Ratio :      (49070.5, 392.69456422334963, 124.95843963882979)
+
+2016-11-22, 20:20
+Not understood correctly the problem from the first time. I though that the shame must be a polygon as close to a circle,
+but actualy is NOT. Must re-DO
+
+
+
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
 
@@ -42,17 +185,6 @@ print('\n================  My FIRST SOLUTION,   ===============\n')
 
 
 
-
-
-
-
-
-
-
-# t1  = time.time()
-
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
 # print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

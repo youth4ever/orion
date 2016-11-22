@@ -2,7 +2,7 @@
 a = '0123456789'
 print(a[::2])               # Returns only the odd index elements, from 2 by 2
 print(a[1::2])               # Returns only the even index elements, from 2 by 2
-print(a[::-1])              #becomes 54321
+print(a[::-1])              #Reverses the string : becomes 54321
 print(a[::-2])              #becomes 531
 print(a[4::])              #from a fixed character to the end
 

@@ -77,7 +77,8 @@ for line in text.split('\n') :
 
 print('-------------------')
 
-# Spades - S , Hearts - H , Diamonds - D , Clubs - C
+# ♠ Spades - S ,   ♥ Hearts - H   ,  ♦  Diamonds - D , ♣ Clubs - C
+
 
 CARD = { '2':2, '3':3 , '4':4 , '5':5, '6':6 , '7':7, '8': 8 , '9': 9, 'T':10, 'J':12, 'Q':13, 'K':14, 'A' :15 }
 print(CARD)

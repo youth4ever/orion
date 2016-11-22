@@ -55,7 +55,7 @@ print(sieve(11000, 12001))
 print(gmpy2.is_prime(11))
 print(gmpy2.next_prime(8))
 
-print(pyprimes.awful_primes())
+
 
 # for i in pyprimes.awful_primes():    print(i)
 for i in pyprimes.nprimes(25):    print(i, end='  ')
@@ -126,6 +126,62 @@ print('\nUsing the method get_divisors from within the class : ', get_divisors()
 print('Using the method factor_pyprimes from within the class : ', get_divisors().factor_pyprimes(90)  )
 
 
+# def product_sum_k(n):
+#     ''':Description: Function which finds the **k**'s of a sum-product number
+#     :Example1:  product_sum_k(15)    returns [9] because :
+#
+#         :k=9: :  3*5*1*1*1*1*1*1*1  = 3+5+1+1+1+1+1+1+1 = 15
+#     :Example2:  product_sum_k(16)    returns [8,10] because :
+#
+#         :k=8: :  2*8*1*1*1*1*1*1  = 2+8+1+1+1+1+1+1 = 16
+#         :k=10: :  4*4*1*1*1*1*1*1*1*1  = 4+4+1+1+1+1+1+1+1+1 = 16
+#     :param: :n:   *int*, number for which *k* is calculated
+#     :return:    *list* containing all the **k**'s that a number n can have
+#     '''
+#     div = get_divisors().divisors(n)
+#     F = get_divisors().factor_pyprimes(n)
+#     p =  functools.reduce(operator.mul, F)    # Taking all terms
+#     ks = [ p-sum(F) + len(F) ]
+#     # p = list( functools.reduce(operator.mul, i) for i in div)   # Taking all terms
+#     for i in range( len(div)//2+1 ) :
+#         a = n/div[i]
+#         # print('a=',a, end='    ')
+#         o = a* div[i] - (a+div[i])
+#         # print('o=',o)
+#         # if int(o+2) not in ks : ks.append( int(o+2) )
+#         ks.append( int(o+2) )
+#
+#     def inner_terms(n):
+#         kin=[]
+#         F = get_divisors().factor_pyprimes(n)
+#         comb=set()              # This CODE WORKS for inner cases : Ex 90 : 6 + 3 +5  ,  9 + 2+5, 10 + 3 +3
+#         if len(F) > 3 :
+#             for i in range(2, len(F)-1):
+#                     C = set(combinations(F, i) )
+#                     comb.update(C)
+#                     # print(comb)
+#                     # C_sum = list( functools.reduce(operator.add, i) for i in comb)
+#                     C_prod = list( functools.reduce(operator.mul, i) for i in comb)
+#             # print('\n',comb)
+#             # print('C_sum : ',C_sum)
+#             # print('C_prod : ',C_prod)
+#             comb = list(comb)
+#             for j in range(len(C_prod)):
+#                 A = F.copy()
+#                 # p1 = C_prod[j]
+#                 # p2 = n/C_prod[j]
+#                 for m in comb[j]: A.remove(m)
+#                 # print(A)
+#                 s1 = C_prod[j]
+#                 s2 = sum(A)
+#                 o1 = n - (s1+s2 ) + len(A) +1
+#                 kin.append(o1)
+#                 # print('p1=', p1 ,  '   p2=', p2,'     s1=',s1 , '    s2=',s2, '   ', o1, '  ' ,list(comb)[j] )
+#             return list(set(kin))
+#         else : return []
+#     kin = inner_terms(n)
+#     return sorted(list(set(ks+kin)))           # this is the returned k
+
 def product_sum_k(n):
     ''':Description: Function which finds the **k**'s of a sum-product number
     :Example1:  product_sum_k(15)    returns [9] because :
@@ -182,57 +238,92 @@ def product_sum_k(n):
     kin = inner_terms(n)
     return sorted(list(set(ks+kin)))           # this is the returned k
 
+
+
 print('\n------------------------ TESTS---------------------------')
-n=23400
+
+n=90
 F = get_divisors().factor_pyprimes(n)
 print('F:  ',F)
+comb=set()
+K=[]
+for i in range(1, len(F)):
+    C = set(combinations(F, i) )
+    comb.update(C)
+    # print(comb)
+    C_sum = list( functools.reduce(operator.add, i) for i in comb)
+    C_prod = list( functools.reduce(operator.mul, i) for i in comb)
+print(comb)
+print('C_sum : ',C_sum)
+print('C_prod : ',C_prod,'\n')
+comb = list(comb)
+print(comb)
+for j in range(len(C_prod)):
+    A = F.copy()
+    p = C_prod[j]
+    for m in comb[j]:
+        A.remove(m)
+    print(A, end='          ')
+    s = sum(A)
+    sp= sum(list(comb)[j])
+    o = n - (p +s ) + len(A) +1
+    K.append(o)
+    print( list(comb)[j]   , '       p=', p , ' ,    A=' ,A  , ', s=' , s , ' ,  sp=' , sp ,'       k=', o  ,'\n')
 
-def inner_terms(n):             # This CODE WORKS for inner cases : Ex 90 : 6 + 3 +5  ,  9 + 2+5, 10 + 3 +3
-    kin, C_prod = [], []
-    F = get_divisors().factor_pyprimes(n)
-    # print(F)
-    comb=set()
-    if len(F) > 3 :
-        for i in range(2, len(F)-1):
-                C = set(combinations(F, i) )
-                comb.update(C)
-                # print(comb)
-                # C_sum = list( functools.reduce(operator.add, i) for i in comb)
-                C_prod = list( functools.reduce(operator.mul, i) for i in comb)
-        print('\n',comb)
-        # print('C_sum : ',C_sum)
-        print('C_prod : ',C_prod)
-        comb = list(comb)
-        for j in range(len(C_prod)):
-            A = F.copy()
-            p1 = C_prod[j]
-            p2 = n/C_prod[j]
-            for m in comb[j]: A.remove(m)
-            # print(A)
-            s1 = C_prod[j]
-            s2 = sum(A)
-            o1 = n - (s1+s2 ) + len(A) +1
-            kin.append(o1)
-            # print('p1=', p1 ,  '   p2=', p2,'     s1=',s1 , '    s2=',s2, '   ', o1, '  ' ,list(comb)[j] )
-        return list(set(kin))
+# p =  functools.reduce(operator.mul, F)    # Taking all terms
+# single = [ p-sum(F) + len(F) ]
+print( sorted(list(set(K))))
 
-    else :
-        return []
+print('product_sum_k  Function Test :    ',product_sum_k(90))
 
-# print('\nInner terms function test : ' , inner_terms(90))
-print('\nInner terms function test : ' , inner_terms(8))
-print('\nInner terms function test : ' , inner_terms(23400))
+I still don;t have all the terms !!!!!!!!!! This is the real problem
+#
+# def inner_terms(n):             # This CODE WORKS for inner cases : Ex 90 : 6 + 3 +5  ,  9 + 2+5, 10 + 3 +3
+#     kin, C_prod = [], []
+#     F = get_divisors().factor_pyprimes(n)
+#     # print(F)
+#     comb=set()
+#     if len(F) > 3 :
+#         for i in range(2, len(F)-1):
+#                 C = set(combinations(F, i) )
+#                 comb.update(C)
+#                 # print(comb)
+#                 # C_sum = list( functools.reduce(operator.add, i) for i in comb)
+#                 C_prod = list( functools.reduce(operator.mul, i) for i in comb)
+#         print('\n',comb)
+#         # print('C_sum : ',C_sum)
+#         print('C_prod : ',C_prod)
+#         comb = list(comb)
+#         for j in range(len(C_prod)):
+#             A = F.copy()
+#             p1 = C_prod[j]
+#             p2 = n/C_prod[j]
+#             for m in comb[j]: A.remove(m)
+#             # print(A)
+#             s1 = C_prod[j]
+#             s2 = sum(A)
+#             o1 = n - (s1+s2 ) + len(A) +1
+#             kin.append(o1)
+#             # print('p1=', p1 ,  '   p2=', p2,'     s1=',s1 , '    s2=',s2, '   ', o1, '  ' ,list(comb)[j] )
+#         return list(set(kin))
+#
+#     else :
+#         return []
+#
+# # print('\nInner terms function test : ' , inner_terms(90))
+# print('\nInner terms function test : ' , inner_terms(8))
+# print('\nInner terms function test : ' , inner_terms(23400))
 
 print('\n----------------------')
 
 
-for i in range(1, len(F)+1):
-    comb=set()
-    C = set(combinations(F , i))
-    print(set(combinations(F , i)) , end='   ' )
-    for j in range(len(C)) :
-        # print()
-        comb_sum = list(functools.reduce(operator.add, j) for j in C)
+# for i in range(1, len(F)+1):
+#     comb=set()
+#     C = set(combinations(F , i))
+#     print(set(combinations(F , i)) , end='   ' )
+#     for j in range(len(C)) :
+#         # print()
+#         comb_sum = list(functools.reduce(operator.add, j) for j in C)
 
 
 # print('\nfactor_pyprimes Test :        ', get_divisors().factor_pyprimes(23400) )
@@ -244,40 +335,54 @@ for i in range(1, len(F)+1):
 # print('product_sum_k  Function Test :    ',product_sum_k(12))
 # print('product_sum_k  Function Test :    ',product_sum_k(32))
 
-nr=22428
-print('\nfactor_pyprimes Test  of ',n , ' :        ', get_divisors().factor_pyprimes(nr) )
-print('\n divisors Function Test of ', n, ' :        ', get_divisors().divisors(nr ) )
-print('\nproduct_sum_k  Function Test of ', n,' :    ',product_sum_k(nr ))
+# nr=22428
+# print('\nfactor_pyprimes Test  of ',n , ' :        ', get_divisors().factor_pyprimes(nr) )
+# print('\n divisors Function Test of ', n, ' :        ', get_divisors().divisors(nr ) )
+# print('\nproduct_sum_k  Function Test of ', n,' :    ',product_sum_k(nr ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
 t1  = time.time()
-
-def pb_088(up_range):
-    BIG_K={}
-    for i in range(4, up_range+1):      # up_range = 23400
-        if gmpy2.is_prime(i) == False :
-            psk = product_sum_k(i)
-            print( 'P-S: ', i, '       key: ', psk )
-            for k in psk :
-                # k_min = min(product_sum_k(i))
-                if k not in BIG_K and k <=12000 :   #12000
-                    BIG_K[k] = i
-                # if k_min < k :
-                #     BIG_K[k_min] = i
-                # print('-> EVOLUTION :   key ',k, '     P-S: ', i)
-            #         if k < BIG_K[k]:
-            #             BIG_K[k] = i
-    return BIG_K
-
-BIG_K  = pb_088(up_range = 200 )        # 23400
-# BIG_K = dict(zip(BIG_K.values(), BIG_K.keys()))     # Reverse the dictionary keys <=> values
-print('\nThe BIG_K Dictionary ', len(BIG_K) ,   BIG_K )     #  !!!  len(BIG_K)  = 11999 for a correct answer, up_range=23500  !!!
-print('\nAnswer:  ', sum(set([ v for v in BIG_K.values() ] ) ),'\n')
-print('\nThe Set of P-S obtained : ', sorted(list(set([ v for v in BIG_K.values() ] ) )),'\n')
-print('Max value in set' ,max(set([ v for v in BIG_K.values() ] ) ),'\n')
-
-print('\nFinal Checks :   \nObtained here : ',sum([i for i in BIG_K.keys()]), '\nReal keys sum that should be : ', (12000*12001/2)-1 )
+#
+# def pb_088(up_range):
+#     BIG_K={}
+#     for i in range(4, up_range+1):      # up_range = 23400
+#         if gmpy2.is_prime(i) == False :
+#             psk = product_sum_k(i)
+#             print( 'P-S: ', i, '       key: ', psk )
+#             for k in psk :
+#                 # k_min = min(product_sum_k(i))
+#                 if k not in BIG_K and k <=12000 :   #12000
+#                     BIG_K[k] = i
+#                 # if k_min < k :
+#                 #     BIG_K[k_min] = i
+#                 # print('-> EVOLUTION :   key ',k, '     P-S: ', i)
+#             #         if k < BIG_K[k]:
+#             #             BIG_K[k] = i
+#     return BIG_K
+#
+# BIG_K  = pb_088(up_range = 200 )        # 23400
+# # BIG_K = dict(zip(BIG_K.values(), BIG_K.keys()))     # Reverse the dictionary keys <=> values
+# print('\nThe BIG_K Dictionary ', len(BIG_K) ,   BIG_K )     #  !!!  len(BIG_K)  = 11999 for a correct answer, up_range=23500  !!!
+# print('\nAnswer:  ', sum(set([ v for v in BIG_K.values() ] ) ),'\n')
+# print('\nThe Set of P-S obtained : ', sorted(list(set([ v for v in BIG_K.values() ] ) )),'\n')
+# print('Max value in set' ,max(set([ v for v in BIG_K.values() ] ) ),'\n')
+#
+# print('\nFinal Checks :   \nObtained here : ',sum([i for i in BIG_K.keys()]), '\nReal keys sum that should be : ', (12000*12001/2)-1 )
 
 #        LOG
 # 2016-11-16, 18:00 # One day full worked, not succedeed. TO DO: Must identify the problem of :

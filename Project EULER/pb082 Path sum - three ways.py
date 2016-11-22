@@ -18,7 +18,7 @@ from the top left to the bottom right by only moving right and down.
 '''
 
 import time
-from numpy import transpose
+from numpy import transpose, zeros
 from copy import copy, deepcopy
 
 filename = "pb081_matrix.txt"
@@ -56,6 +56,7 @@ for i in range(len(m)): print(m[i])
 print('\n---------------------------------The Transposed Matrix --------------')
 
 mT = transpose(m)
+
 for i in range(len(mT)): print(mT[i])
 
 
@@ -65,25 +66,57 @@ print('\n----------------------------------- The Computed PATH -----------------
 
 # M = [row[:] for row in mT]     # Making a copy of transposed matrix
 M = deepcopy(mT)          # deepcopy for cloning the transposed matrix
+B = zeros((len(M), len(M)), dtype=int)        # numpy Create a zeroed Matrix the same size
+# print(B)
 
-for i in range(0,len(mT)):
+
+for i in range(0, len(mT)):
+    for j in range(1, len(mT)-1, 2):
+        if i==0:
+            break
+        else:
+            if max(mT[i][j-1], mT[i][j], mT[i][j+1]) == mT[i][j-1] :
+                B[i][j-1], B[i][j], B[i][j+1] = 0, 1, 1
+
+            if max(mT[i][j-1], mT[i][j], mT[i][j+1]) == mT[i][j] :
+                        B[i][j-1], B[i][j], B[i][j+1] = 1, 0, 1
+
+            if max(mT[i][j-1], mT[i][j], mT[i][j+1]) == mT[i][j+1] :
+                        B[i][j-1], B[i][j], B[i][j+1] = 1, 1, 0
+    # print(j,'    ',B[i])
+
+
+
+print()
+for i in range(len(B)): print(B[i])
+print()
+
+
+# print(mT[0])
+for i in range(1, len(mT)-1):
     for j in range(0, len(mT)):
-        if i ==0  :
-            #print(m[i][j])
-            continue
-        elif j == 0 and i > 0 :
+        if B[i][j] ==1 :
+            if i == 1 or i == len(mT)-1 :        # 2-nd row (#1) and last row
+                mT[i][j] +=  M[i-1][j]
 
-            #print(m[i][j])
-            mT[i][j] += min ( mT[i-1][j], mT[i][j+1] )
-        elif j == len(m)-1 and i > 0 :
-            #print(m[i][j])
-            mT[i][j] += min( mT[i-1][j], mT[i][j-1] )
-        # elif  mtx[i][j-1] < mtx[i][j]  :
-        #     m[i][j-1] +=  m[i][j], m[i][j+1], m[i-1][j]  )
-        else : #if  mtx[i][j-1] < mtx[i][j]  :
-            #print(m[i][j-1], m[i-1][j])
-            mT[i][j] += min( mT[i][j-1], mT[i][j+1], mT[i-1][j]  )
+            #if j%2 == 0 :
+            if i < len(mT)-1 and j < len(mT)-2 :
+                if M[i-1][j+1] + M[i][j+1] < M[i-1][j] :        # Go To LEFT   __|
+                    mT[i][j] += ( mT[i-1][j+1] + mT[i][j+1] )
+
+                elif  M[i][j+1] +M[i+1][j+1] < M[i][j+1] :        # Go To RIGHT  |__
+                    mT[i][j] += M[i][j+1] +M[i+1][j+1]
+
+                else :
+                    mT[i][j] += M[i-1][j]
+
     print(mT[i])
+print()
+# Characters :  ∟ ∟  ┐ ┐  ┐ ∟  ┌ ┌ ┐ _|
+
+
+for i in range(len(mT)): print(mT[i])
+
 
 # matrix = deepcopy(m)        #              You must use deepcopy !!!!!!!!!!!!!!!!!!!!!!
 #
