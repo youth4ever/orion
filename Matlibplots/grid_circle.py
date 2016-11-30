@@ -36,10 +36,6 @@ ax2.set_ylim([0, 250])
 ax2.set_xticks(major_ticks)
 ax2.set_xticks(minor_ticks, minor=True)
 
-
-
-
-
 circ = plt.Circle((0, 0), radius=250, color='g', fill=False)
 ax.add_patch(circ)
 
@@ -47,6 +43,5 @@ fig = plt.gcf()
 fig.set_size_inches(50, 50)
 fig.savefig('C:/Users/Bogdan/Desktop/pb314_grid_circle.png', dpi=300)
 # fig.savefig('pb314_grid_circle.png', dpi=300)
-
 
 plt.show()

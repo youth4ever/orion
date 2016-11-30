@@ -19,7 +19,8 @@ Although not allowed , but to get an idea if this is anything better: if you pla
 the four sides the area will be equal to π*2502 m**2 and the perimeter will be π*500 m, so the enclosed-area/wall-length ratio will also be 125.
 
 However, if you cut off from the square four triangles with sides 75 m, 75 m and 75√2 m the total area becomes 238750 m**2
-and the perimeter becomes 1400+300√2 m. So this gives an enclosed-area/wall-length ratio of 130.87, which is significantly better.
+and the perimeter becomes 1400+300√2 m.
+So this gives an enclosed-area/wall-length ratio of 130.87, which is significantly better.
 
 Find the maximum enclosed-area/wall-length ratio.
 Give your answer rounded to 8 places behind the decimal point in the form abc.defghijk.
@@ -147,25 +148,25 @@ def mouse_on_the_moon(epsilon) :
 print('\nAnswer: ',mouse_on_the_moon(0.0666),'\n\n')
 
 
-max_ratio=0
-for m in range(500, 800):
-    m = m / 10000
-    R = mouse_on_the_moon( m )
-    res = R[2]
-    if res > max_ratio :
-        max_ratio = res
-        print('epsilon :    ', m ,'    Total Area, Total Edges run, Ratio :     '    , R  )
-
-print('\n',max_ratio)
+# max_ratio=0
+# for m in range(500, 800):
+#     m = m / 10000
+#     R = mouse_on_the_moon( m )
+#     res = R[2]
+#     if res > max_ratio :
+#         max_ratio = res
+#         print('epsilon :    ', m ,'    Total Area, Total Edges run, Ratio :     '    , R  )
+#
+# print('\n',max_ratio)
 
  # ######         ANSWERS :             #########
 
 # epsilon :     0.0666  , theta/100  , Total Area, Total Edges run, Ratio :      (49070.5, 392.69456422334963, 124.95843963882979)
 # epsilon :     0.06655                     Total Area, Total Edges run, Ratio :      (49070.5, 392.69456422334963, 124.95843963882979)
 
-2016-11-22, 20:20
-Not understood correctly the problem from the first time. I though that the shame must be a polygon as close to a circle,
-but actualy is NOT. Must re-DO
+# 2016-11-22, 20:20
+# Not understood correctly the problem from the first time. I though that the shame must be a polygon as close to a circle,
+# but actualy is NOT. Must re-DO
 
 
 

@@ -3,10 +3,13 @@ import numpy as np
 
 
 mu, sigma = 100, 15
-x = mu + sigma * np.random.randn(10000)
+x = mu + sigma * np.random.randn(100000)
+print(len(x) ,x )
 
 # the histogram of the data
-n, bins, patches = plt.hist(x, 50, normed=1, facecolor='g', alpha=0.75)
+# n = x
+# bins = 100
+n, bins, patches = plt.hist(x, 100 ,normed=1, facecolor='g', alpha=0.75)
 
 
 plt.xlabel('Smarts')

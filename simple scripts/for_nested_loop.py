@@ -113,10 +113,10 @@ print('\n---------------COMBINATIONS of All elements in All possible Numbers ---
 A=[2,3,5,7,11,13]
 from itertools import combinations
 
-for k in range(len(A)+1):                       # If you don't want the last element of the list :     range(len(A))
-    for q in  range(len(A)) :
-        Comb = list(combinations(A[0:k],q))
-        print(Comb)
+for i in range(1, len(A)+1):                       # If you don't want the last element of the list :     range(len(A))
+    for j in  range(1, len(A)+1) :
+        Comb = list(combinations(A[0:j],i))
+    print(Comb)
 
 # Without the last element and Listed only once each
 for k in range(len(A)-1,len(A)):
