@@ -160,3 +160,20 @@ circulate_number(1234569)
 
 print('\n','===='*20)
 
+print('\n--------------------------- UNIQUE PERMUTATIONS -------------------')
+# Only unique permutations
+def unique_permutations(lst):       # VERY EFFECTIVE
+    ''':Description: Takes a list and makes ONLY Unique Permutations of a list with repeated elements.
+        If one tries itertools.permutations on a list with 14 elements ==> BANG, computer freezes
+    :param lst: type list
+    :return:    a list of lists containing all the permutations
+    '''
+    if len(lst) == 1:
+        yield (lst[0],)
+    else:
+        unique_lst = set(lst)
+        for first_element in unique_lst:
+            remaining_lst = list(lst)
+            remaining_lst.remove(first_element)
+            for sub_permutation in unique_permutations(remaining_lst):
+                yield (first_element,) + sub_permutation

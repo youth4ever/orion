@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import time
-
+from math import  gcd
 # The Most basic
 
 # Prime numbers GENERATOR
@@ -318,7 +318,8 @@ factor(32)
 
 #   CMMDC - Cel Mai Mare Divizor Comun - The Greatest Common Divisor - GCD
 print('\n------------   CMMDC - Cel Mai Mare Divizor Comun - The Greatest Common Divisor - GCD ------------------')
-def cmmdc(a, b):
+
+def cmmdc(a, b):        # GCD
     '''a, b: positive integers     , cmmdc, c.m.m.d.c., Cel Mai Mare Divizor Comun
     returns: a positive integer,  The Greatest Common Divisor of a & b.   '''
     testValue = min(a, b)
@@ -327,9 +328,7 @@ def cmmdc(a, b):
         testValue -= 1
     return testValue
 
-print(cmmdc(1445468, 300173))
-
-def cmmdc_rec(a, b):
+def cmmdc_rec(a, b):        #  GCD, CMMDC Recursive
     '''    a, b: positive integers     , cmmdc, c.m.m.d.c., Cel Mai Mare Divizor Comun
         returns: a positive integer,  The Greatest Common Divisor of a & b.    '''
     if b == 0:
@@ -337,8 +336,28 @@ def cmmdc_rec(a, b):
     else:
        return cmmdc_rec(b, a % b)
 
+def gcd(a, b):      # GCD
+    """Return greatest common divisor using Euclid's Algorithm."""
+    while b:
+        a, b = b, a % b
+    return a
+
+
+print('Test for the GCD cmmdc Function :\t',cmmdc(1445468, 300173))
+print('Test for the GCD cmmdc_rec Function :\t',cmmdc(1445468, 300173))
+print('Test for the GCD math.gcd Function :\t',cmmdc(1445468, 300173))
+print('Test for the GCD gcd Custom Function :\t',cmmdc(1445468, 300173))
 print(cmmdc_rec(1445, 3005))
 factors(197)
+
+
+print('\n------------   CMMMC - Cel Mai Mic Multiplu  Comun - The Lowest Common Multiple LCM ------------------')
+
+def lcm(a, b):
+    """Return lowest common multiple."""
+    return a * b // gcd(a, b)
+
+print('LCM, Cel Mai Mic Multiplu  Comun Test :  \t',lcm(120, 121))
 
 print('\n--------------------------------CIRCULAR PRIMES -----------------------------------')
 ############################################################################
@@ -374,32 +393,41 @@ print(circular_primes(197))
 ###################################################
 
 print('\n---------------------------- DIVISORS --------------------------------')
-def get_divisors(nr):
-    '''Made by Bogdan Trif @ 2016-11-09, based on itertools.combinations module
-    and with a little help on list(functools.reduce(operator.mul, i) for i in comb)
-    :param nr:  int
-    :return: a list with the divisors    '''
-    from itertools import combinations
-    import functools, operator
 
-    def factor_pyprimes(n):
+class GET_DIVISORS(object):
+    '''Made by Bogdan Trif @ 2016-11-15, based on itertools.combinations module
+    and with a little help on list(functools.reduce(operator.mul, i) for i in comb)
+
+    :param nr:  int
+    :return: a list with the factors ( method factorise) or divisors (method divisors)
+    :Usage:  >>> GET_DIVISORS().divisors(90)    # to obtain the divisors
+                 >>>  GET_DIVISORS().factorise(90)   # to obtain the factors                      '''
+#     def __init__(self, nr):   # We don't want to initialize the class with a number
+#     self.nr = nr
+
+    def factorise(self, nr):
         ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
         from pyprimes import factorise
-        return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
+        return [val for sublist in [[i[0]]*i[1] for i in factorise(nr)] for val in sublist]
 
-    if gmpy2.is_prime(nr) == True or nr == 1 :
-        return [1]    # Must be adjusted to [1] if you change on list
-    else :
-        all_factors = factor_pyprimes(nr)
-        # set_factors=list(set(all_factors))
-        comb= set()
-        # print(all_factors)
+    def divisors(self, nr):
+        ''':Description: Use the itertools, functools, operator, gmpy2 modules.
+        In the case of multiple calls take the module imports outside the class and load only once => improved speed. '''
+        from itertools import combinations
+        import functools, operator, gmpy2
+        if gmpy2.is_prime(nr) == True or nr == 1 :
+            return [1]    # Must be adjusted to [1] if you change on list
+        else :
+            all_factors =  self.factorise(nr)
+            # set_factors=list(set(all_factors))
+            comb= set()
+            # print(all_factors)
+            for i in range(1, len(all_factors)):
+                c = set(combinations(all_factors, i) )
+                comb.update(c)
+                comb_prod = list(functools.reduce(operator.mul, i) for i in comb)
+                comb_prod.sort()
+        return  comb_prod[::-1]   # sum([1]+ comb_prod)   !!! Remember to change on  return [1]  for isprime case !
 
-        for i in range(1, len(all_factors)):
-            c = set(combinations(all_factors, i) )
-            comb.update(c)
-            comb_prod = list(functools.reduce(operator.mul, i) for i in comb)
-            comb_prod.sort()
-        return  comb_prod   # sum([1]+ comb_prod)   !!!!!!!! Remember to change on  return [1]  for isprime case
 
-print(get_divisors(90))
+print('Here we test the GET_DIVISORS CLASS :  ',GET_DIVISORS().divisors(90))

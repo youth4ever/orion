@@ -58,6 +58,37 @@ y = 3
 for i in range(10): print(y<<i, end='  ')
 print()
 
+
+
+print('\n---------------- Bin BINARY,  oct OctoDecimal, dec DECIMAL, hexa, HEXADECIMAL CONVERSIONS -------------')
+
+print('Convert from Decimal to Binary :  ', bin(155))
+print('Convert from Binary to Decimal :  ', int(0b10011011))
+
+print('Convert from Decimal to Octadecimal :  ', oct(755))
+print('Convert from Octadecimal to Decimal :  ', int(0o1363))
+
+print('Convert from Decimal to Hexadeciamal :  ', hex(755))
+print('Convert from Hexadeciamal to Decimal :  ', int(0x2f3))
+
+
+
+print('\n=============================')
+
+# Converting an Integer to a String in Any Base
+
+def toStr(n,base):
+   convertString = "0123456789ABCDEF"
+   if n < base:
+      return convertString[n]
+   else:
+      return toStr(n//base,base) + convertString[n%base]
+
+print(toStr(1453,16))
+print(toStr(123,6))
+
+
+
 print('\n----------------- BENCHMARK TEST between normal multiplication and BITWISE multiplication -----------')
 # import time
 # t1=time.time()

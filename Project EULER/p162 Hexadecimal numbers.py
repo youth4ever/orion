@@ -2,21 +2,39 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-                    Primitive Triangles     -       Problem 276
+Hexadecimal numbers     -       Problem 162
 
-Consider the triangles with integer sides a, b and c with a ≤ b ≤ c.
-An integer sided triangle (a,b,c) is called primitive if gcd(a,b,c)=1.
-How many primitive integer sided triangles exist with a perimeter not exceeding 10 000 000 (10**7) ?
+In the hexadecimal number system numbers are represented using 16 different digits:
+
+0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
+The hexadecimal number AF when written in the decimal number system equals 10x16+15=175.
+
+In the 3-digit hexadecimal numbers 10A, 1A0, A10, and A01 the digits 0,1 and A are all present.
+Like numbers written in base ten we write hexadecimal numbers without leading zeroes.
+
+How many hexadecimal numbers containing at most sixteen (16) hexadecimal digits exist with all of the digits 0, 1, and A present at least once?
+Give your answer as a hexadecimal number.
+
+(A,B,C,D,E and F in upper case, without any leading or trailing code that marks the number as hexadecimal and without leading zeroes ,
+e.g. 1A3F and not: 1a3f and not 0x1a3f and not $1A3F and not #1A3F and not 0000001A3F)
+
 '''
 import time
 
 
 print('\n--------------------------TESTS------------------------------')
 
-this is done with
+print('Convert from Decimal to Hexadeciamal :  ', hex(755))
+print('Convert from Hexadeciamal to Decimal :  ', int(0xaf))
+
+print('Convert from Hexadeciamal to Decimal :  ', int(0x10A))
+print('Convert from Hexadeciamal to Decimal :  ', int(0x1A0))
+print('Convert from Hexadeciamal to Decimal :  ', int(0xA10))
+print('Convert from Hexadeciamal to Decimal :  ', int(0xA01))
 
 
 
+print(16**16)
 
 
 

@@ -13,8 +13,9 @@ For example, five coins can be separated into piles in exactly seven different w
                                                         OO   OO   O
                                                         OO   O   O   O
                                                         O   O   O   O   O
-Find the least value of n for which p(n) is divisible by one million.
+            Find the least value of n for which p(n) is divisible by one million.
 '''
+
 import time
 t1  = time.time()
 

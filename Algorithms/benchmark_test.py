@@ -1,31 +1,38 @@
 import time
-def factors(a):         ##outputs a list of the unique prime factors of its input
-    # This Function is splitting a number in its factors, and detects also if the number is a prime
-    b = 2
-    d = []
-    f = a
-    while f > 1:
-        while f % b != 0:
-            b = b + 1
-        d = d + [b]
-        f = f / b
-    if len(d) >1:
-        print('The factors of  ',a,':   ',d)
-    else: print(a,' is prime')
+
+
+def primes_upto(k):
+    is_prime = [True] * int(k+1)
+    is_prime[0] = is_prime[1] = False
+    for n in (n for n, prime in enumerate(is_prime) if prime):
+        yield n
+        if n*n > k: continue
+        is_prime[n::n] = [False] * int(k/n)
 
 
 
-def factor_split(n):
-    ''' Decompose a factor in its prime factors. This function uses the pyprimes module'''
-    from pyprimes import factorise
-    return [i[0] for i in factorise(n)]
+
+def prime_generator(n):         # HIghly Efficient !!!!         THE FASTEST, The BEST , The ONE
+    """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
+    Create a candidate list within which non-primes will be marked as None.
+    """
+    cand = [i for i in range(3, n + 1, 2)]
+    end = int(n ** 0.5) // 2
+
+    # Loop over candidates (cand), marking out each multiple.
+    for i in range(end):
+        if cand[i]:
+            cand[cand[i] + i::cand[i]] = [None] * ( (n // cand[i]) - (n // (2 * cand[i])) - 1 )
+
+    # Filter out non-primes and return the list.
+    return [2] + [i for i in cand if i]
+
 
 ######################################
 
 t1  = time.time()
 
-# factors(6597326399323993)
-# factors(1979197919791979)
+primes = set(primes_upto(10**7))
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n')
@@ -33,29 +40,17 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n')
 ############################
 
 t1  = time.time()
-# print(factor_split(1979197919791979))
-# print(factor_split(6597326399323993))
+
+primes = prime_generator(10**7)
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n')
 
 ###############################
 
-print('\n\n==============    is_prime TESTS ================')
+print('\n\n==============      ================')
 
 t1  = time.time()
-
-def isprime(n):
-    ''' VERY FAST. Does not depend on a pre-generated sieve or on other module !'''
-    if n == 1:
-        return False
-    for i in range(2, int((n**0.5)+1)):
-        if not n % i:
-            return False
-    return True
-
-print('My  Function Test is_prime :  ',isprime(100000980001501))
-# print('My  Function Test is_prime',isprime( 18014398241046527))
 
 
 t2  = time.time()
@@ -66,9 +61,6 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n')
 
 t1  = time.time()
 
-import gmpy2
-print('gmpy2 is prime Test :    ',gmpy2.is_prime(100000980001501))
-# print('gmpy2 is prime Test ',gmpy2.is_prime( 18014398241046527))
 
 
 t2  = time.time()

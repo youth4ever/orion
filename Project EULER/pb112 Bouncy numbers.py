@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Sat, 19 Nov 2016, 15:55
 #The  Euler Project  https://projecteuler.net
 '''
                                         Bouncy numbers     -   Problem 112

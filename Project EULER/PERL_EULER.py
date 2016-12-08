@@ -441,6 +441,140 @@ while (1) {
 
     ++$n;
 }
+
+##############################         #########################
+# Sun, 7 Aug 2016, 23:31,  trizen ;   Brute-force solution in Perl, using `eval()` (runs in ~13 sec):
+
+use ntheory qw(forperm);
+
+my @op = ('+', '-', '*', '/');
+
+my @expr = (
+            "%d %s %d %s %d %s %d",
+            "%d %s (%d %s (%d %s %d))",
+            "%d %s ((%d %s %d) %s %d)",
+            "(%d %s (%d %s %d)) %s %d",
+            "%d %s (%d %s %d %s %d)",
+            "%d %s (%d %s %d) %s %d",
+            "%d %s %d %s (%d %s %d)",
+            "((%d %s %d) %s %d) %s %d",
+            "(%d %s %d) %s (%d %s %d)",
+           );
+
+sub evaluate {
+    my ($nums, $ops, $table) = @_;
+    foreach my $expr (@expr) {
+
+        my $n = eval sprintf($expr,
+            $nums->[0], $ops->[0],
+            $nums->[1], $ops->[1],
+            $nums->[2], $ops->[2],
+            $nums->[3]
+        );
+
+        if (not $@
+            and $n > 0
+            and int($n) eq $n
+            and not exists $table->{$n}) {
+            undef $table->{$n};
+        }
+    }
+}
+
+sub compute {
+    my ($set, $table) = @_;
+
+    forperm {
+        my @nums = @{$set}[@_];
+
+        foreach my $i (0 .. 3) {
+            foreach my $j (0 .. 3) {
+                foreach my $k (0 .. 3) {
+                    my @ops = @op[$i, $j, $k];
+                    evaluate(\@nums, \@ops, $table);
+                }
+            }
+        }
+
+    } scalar(@$set);
+}
+
+my %max;
+
+foreach my $i (1 .. 9) {
+    foreach my $j ($i + 1 .. 9) {
+        foreach my $k ($j + 1 .. 9) {
+            foreach my $l ($k + 1 .. 9) {
+                compute([$i, $j, $k, $l], \my %table);
+
+                my ($n, $c) = (0, 0);
+                my @keys = sort { $a <=> $b } keys %table;
+
+                while (@keys) {
+                    shift(@keys) == ++$n ? ++$c : last;
+                }
+
+                if ($c > ($max{max} || 0)) {
+                    $max{max} = $c;
+                    $max{set} = [$i, $j, $k, $l];
+                }
+            }
+        }
+    }
+}
+
+print "$max{max}: [@{$max{set}}]\n";
+
+
+##############################   PB123 Prime Square Remainders     #########################
+# Wed, 17 Aug 2016, 00:47,   trizen
+# Trivial when combined with modular exponentiation (run-time: ~100 ms):
+
+use 5.010;
+use ntheory qw(nth_prime powmod);
+
+my $n = 7037;
+
+while (1) {
+    my $p = nth_prime(++$n);
+    my $s = $p * $p;
+    my $r = (powmod($p - 1, $n, $s) + powmod($p + 1, $n, $s)) % $s;
+
+    if ($r > 10**10) {
+        say $n;
+        last;
+    }
+}
+
+##############################   PB146 - Investigating Prime Pattern      #########################
+# Wed, 28 Oct 2015, 19:33 , trizen
+# 15 seconds in Perl, using the "ntheory" library.
+
+use 5.010;
+use strict;
+use integer;
+use ntheory qw(is_prime next_prime);
+
+my $sum = 0;
+for (my $i = 10; $i < 150_000_000; $i += 10) {
+    my $x = $i**2;
+    if (    is_prime($x + 1)
+        and next_prime($x + 1) == $x + 3
+        and next_prime($x + 3) == $x + 7
+        and next_prime($x + 7) == $x + 9
+        and next_prime($x + 9) == $x + 13
+        and next_prime($x + 13) == $x + 27) {
+        $sum += $i;
+    }
+}
+say $sum;
+
+##############################         #########################
+##############################         #########################
+##############################         #########################
+##############################         #########################
+##############################         #########################
+##############################         #########################
 ##############################         #########################
 ##############################         #########################
 ##############################         #########################

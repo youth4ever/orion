@@ -5,20 +5,48 @@
                                                     Number Rotations        -       Problem 168
 
 Consider the number 142857. We can right-rotate this number by moving the last digit (7) to the front of it, giving us 714285.
+
 It can be verified that 714285=5×142857.
+
 This demonstrates an unusual property of 142857: it is a divisor of its right-rotation.
 
 Find the last 5 digits of the sum of all integers n, 10 < n < 10**100, that have this property.
 
-
 '''
 import time
+import gmpy2
+
+def circulate_number(A):
+      tmp=[]
+      for v in range(len(str(A))):
+            a , i , s =  str(A), len(str(A)), ''
+            for c in range(i):
+                  #print(a[(v+c) % j] ,end='  ')
+                  s += str(a[(v+c) % i])
+            #return s
+            tmp.append(int(s))
+            #print(s)
+            v+= 1
+      return tmp #print(tmp)
+
+def right_rotate_number(n):
+    n = str(n)
+    return int(n[-1]+n[:-1])
+
+print(circulate_number(142857))
+print('is_prime :\t',gmpy2.is_prime(142857))
+print('right_rotate_number Test :', right_rotate_number(142857))
+
 
 
 print('\n--------------------------TESTS------------------------------')
 
 
 
+for i in range(10**5, 10**6) :
+    a = right_rotate_number(i)
+    if  a/i % 1 == 0 and a/i != 1 :
+        print (a, i , a/i, a%i )
 
 
 

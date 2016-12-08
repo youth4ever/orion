@@ -2,18 +2,23 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-                    Primitive Triangles     -       Problem 276
+                    Strong Repunits     -   Problem 346
 
-Consider the triangles with integer sides a, b and c with a ≤ b ≤ c.
-An integer sided triangle (a,b,c) is called primitive if gcd(a,b,c)=1.
-How many primitive integer sided triangles exist with a perimeter not exceeding 10 000 000 (10**7) ?
+The number 7 is special, because 7 is 111 written in base 2, and 11 written in base 6
+(i.e. 7_10 = 11_6 = 111_2). In other words, 7 is a repunit in at least two bases b > 1.
+
+We shall call a positive integer with this property a strong repunit.
+It can be verified that there are 8 strong repunits below 50: {1,7,13,15,21,31,40,43}.
+Furthermore, the sum of all strong repunits below 1000 equals 15864.
+
+Find the sum of all strong repunits below 10**12.
+
 '''
 import time
 
 
 print('\n--------------------------TESTS------------------------------')
 
-this is done with
 
 
 

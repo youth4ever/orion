@@ -2,18 +2,19 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-                    Primitive Triangles     -       Problem 276
+Squarefree Numbers  -   Problem 193
 
-Consider the triangles with integer sides a, b and c with a ≤ b ≤ c.
-An integer sided triangle (a,b,c) is called primitive if gcd(a,b,c)=1.
-How many primitive integer sided triangles exist with a perimeter not exceeding 10 000 000 (10**7) ?
+A positive integer n is called squarefree, if no square of a prime divides n, thus 1, 2, 3, 5, 6, 7, 10, 11 are squarefree,
+but not 4, 8, 9, 12.
+
+How many squarefree numbers are there below 2**50 ?
+
 '''
 import time
 
 
 print('\n--------------------------TESTS------------------------------')
 
-this is done with
 
 
 

@@ -165,7 +165,7 @@ if __name__ == "__main__":
 
 
 
-
+gmpy2.mpq(3,11)/7 + gmpy2.mpq(11,8)/29   # IMplement on problem 155 to speed up
 
 
 

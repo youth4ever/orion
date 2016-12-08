@@ -3,9 +3,10 @@
 #The  Euler Project  https://projecteuler.net
 '''
                     Consecutive positive divisors       -   Problem 179
+
 Find the number of integers 1 < n < 10**7, for which n and n + 1 have the same number of positive divisors.
 
-For example, 14 has the positive divisors 1, 2, 7, 14   while 15 has 1, 3, 5, 15.
+For example, 14 has the positive divisors 1, 2, 7, 14   while   15 has  1, 3, 5, 15.
 '''
 
 
@@ -55,8 +56,8 @@ def count_repetitions(lst):
             pos += 1
         if lst[i] != lst[i-1]:
             pos = 0
-        print(pos , end='  ')
-        if pos == 1 : cnt +=1
+        # print(pos , end='  ')
+        if pos == 1 : cnt +=2
         if pos == 2 or pos == 3 or pos ==4 : cnt +=1
     return cnt
 
@@ -68,12 +69,13 @@ t1  = time.time()
 
 
 L=[]
-counter=0
-up_range = 10**4
+counter=2
+up_range = 10**2
 for i in range(2, up_range+1 ):
     if gmpy2.is_prime(i) == True or i == up_range :
         counter += count_repetitions(L)
         L=[]
+        print(str(i)+'.   ' ,    '         Counter:'  ,counter)
     else:
         div = GET_DIVISORS().divisors(i)
         l = len(div)
@@ -86,7 +88,8 @@ print('\nAnswer : ',counter)
 
 
 
-# Tried : Answer :  1849079, ..81, ..83 , ..82, ..80, ..78, ..77, ..84, ..85
+# Tried : Answer :  1849079, ..81, ..83 , ..82, ..80, ..78, ..77, ..84, ..85,
+# Tried : 986116, 986114, 986115
 
 
 

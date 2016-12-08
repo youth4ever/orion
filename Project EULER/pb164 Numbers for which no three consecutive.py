@@ -2,18 +2,17 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-                    Primitive Triangles     -       Problem 276
+Numbers for which no three consecutive digits have a sum greater than a given value     -       Problem 164
 
-Consider the triangles with integer sides a, b and c with a ≤ b ≤ c.
-An integer sided triangle (a,b,c) is called primitive if gcd(a,b,c)=1.
-How many primitive integer sided triangles exist with a perimeter not exceeding 10 000 000 (10**7) ?
+How many 20 digit numbers n (without any leading zero) exist such that
+no three consecutive digits of n have a sum greater than 9?
+
 '''
 import time
 
 
 print('\n--------------------------TESTS------------------------------')
 
-this is done with
 
 
 

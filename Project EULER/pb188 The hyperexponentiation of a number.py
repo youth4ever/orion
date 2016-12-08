@@ -2,18 +2,27 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-                    Primitive Triangles     -       Problem 276
+The hyperexponentiation of a number     -       Problem 188
 
-Consider the triangles with integer sides a, b and c with a ≤ b ≤ c.
-An integer sided triangle (a,b,c) is called primitive if gcd(a,b,c)=1.
-How many primitive integer sided triangles exist with a perimeter not exceeding 10 000 000 (10**7) ?
+The hyperexponentiation or tetration of a number a by a positive integer b,
+denoted by a↑↑b or ba, is recursively defined by:
+
+a↑↑1 = a,
+a↑↑(k+1) = a(a↑↑k).
+
+Thus we have e.g. 3↑↑2 = 3**3 = 27, hence 3↑↑3 = 3**27 = 7625597484987
+
+and 3↑↑4 is roughly 10**3.6383346400240996*10^12.
+
+Find the last 8 digits of 1777↑↑1855.
+
+
 '''
 import time
 
 
 print('\n--------------------------TESTS------------------------------')
 
-this is done with
 
 
 

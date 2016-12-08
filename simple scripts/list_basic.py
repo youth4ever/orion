@@ -282,6 +282,50 @@ print('\nBOOLEAN, Get information about the existence of an element in a list:')
 print(15 in test_2)
 print(7 in test_2)
 
+
+print('\n------------------------ Find the closest element of a number in a list------------------------------')
+
+print('--------------------------BINARY SEARCH ALGORITHM , VERY VERY FAST ----------------')
+def bin_search(n, List):        # VERY FAST ALGORITHM
+    ''':Description: Search for an element in the list and returns the index of it. If it not finds it returns
+        the index of the element closest to its left, the smaller number.
+    :param: **n**- integer, the number to find
+                **List** - lst type, the list to search for
+    :returns:   int, the index of the element
+    '''
+    left = 0
+    right = len(List) -1
+
+    while left <= right:
+        midpoint = (left+right)//2
+        if List[midpoint] == n: return midpoint
+        elif List[midpoint] > n: right = midpoint-1
+        else: left = midpoint+1
+    if n > List[midpoint]: return midpoint
+    else: return (midpoint-1)
+
+primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101]
+myNumber = 87
+print(primes)
+print("I don't have the number",myNumber,"in the list. But I can get the INDEX left close to it it :", bin_search(myNumber, primes ))
+
+
+print('\n------------------------SLOWER METHODS, Only for lists <1000 elements  :------------------------------')
+
+myNumber = 87
+print("I don't have the number",myNumber,"in the list. But I can get the closest value to it :")
+print('Closest number to :',myNumber,'is :  ' ,min(primes, key=lambda x: abs(x-myNumber)),'\n')
+
+print('If one want to find more elements nearby :')
+from heapq import nsmallest
+print(nsmallest(3, primes, key=lambda x: abs(x-myNumber) ))
+# or
+# This does the following:
+# Create a sequence of tuples (d, x) where d is the distance to your target
+# Select the first k elements of that list
+# Extract just the number values from the result, discarding the distance
+print(  [n for d, n in sorted((abs(x-myNumber), x) for x in primes)[:3]]  )
+
 print('\n------------------------MIN, Max of TWO LISTS :------------------------------')
 pth1=[131, 201, 96, 342, 746, 422, 111, 956, 331]
 pth2=[131, 201, 96, 342, 746, 422, 121, 37, 331]

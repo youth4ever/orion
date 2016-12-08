@@ -96,7 +96,7 @@ a = reduce(lambda x,y: x+y, [47,11,42,13])
 print('Calculates the sum of the list :   ', a )
 f = lambda a,b: a if (a > b) else b
 print('Determining the maximum of a list of numerical values by using reduce:   ', reduce(f, [47,11,42,102,13]))
-s = reduce(lambda x, y: x+y, range(1,101))
+s = reduce(lambda x, y : x+y, range(1,101))
 print('Calculating the sum of the numbers from 1 to 100:   ', s)
 factorial = reduce(lambda x,y : x*y, range(1,6))
 print('Calculating the factorial of 5 :   ', factorial)
