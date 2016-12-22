@@ -1,5 +1,5 @@
 
-from itertools import count
+from itertools import count, product
 from math import gcd
 
 def pythagorean_triple(plim):
@@ -80,8 +80,8 @@ print('\n---------------------------------')
 
 def gen_Pythagorean_triplets(i,j):    # by Bogdan Trif
     ''':Usage:      >>> pyt = gen_Pythagorean_triplets(5,5)
-                        >>> next(pyt)
-                        >>> for i in gen_Pythagorean_triplets(8,8): print(i)
+                        # >>> next(pyt)
+                        # >>> for i in gen_Pythagorean_triplets(8,8): print(i)
     :param i:   i
     :param j:   j
     :return:    a,b,c - pythagorean triplet
@@ -94,5 +94,33 @@ def gen_Pythagorean_triplets(i,j):    # by Bogdan Trif
             if a > 0:
                 print(m,n,'    ',sorted((a,b,c)))
                 yield a,b,c
+
+print('\n#########   MORE ADVANCED METHODS TO GENERATE PYTHAGOREAN TRIPLETS    #################\n')
+import itertools
+# Method I - With Only One variable :
+
+print(list((a,b,c) for a,b,c in itertools.product(range(1, 100), repeat=3) if a<=b<=c and a**2 + b**2 == c**2))
+
+# Method II - With Only One variable :
+
+print(list(x for x in itertools.product(range(1, 100), repeat=3) if x[0]<=x[1] <=x[2] and x[0]**2 + x[1]**2 == x[2]**2))
+
+
+print('------------------ RECURSIVE GENERATOR ------------------')
+
+# RECURSIVE GENERATOR
+
+def orduples(size, start, stop, step=1):
+    if size == 0:
+        yield ()
+    elif size == 1:
+        for x in range(start, stop, step):
+            yield (x,)
+    else:
+        for u in orduples(size - 1, start, stop, step):
+            for x in range(u[-1], stop, step):
+                yield u + (x,)
+if __name__ == "__main__":
+    print(list(orduples(3, 0, 5)))
 
 

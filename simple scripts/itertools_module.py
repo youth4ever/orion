@@ -59,3 +59,58 @@ key='ABCD'
 C = cycle(key)
 print('Cycling the key : ' , C.__next__() , C.__next__(),  C.__next__() , C.__next__() )
 for i in range(14) : print( next(C)  , end='  ' )
+
+print('------------------- Dynamically creating nested for loop? ------------------')
+
+import itertools
+counts = [1, 2, 3]
+ranges = [range(x) for x in counts]
+for i in itertools.product(*ranges):
+    print( i , end='  ')
+
+
+print('\n\n---------- Combinations between Elements of Unknown Number of  Nested Lists -------------------')
+# Nested Lists, Iterating over an unknown number of nested loops in python
+from itertools import product
+lists = [     ['THE', 'A'],     ['ELEPHANT', 'APPLE', 'CAR'],     ['WALKED', 'DROVE', 'SAT'] ]
+for items in product(*lists):
+    print (items)
+
+
+print('\n#########   MORE ADVANCED METHODS TO GENERATE PYTHAGOREAN TRIPLETS    #################\n')
+import itertools
+# Method I - With Only One variable :
+
+print(list((a,b,c) for a,b,c in itertools.product(range(1, 100), repeat=3) if a<=b<=c and a**2 + b**2 == c**2))
+
+# Method II - With Only One variable :
+
+print(list(x for x in itertools.product(range(1, 100), repeat=3) if x[0]<=x[1] <=x[2] and x[0]**2 + x[1]**2 == x[2]**2))
+
+
+print('------------------ RECURSIVE GENERATOR ------------------')
+
+# RECURSIVE GENERATOR
+
+def orduples(size, start, stop, step=1):
+    if size == 0:
+        yield ()
+    elif size == 1:
+        for x in range(start, stop, step):
+            yield (x,)
+    else:
+        for u in orduples(size - 1, start, stop, step):
+            for x in range(u[-1], stop, step):
+                yield u + (x,)
+if __name__ == "__main__":
+    print(list(orduples(3, 0, 5)))
+
+print('--------------------- UNIQUE COMBINATIONS -------------------')
+from itertools import combinations
+
+for combination in combinations(range(1,6), 3):
+    print (combination, end='  ')
+
+print('\n----------------- Unique Custom List Non-reapeating Combinations')
+for combination in combinations([2, 3, 5, 7, 11, 13], 3):
+    print (combination, end='  ')

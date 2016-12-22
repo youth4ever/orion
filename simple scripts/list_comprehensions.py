@@ -135,3 +135,31 @@ print(grid)
 
 print('\n---------------Build a matrix or table with zeroes in it of custom size----------------- ')
 print( [[0 for x in range(4)] for x in range(10+1)])
+
+
+print('\n ---------------------   break list comprehension, Stop an iteration if a condition is met ----------')
+
+
+from itertools import count
+def end_of_loop():
+    raise StopIteration
+
+print('This loop stops at 100 even if normally will go to Infinity :'  , list( end_of_loop() if i*i > 100 else  i*i for i in count(1) ))
+
+
+
+
+print('\n ---------------------   List Comprehension, IF ELSE Statements Together, same proposition ----------')
+
+l = [22, 13, 45, 50, 98, 69, 43, 44, 1]
+print(' IF ELSE Statements Together : \t' , [x+1 if x >= 45 else x+5 for x in l] )
+
+
+
+
+
+
+
+
+
+

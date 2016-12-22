@@ -6,6 +6,15 @@ print(a[::-1])              #Reverses the string : becomes 54321
 print(a[::-2])              #becomes 531
 print(a[4::])              #from a fixed character to the end
 
+print('\n------------ Palindrome Construction ------------------')
+i=12345
+print('the string is :', i)
+print( 'Returns only the the characters until the last(not included) and Reversed :', str(i)+str(i)[ len(str(i))-2::-1] )
+
+
+print( 'Completely Reverse the entire String :', str(i)+str(i)[::-1 ] )
+
+print('----------------------')
 
 L=[9,6,16,0,54,11,3, 11, 0, 6, 11]
 print("Join a list of numbers in a string :",  ''.join( str(i) for i in  L ) )

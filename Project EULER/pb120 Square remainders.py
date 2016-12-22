@@ -103,8 +103,8 @@ print('\n--------------------------SOLUTION 3, Khalid, Saudi Arabia  -----------
 t1  = time.time()
 # I didn't reach the level of simplification that some people arrived at, but I got that only the last two terms matter,
 # and that it will come out to i*a where i is in 6, 10, 14, 18, 22 ...
+# So I just went with that, and it worked.
 
-So I just went with that, and it worked.
 def r_max(num):
     max = 0
     square = num**2

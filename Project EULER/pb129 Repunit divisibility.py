@@ -19,6 +19,21 @@ Find the least value of n for which A(n) first exceeds one-million.
 '''
 import time
 
+def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
+    ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+    from pyprimes import factorise
+    return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
+
+def prime_generator(lower, upper):      ### o(^_^)o  FASTEST  o(^_^)o  ###  HIghly Efficient !!!
+    """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
+    Create a candidate list within which non-primes will be marked as None.         """
+    cand = [i for i in range(3, upper + 1, 2)]
+    end = int(upper ** 0.5) // 2
+
+    # Loop over candidates (cand), marking out each multiple.
+    for i in range(end):
+        if cand[i]:
+            cand[cand[i] + i::cand[i]] = [None] * ( (upper // cand[i]) - (upper // (2 * cand[i])) - 1 )
 
 print('\n--------------------------TESTS------------------------------')
 

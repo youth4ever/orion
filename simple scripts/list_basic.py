@@ -259,6 +259,23 @@ def duplicates(lst, item):
 
 print(duplicates(lst, False) )
 
+
+def count_repetitions(lst):
+    ''':Description: Counts how many consecutive occurrences there are in a list
+    '''
+    pos = 0
+    cnt=0
+    for i in range(1,len(lst)):
+        if lst[i] == lst[i-1]:
+            pos += 1
+        if lst[i] != lst[i-1]:
+            pos = 0
+        # print(pos , end='  ')
+        if pos == 1 : cnt +=2
+        if pos == 2 or pos == 3 or pos ==4 : cnt +=1
+    return cnt
+
+
 ######################################
 print('\n-------------------    Finding the index of an item given a list containing it in Python  -----------------------')
 # It always finds the index of the first element in the list, so if there are many the next ones will not be listed:
@@ -434,3 +451,16 @@ print(enigma)
 print('Suppose you want to swap elements between them, here we swap 1 with 8 :')
 enigma[1], enigma[4] = enigma[4], enigma[1]
 print(enigma)
+
+
+print('\n -----------NESTED LIST , Iteration over an unknown Number of Sublists----------- ')
+
+from itertools import product
+
+lists = [    ['THE', 'A'],
+    ['ELEPHANT', 'APPLE', 'CAR'],
+    ['WALKED', 'DROVE', 'SAT'] ]
+
+for items in product(*lists):
+    print (items)
+

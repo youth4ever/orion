@@ -49,7 +49,7 @@ print('\n', len(C) , len(C)-cnt, cnt)
 print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()
 
-Must see if there is a pattern from those numbers
+# Must see if there is a pattern from those numbers
 
 
 

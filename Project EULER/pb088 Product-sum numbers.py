@@ -299,7 +299,7 @@ print('\n----------------------')
 
 print('\nTesting the single_factoring Function : ', single_factoring([2,2,2,2,2,2,2,2,2,2,2,2,2]))
 print('Class Test Method factorize_all : ', GET_DIVISORS().divisors(512) )
-print('\nTesting the multi_factoring Function : ', len(list(set(multi_factoring([2,2,2,2,2,2,2,2,2,2,3,3,3])))) ,len(multi_factoring([2,2,2,2,2,2,2,2,2,2,3,3,3])), multi_factoring([2,2,2,2,2,2,2,2,2,2,3,3,3])  )
+print('\nTesting the multi_factoring Function : ', len(list(set(multi_factoring([2,2,2,3,3,3])))) ,len(multi_factoring([2,2,2,3,3,3])), multi_factoring([2,2,2,3,3,3])  )
 
 
 print('\n================  My FIRST SOLUTION, SLOW, 30 sec  ===============\n')

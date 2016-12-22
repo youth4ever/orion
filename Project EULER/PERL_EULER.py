@@ -569,8 +569,51 @@ for (my $i = 10; $i < 150_000_000; $i += 10) {
 }
 say $sum;
 
-##############################         #########################
-##############################         #########################
+##############################  pb114 - Counting Block combinations I        #########################
+# I wasted far too much time trying to do some clever maths with this;
+# once I gave up on that and just implemented a simple recursive solution (with memoization),
+# I had an answer very quickly:
+# Fri, 17 Feb 2006, 22:54, hv, Perl
+
+#!/usr/bin/perl -w
+use strict;
+use bigint;
+use Memoize;
+memoize('F');
+
+print "F(50) = ".F(50)."\n";
+
+sub F {
+    my $n = shift;
+    return $n >= 0 ? 1 : 0 if $n < 3;
+    my $s = 1 + F($n - 1);
+    $s += F($_) for 0 .. $n - 4;
+    $s;
+}
+##############################   PB124 - Ordered Radicals      #########################
+# Mon, 22 Aug 2016, 02:40, trizen
+# Too easy for a rating of 25%.
+
+use 5.010;
+use strict;
+use integer;
+
+use ntheory qw(factor is_square_free);
+use List::Util qw(uniq product);
+
+my @list;
+foreach my $i (1 .. 100000) {
+    push @list, [is_square_free($i) ? $i : product(uniq(factor($i))), $i];
+}
+
+@list = sort {
+           ($a->[0] <=> $b->[0])
+        || ($a->[1] <=> $b->[1])
+} @list;
+
+say $list[10000-1][1];
+
+
 ##############################         #########################
 ##############################         #########################
 ##############################         #########################

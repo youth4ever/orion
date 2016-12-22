@@ -1,0 +1,1 @@
+#from primes_work_tool.py import primes_work_tool

@@ -82,7 +82,7 @@ def automated_test():
         n = randint(101,1e4)
         print(n, '    1-st , 2-nd    : ',bouncy_number_first(n),  bouncy_number(n) )
 
-# automated_test()
+automated_test()
 
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
 
 t2  = time.time()
-print('\nCompleted in :', round((t2-t1), 6), 's\n\n')
+print('\nCompleted in :', round((t2-t1), 6), 's\n\n')               #   Completed in : 11.858678 s
 
 '''
 

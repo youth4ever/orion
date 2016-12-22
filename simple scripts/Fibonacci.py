@@ -24,8 +24,7 @@ def main():
 	t2  = time.time()
 	print('\n', ' Completed in  in :', round((t2-t1)*1000,4), 'ms\n')
 
-
-
+###########################
 
 
 
@@ -44,7 +43,6 @@ print('\n--------------  Recursion function Fibonacci with memoization; Memoizat
 d={1:1, 2:1}
 def fib(n, d):
 	#	Recursion function Fibonacci with memoization; Memoization keep tracks of already calculated values
-
 	if n in d:				#	First look up in the dictionary
 		return d[n]
 	else:
@@ -68,6 +66,8 @@ def fibo(n):
 		return ans
 
 print('\nRecursive  Fibonacci with Memoization : ',fibo(3))
+
+
 ###################################################
 
 def Fibonacci(n):
@@ -80,7 +80,35 @@ def Fibonacci(n):
 		a  , b = b, a + b
 
 
-
-if __name__ == "__main__": main()
-
 Fibonacci(40)
+
+
+
+#########################
+print('\n\n------------------------ Fibonacci Generator -----------------------------------')
+
+
+def fibonacci_gen():
+    """Fibonacci numbers generator"""
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+f = fibonacci_gen()
+for i in range(100):
+	print(next(f), end='  ')
+
+
+print('\n\n------------------------ Fibonacci with lru_cache -----------------------------------')
+
+import functools
+
+@functools.lru_cache(maxsize=None)
+def fib_lru(num):
+    if num < 2:
+        return num
+    else:
+        return fib_lru(num-1) + fib_lru(num-2)
+
+print(fib_lru(5))

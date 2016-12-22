@@ -19,7 +19,34 @@ What is f(10**25)?
 
 '''
 import time
+from math import log2
 
+D = { 1 : 1}
+
+print('log base 2 of 10 :\t',log2(10))
+print('log base 2 of 20 :\t',log2(20))
+print('log base 2 of 50 :\t',log2(50))
+print('log base 2 of 100 :\t',log2(100))
+
+print('\n--------------------')
+
+def decompose_number(n):
+    N = []
+    while n >= 1 :
+        x = int(log2(n))
+        N.append(2**x)
+        n = n%(2**x)
+        # print(n)
+    return N
+
+print('function decompose_number testing : \t',decompose_number(10**1))
+
+print('\n--------------------')
+
+#
+# x=1
+# for i in range(16):
+#     print(x<<i, end='  ')
 
 print('\n--------------------------TESTS------------------------------')
 

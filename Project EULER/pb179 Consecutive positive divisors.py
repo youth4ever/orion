@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @ Completed on Sat, 17 Dec 2016, 23:44
 #The  Euler Project  https://projecteuler.net
 '''
                     Consecutive positive divisors       -   Problem 179
@@ -10,132 +10,169 @@ For example, 14 has the positive divisors 1, 2, 7, 14   while   15 has  1, 3, 5,
 '''
 
 
-import time
+import time, sys
 import gmpy2
 
-class GET_DIVISORS(object):
-    '''Made by Bogdan Trif @ 2016-11-15, based on itertools.combinations module
-    and with a little help on list(functools.reduce(operator.mul, i) for i in comb)
+def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
+    ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+    from pyprimes import factorise
+    return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
 
-    :param nr:  int
-    :return: a list with the divisors    '''
+print(get_factors(1979197919791979))
+#print(list(i[0] for i in list(factorise(3932273))))
 
-#     def __init__(self, nr):   # We don't want to initialize the class with a number
-#     self.nr = nr
 
-    def factor_pyprimes(self, nr):
+def  calculate_divisors(nr):
+    '''**©** Made by Bogdan Trif @ 2016-12-08, 16:30.
+        :Description: Functions which computes the number of divisors of a number.
+                It uses the Numbers of Divisors Theorem :which says : if N=a**x*b**y*c**z => divisors_nr=(x+1)(y+1)(z+1)
+            Example: N = 216 = 2**3 * 3**3 => divisors_nr = (3+1)(3+1) = 16
+    :param nr: int, nr
+    :return: int, divisors_number                   '''
+    import functools, operator
+    from pyprimes import factorise
+    def factors(nr):
         ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
-        from pyprimes import factorise
-        return [val for sublist in [[i[0]]*i[1] for i in factorise(nr)] for val in sublist]
-
-    def divisors(self, nr):
-        from itertools import combinations
-        import functools, operator, gmpy2
-        if gmpy2.is_prime(nr) == True or nr == 1 :
-            return [nr, 1]    # Must be adjusted to [1] if you change on list
-        else :
-            all_factors =  self.factor_pyprimes(nr)
-            # set_factors=list(set(all_factors))
-            comb= set()
-            # print(all_factors)
-            for i in range(1, len(all_factors)):
-                c = set(combinations(all_factors, i) )
-                comb.update(c)
-                comb_prod = list(functools.reduce(operator.mul, i) for i in comb)
-                comb_prod.sort()
-        return  [nr]+comb_prod[::-1]+[1]   # sum([1]+ comb_prod)   !!!!!!!! Remember to change on  return [1]  for isprime case
+        return [i for i in factorise(nr)]
+    N = factors(nr)
+    return  functools.reduce( operator.mul , [ (i[1]+1) for i in N ])
 
 
-def count_repetitions(lst):
-    ''':Description: Counts how many consecutive occurences there are in a list
-    '''
-    pos = 0
-    cnt=0
-    for i in range(1,len(lst)):
-        if lst[i] == lst[i-1]:
-            pos += 1
-        if lst[i] != lst[i-1]:
-            pos = 0
-        # print(pos , end='  ')
-        if pos == 1 : cnt +=2
-        if pos == 2 or pos == 3 or pos ==4 : cnt +=1
-    return cnt
 
 print('\n--------------------------TESTS------------------------------')
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n======== My FIRST SOLUTION,  Need Improvement ,VERY SLOW 26 min ===============\n')
 t1  = time.time()
 
+def my_first_solution(up_range) :
+    h, counter = 0, 0
+    I_last=2
+    for i in range(3, up_range+1 ):
+        if gmpy2.is_prime(i) :
+            I_n = 2
+        else :
+            I_n = calculate_divisors(i)
+        if I_n == I_last :
+            counter+=1
+        # print(str(i)+' :   ' ,  I_last  , '    ', str(i+1)+' :   '  , I_n, '        Cnt:'  ,counter)
+        I_last = I_n            # Important Line
+        if i*100 //up_range  > h-1 :        # Progress Bar #
+            h += 1
+            # sys.stdout.write("\r%d%%-" %h )
+            sys.stdout.write('\r' + str(h)+' % ['+'#'*h+str(' ')*(220-22*h//10) +']' )   # Font Segoe UI Semibold
+            # sys.stdout.write('\r' + str(h)+' % ['+'#'*h+str(' ')*(100-h) +']' )         #  Calibri, Adjust the numbers, for the font of your configuration
+            # sys.stdout.flush()
+    return print('\nAnswer : ',counter)
 
-L=[]
-counter=2
-up_range = 10**2
-for i in range(2, up_range+1 ):
-    if gmpy2.is_prime(i) == True or i == up_range :
-        counter += count_repetitions(L)
-        L=[]
-        print(str(i)+'.   ' ,    '         Counter:'  ,counter)
-    else:
-        div = GET_DIVISORS().divisors(i)
-        l = len(div)
-        L.append(l)
-        print(str(i)+'.   ' , div,'   ' , l  ,   '         Counter:'  ,counter)
-    if i % 1e5 == 0 : print(i)
-
-
-print('\nAnswer : ',counter)
-
-
-
-# Tried : Answer :  1849079, ..81, ..83 , ..82, ..80, ..78, ..77, ..84, ..85,
-# Tried : 986116, 986114, 986115
+# my_first_solution(10**7)            # Answer :  986262
 
 
-
-
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')        # Completed in : 1586.758758 s
 
 
 
 
+
+print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+print('\n--------------------------SOLUTION 1, VERY INNOVATIVE & ELEGANT  15 secs --------------------------')
+t1  = time.time()
+
+# ===== Tue, 24 May 2016, 17:22, FJ_Sevilla , Spain
+# Python 3 It is not as fast but is simple :)
+
+from math import sqrt
+def FJ_Sevilla():
+    limit = 10**7
+    divisors = [0]*(limit)
+    for i in range(2, int(sqrt(limit))):
+        s=i**2
+        divisors[s] += 0.5
+        for j in range(i+s, limit, i):
+            divisors[j] += 1
+    return print(sum(divisors[i] == divisors[i - 1] for i in range(3, limit)))
+
+# FJ_Sevilla()
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
+print('\n--------------------------SOLUTION 2, Brute Force,  27 sec  --------------------------')
+t1  = time.time()
+# =====  Mon, 5 Oct 2015, 03:22, elvischen
 
-# print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-# print('\n--------------------------SOLUTION 1,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 2,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 3,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 4,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+def elvischen() :
+    Limit = 10**7
+    x = [2]*Limit
+    for i in range(2,int(Limit**0.5)):
+        for j in range(i*i,Limit,i):
+            x[j] += 2
+    for i in range(2,int(Limit**0.5)):
+        x[i**2] -= 1
+
+    result = 0
+    for i in range(2,Limit-1):
+        if x[i]== x[i+1]:
+            result += 1
+    return print('Result:   ' , result)
+
+# elvischen()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 3,   --------------------------')
+t1  = time.time()
+
+# ====== Mon, 20 Oct 2014, 14:46, fioi, France
+
+def fioi():
+    upper = 10 ** 7
+    nb_divs = [1] * upper
+
+    for i in range(2, upper):
+        if nb_divs[i] == 1:
+            for j in range(i, upper, i):
+                k, l = 0, j
+                while l % i == 0:
+                    l //= i
+                    k += 1
+                nb_divs[j] *= k + 1
+
+    ans = 0
+
+    for i in range(1, upper - 1):
+        if nb_divs[i] == nb_divs[i + 1]:
+            ans += 1
+
+    return print(ans)
+
+fioi()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 4, 1 min  --------------------------')
+t1  = time.time()
+
+# ===== Mon, 31 Oct 2016, 05:58, mbh038  , England
+# 33 s in Python. I use a sieve to determine the number of divisors.
+
+import time
+import numpy as np
+
+def p179(limit=100):
+    t=time.clock()
+    a1=np.ones( limit, dtype=int )
+    for divisor in range(1,limit):
+        a1[divisor :: divisor] += 1
+    print(sum([a1[i] == a1[i+1] for i in range(2,len(a1)-1)]))
+    print (time.clock()-t)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
 # print('\n--------------------------SOLUTION 5,   --------------------------')
 # t1  = time.time()
 #

@@ -1,6 +1,6 @@
 #!/usr/bin/python
-import time
-from math import  gcd
+import time, functools
+from math import  gcd, sqrt
 # The Most basic
 
 # Prime numbers GENERATOR
@@ -49,21 +49,45 @@ print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
 print('---'*20,'SIEVE of ERATOSTHENES :  Efficient PRIME GENERATOR algorithms','---'*20)
 t1  = time.time()
 
-def prime_generator(n):         # HIghly Efficient !!!!         THE FASTEST, The BEST , The ONE
+def prime_generator(lower, upper):      ### o(^_^)o  FASTEST  o(^_^)o  ###  HIghly Efficient !!!
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
-    Create a candidate list within which non-primes will be marked as None.
-    """
-    cand = [i for i in range(3, n + 1, 2)]
-    end = int(n ** 0.5) // 2
+    Create a candidate list within which non-primes will be marked as None.         """
+    cand = [i for i in range(3, upper + 1, 2)]
+    end = int(upper ** 0.5) // 2
 
     # Loop over candidates (cand), marking out each multiple.
     for i in range(end):
         if cand[i]:
-            cand[cand[i] + i::cand[i]] = [None] * ( (n // cand[i]) - (n // (2 * cand[i])) - 1 )
+            cand[cand[i] + i::cand[i]] = [None] * ( (upper // cand[i]) - (upper // (2 * cand[i])) - 1 )
 
     # Filter out non-primes and return the list.
-    return [2] + [i for i in cand if i]
+    return [2] + [ i for i in cand if i and i > lower ]
 
+def sieve(n):       # Need to test it
+    sieve = [True] * n
+    for i in range(3,int(n**0.5)+1,2):
+        if sieve[i]:
+            sieve[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
+    return [2] + [i for i in range(3,n,2) if sieve[i]]
+
+def sieve(lower, upper_bound):          # SECOND
+    ''':Description:        SIEVE OF ERATOSTHENES ALGORITHM  , SECOND FASTEST
+    :param:      :lower: = lower_integer including
+                     :upper_bound: = upper integer excluding
+    :returns:   a list containing all primes between lower and upper bound
+    :Usage:             Example:    primes = sieve(2, 100)                    '''
+
+    n = upper_bound + 1
+    check = [True] * n
+    check[0] = check[1] = False
+    for i in range(2, int(upper_bound**0.5) + 1):
+        if check[i]:
+            for j in range(i**2, upper_bound + 1, i):
+                check[j] = False
+    primes = [i for i, flag in enumerate(check) if flag and i > lower ]
+    return primes
+
+print(sieve(11900, 12000))
 
 
 def gen_primes(limit):                                  # THIRD
@@ -91,24 +115,7 @@ print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
 
 t1  = time.time()
 
-def sieve(lower, upper_bound):
-    ''':Description:        SIEVE OF ERATOSTHENES ALGORITHM  , SECOND FASTEST
-    :param:      :lower: = lower_integer including
-                     :upper_bound: = upper integer excluding
-    :returns:   a list containing all primes between lower and upper bound
-    :Usage:             Example:    primes = sieve(2, 100)                    '''
 
-    n = upper_bound + 1
-    check = [True] * n
-    check[0] = check[1] = False
-    for i in range(2, int(upper_bound**0.5) + 1):
-        if check[i]:
-            for j in range(i**2, upper_bound + 1, i):
-                check[j] = False
-    primes = [i for i, flag in enumerate(check) if flag and i > lower ]
-    return primes
-
-print(sieve(11900, 12000))
 
 t2  = time.time()
 print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
@@ -282,12 +289,12 @@ factors(int(''.join(('1', '8', '9', '9', '3', '4', '3'))))          # The factor
 
 print('-------------- Using module pyprimes , FASTEST FACTOR DECOMPOSITION ---------------------------')
 
-def factorise(n):
+def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
     ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
     from pyprimes import factorise
     return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
 
-print(factorise(1979197919791979))
+print(get_factors(1979197919791979))
 #print(list(i[0] for i in list(factorise(3932273))))
 
 
@@ -394,14 +401,49 @@ print(circular_primes(197))
 
 print('\n---------------------------- DIVISORS --------------------------------')
 
-class GET_DIVISORS(object):
-    '''Made by Bogdan Trif @ 2016-11-15, based on itertools.combinations module
+def  calculate_divisors(nr):
+    '''**©** Made by Bogdan Trif @ 2016-12-08, 16:30.
+        :Description: Functions which computes the number of divisors of a number.
+                It uses the Numbers of Divisors Theorem :which says : if N=a**x*b**y*c**z => divisors_nr=(x+1)(y+1)(z+1)
+            Example: N = 216 = 2**3 * 3**3 => divisors_nr = (3+1)(3+1) = 16
+    :param nr: int, nr
+    :return: int, divisors_number                   '''
+    import functools, operator
+    from pyprimes import factorise
+    def factors(nr):
+        ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+        return [i for i in factorise(nr)]
+    N = factors(nr)
+    return  functools.reduce( operator.mul , [ (i[1]+1) for i in N ])
+
+
+
+
+def get_divisors(n):      ### o(^_^)o  FASTEST  o(^_^)o  ### !! FIRST FASTEST
+    from math import sqrt
+    factors = set()
+    for x in range(1, int(sqrt(n)) + 1):
+        if n % x == 0:
+            factors.add(x)
+            factors.add(n//x)
+    return sorted(factors)
+
+for i in (72, 90, 210): print( "%i: factors: %s" % (i, get_divisors(i)) )
+
+
+def divisors(n):     # SECOND FASTEST, Very close to the First
+    return set(functools.reduce(list.__add__,([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
+
+for i in (72, 90, 210): print( "%i: factors: %s" % (i, divisors(i)) )
+
+class GET_DIVISORS(object):     ### THIRD PLACE, LOW PERFORMANCE
+    '''**©** Made by Bogdan Trif @ 2016-11-15, based on itertools.combinations module
     and with a little help on list(functools.reduce(operator.mul, i) for i in comb)
 
     :param nr:  int
     :return: a list with the factors ( method factorise) or divisors (method divisors)
     :Usage:  >>> GET_DIVISORS().divisors(90)    # to obtain the divisors
-                 >>>  GET_DIVISORS().factorise(90)   # to obtain the factors                      '''
+                                                                                                              '''
 #     def __init__(self, nr):   # We don't want to initialize the class with a number
 #     self.nr = nr
 
@@ -429,5 +471,17 @@ class GET_DIVISORS(object):
                 comb_prod.sort()
         return  comb_prod[::-1]   # sum([1]+ comb_prod)   !!! Remember to change on  return [1]  for isprime case !
 
-
 print('Here we test the GET_DIVISORS CLASS :  ',GET_DIVISORS().divisors(90))
+
+
+
+
+
+
+
+
+
+
+
+
+

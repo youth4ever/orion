@@ -166,7 +166,7 @@ from functools import reduce
 print( list(reduce(lambda a, b: a.union(set(b)), D.values(), set())) )
 
 
-print('\n--------Convert , map, zip two lists into a dicctionary -------------')
+print('\n--------Convert , map, zip two lists into a dictionary -------------')
 keys = ['a', 'b', 'c']
 values = [1, 2, 3]
 # Method II - Using dict
@@ -177,3 +177,29 @@ print({k: v for k, v in zip(keys, values)})
 # Method III - Using itertools
 import itertools
 print(dict(itertools.zip_longest(keys,values)))
+
+print('\n--------dictionary setdefault() Method, equivalent to get Method -------------')
+# This method returns the key value available in the dictionary and if given key is not available then it will return provided default value.
+#!/usr/bin/python
+dict = {'Name': 'Zara', 'Age': 7}
+print ("Value : %s" %  dict.setdefault('Age', None))
+print ("Value : %s" %  dict.setdefault('Sex', None))
+# It is equivalent to the get Metod :
+print('Value :', dict.get('Sex'))
+
+print('\n-------------- Sort, Arrange a Dictionary after the keys / values ---------------')
+print('-------------- Sort, after values ---------------')
+# METHOD I
+import operator
+x = {1: 1, 2: 2, 3: 3, 4: 2, 5: 5, 6: 6, 7: 7, 8: 2, 9: 3, 10: 10}
+sorted_x = sorted( x.items(), key=operator.itemgetter(1) )
+print('Method I - Sort after the VALUES :' ,sorted_x)
+
+# METHOD II -   not what I want at this moment
+print('Method II - Sort after the VALUES :' ,sorted(x, key=x.get))
+
+print('-------------- Sort, after keys ---------------')
+# METHOD I -
+x = {1: 1, 42: 2, 13: 3, 14: 2, 117: 5, 16: 6, 27: 7, 17: 2, 39: 3, 11: 10}
+sorted_y = sorted(x.items(), key=operator.itemgetter(0))
+print('Method I - Sort after the KEYS :' ,sorted_y)

@@ -1,4 +1,5 @@
-from itertools import combinations_with_replacement
+from itertools import combinations_with_replacement, product
+import itertools
 print("j   ", "    i  ","       i+j")
 print("------"*20)
 
@@ -116,8 +117,9 @@ from itertools import combinations
 for i in range(1, len(A)+1):                       # If you don't want the last element of the list :     range(len(A))
     for j in  range(1, len(A)+1) :
         Comb = list(combinations(A[0:j],i))
-    print(Comb)
+    print(Comb, end='  ')
 
+print('\n--------    # Without the last element and Listed only once each       --------- ')
 # Without the last element and Listed only once each
 for k in range(len(A)-1,len(A)):
     print('------------',A[0:k],'-------')
@@ -125,7 +127,7 @@ for k in range(len(A)-1,len(A)):
         Comb = list(combinations(A[:k],l))
         #print(Comb)
         for m in Comb:
-            print(m)
+            print(m, end ='   ')
 
 
 print('\n---------------------------ASCENDING LIST ---------------------------')
@@ -194,6 +196,7 @@ try:
 except StopIteration : pass
 
 print('\n-------------------- RECURSION, Multiple Nested For Loops, Custom Levels ------------------')
+
 def loop_rec(y, number):
     if (number >= 1):
         loop_rec( y+1, number - 1 )
@@ -204,3 +207,92 @@ def loop_rec(y, number):
         return
 
 loop_rec(1,5)
+
+
+print('\n------------------- With Itertools product ------------------')
+
+for i, j, k in itertools.product(*itertools.repeat(range(3), 3)) :
+    print(i,j,k, end='   ')
+
+for i,j,k in itertools.product(*[range(3)]*3):
+    print(i,j,k, end='   ')
+
+
+print('\n-------------------- DYNAMIC LOOPS,  ------------------')
+# Nested Lists, Iterating over an unknown number of nested loops in python
+from itertools import product
+
+lists = [
+    ['THE', 'A'],
+    ['ELEPHANT', 'APPLE', 'CAR'],
+    ['WALKED', 'DROVE', 'SAT']
+]
+
+for items in product(*lists):
+    print (items)
+
+print('\n--------------------RECURSION, Dynamic For Loop ----------------------')
+
+def dynamic_for_loop(boundaries, *vargs):
+    if not boundaries:
+        print(*vargs, end='   ') # or whatever you want to do with the values
+    else:
+        bounds = boundaries[0]
+        for i in range(*bounds):
+            dynamic_for_loop(boundaries[1:], *(vargs + (i,)))
+
+boundaries = [[ 0,2,1], [0,3,1], [0,3,1]]
+
+print('dynamic_for_loop  :\n '   )
+dynamic_for_loop(boundaries)
+
+
+print('\n#########   MORE ADVANCED METHODS TO GENERATE PYTHAGOREAN TRIPLETS    #################\n')
+import itertools
+# Method I - With Only One variable :
+
+print(list((a,b,c) for a,b,c in itertools.product(range(1, 100), repeat=3) if a<=b<=c and a**2 + b**2 == c**2))
+
+# Method II - With Only One variable :
+
+print(list(x for x in itertools.product(range(1, 100), repeat=3) if x[0]<=x[1] <=x[2] and x[0]**2 + x[1]**2 == x[2]**2))
+
+
+print('------------------ RECURSIVE GENERATOR ------------------')
+
+# RECURSIVE GENERATOR
+
+def orduples(size, start, stop, step=1):
+    if size == 0:
+        yield ()
+    elif size == 1:
+        for x in range(start, stop, step):
+            yield (x,)
+    else:
+        for u in orduples(size - 1, start, stop, step):
+            for x in range(u[-1], stop, step):
+                yield u + (x,)
+if __name__ == "__main__":
+    print(list(orduples(3, 0, 5)))
+
+
+print('\n -------------------- Unique, non-reapeating , COMBINATIONS --------------------')
+from itertools import combinations
+
+for combination in combinations(range(1,6), 3):
+    print (combination, end='   ')
+
+
+
+print('\n----------------- Unique Custom List Non-reapeating Combinations')
+for combination in combinations([2, 3, 5, 7, 11, 13], 3):
+    print (combination, end='  ')
+
+print('\n----------------- ALL Variable  Custom List Non-reapeating Combinations')
+for i in range(1,6) :
+    print('\n------')
+    for c in combinations([2,3,5,7,11,13], i):
+        print (c, end='   ')
+
+
+

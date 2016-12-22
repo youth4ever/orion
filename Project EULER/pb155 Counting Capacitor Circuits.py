@@ -23,7 +23,7 @@ from fractions import Fraction
 from decimal import *
 getcontext().prec = 25
 from itertools import chain
-
+import gmpy2
 
 def add_capac_paralel(c1, c2):
     # return  c1+c2
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     # C={1 : [60] }
     C={1 : ['60'] }
 
-    pb155(12)
+    # pb155(12)
 
     t2  = time.time()
     print('\nCompleted in :', round((t2-t1),6), 's\n\n')
@@ -164,8 +164,9 @@ if __name__ == "__main__":
 # To speed up thing I need to use mpq from gmpy2 module
 
 
+a = gmpy2.mpq(3,11)/7 + gmpy2.mpq(11,8)/29
+print(' = = gmpy2.mpq :' ,a ,'      ' , a.numerator, '      ' ,a.denominator)   # IMplement on problem 155 to speed up
 
-gmpy2.mpq(3,11)/7 + gmpy2.mpq(11,8)/29   # IMplement on problem 155 to speed up
 
 
 

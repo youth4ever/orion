@@ -218,7 +218,7 @@ primes = prime_generator(int(1.61*10**5) )
 test_nr = 10**9
 cnt, P  = 0, []
 for i in primes:
-    if pow(10, test_nr, 9*i) == 1:      # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
+    if pow(10, test_nr, 9*i) == 1:    # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
         cnt+=1
         P.append(i)
     if cnt ==40 : break

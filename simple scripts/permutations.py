@@ -160,7 +160,8 @@ circulate_number(1234569)
 
 print('\n','===='*20)
 
-print('\n--------------------------- UNIQUE PERMUTATIONS -------------------')
+print('\n--------------------------- UNIQUE PERMUTATIONS LIST FUNCTION-------------------')
+
 # Only unique permutations
 def unique_permutations(lst):       # VERY EFFECTIVE
     ''':Description: Takes a list and makes ONLY Unique Permutations of a list with repeated elements.
@@ -177,3 +178,29 @@ def unique_permutations(lst):       # VERY EFFECTIVE
             remaining_lst.remove(first_element)
             for sub_permutation in unique_permutations(remaining_lst):
                 yield (first_element,) + sub_permutation
+
+
+print('\n-------------- PERMUTATION CALCULATION FORMULA OF A LIST -------------------')
+# The formula is P(total_elem_nr) / [ P(elem_1) *P(elem_2) * ...* Perm(elem_n) ]
+
+lst =   [1, 1, 1, 1, 2, 2, 3]
+lst = lst*3
+print(lst)
+
+def calc_perm(lst) :        ### o(^_^)o    o(^_^)o  ###
+    '''     **©** Made by Bogdan Trif @ 2016-12-16, 1150.
+
+        :Description:    Calculates the number of unique permutations of a list.
+        :param lst: list
+        :return: int, number of permutations                    '''
+    from math import factorial
+    from functools import reduce
+    from operator import mul
+    total = len(lst)
+    elem_nr=[]
+    for i in set(lst): elem_nr.append(lst.count(i))
+    numerator = factorial(sum(elem_nr))
+    denominator =  reduce(mul, [factorial(i) for i in elem_nr] )
+    return numerator // denominator
+
+print('\nThe Permutation Function calc_perm :\t',calc_perm(lst))
