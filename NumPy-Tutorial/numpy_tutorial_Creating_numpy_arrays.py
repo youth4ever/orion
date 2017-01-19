@@ -30,8 +30,8 @@ So far the numpy.ndarray looks awefully much like a Python list (or nested list)
 There are several reasons:
 
 Python lists are very general. They can contain any kind of object.
-They are dynamically typed. They do not support mathematical functions such as matrix and dot multiplications,
- etc. Implementating such functions for Python lists would not be very efficient because of the dynamic typing.
+They are dynamically typed. They do not support mathematical functions such as matrix and dot multiplications, etc.
+Implementing such functions for Python lists would not be very efficient because of the dynamic typing.
 Numpy arrays are statically typed and homogeneous. The type of the elements is determined when array is created.
 Numpy arrays are memory efficient.
 Because of the static typing, fast implementation of mathematical functions such as multiplication

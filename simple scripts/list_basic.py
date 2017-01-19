@@ -19,9 +19,48 @@ print('Sum of the list is : ', sum(my_lst))
 # Display ONLY ODD Index Terms from a list :
 print(my_lst[1::2])
 
+print('---------List slices with negative step -----------------' )
+a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print( a[::-1] )
+print(  a[::-2] )
+
+print(' ---------List slice assignment -----------------' )
+a = [1, 2, 3, 4, 5]
+a[2:3] = [0, 0]
+print( a )
+a[1:1] = [8, 9]
+print( a )
+a[1:-1] = []
+print( a )
+
+print(' ---------Naming slices (slice(start, end, step)) -----------------' )
+a = [0, 1, 2, 3, 4, 5]
+LASTTHREE = slice(-3, None)
+print( LASTTHREE )
+slice(-3, None, None)
+print( a[LASTTHREE] )
+
 print('\n-------------------------------- slice ------------------------')
 sl = slice(0,6, 1)
 print ('Using slice we can build custom ranges :  ',my_lst[sl])
+
+
+print('\n----------- Grouping adjacent list items using zip ---------------')
+
+a = [1, 2, 3, 4, 5, 6]
+
+# Using iterators
+group_adjacent = lambda a, k: zip(*([iter(a)] * k))
+print( list(group_adjacent(a, 3)) )
+print( list(group_adjacent(a, 2)) )
+print( list(group_adjacent(a, 1)) )
+
+# Using slices
+from itertools import islice
+group_adjacent = lambda a, k: zip(*(islice(a, i, None, k) for i in range(k)))
+print( list(group_adjacent(a, 3)) )
+print( list(group_adjacent(a, 2)) )
+print( list(group_adjacent(a, 1)) )
 
 
 print('---------------------  PRODUCTS ---------------------')
@@ -82,6 +121,7 @@ print('old_array : ', old_array)
 print('new_array : ', list(new_array))
 
 print('\n---------- Replace an element in a simple list without affecting the indexing -----------')
+print(my_lst)
 my_lst.insert(my_lst.index(7),100)
 del(my_lst[my_lst.index(7)])
 print(my_lst)
@@ -106,9 +146,32 @@ print( 'Divide each element from a List  ' ,[ int(i / 2) for i in [2,4] ])      
 print('\n=================== JOIN,  FLATTEN A LIST =======================')
 print('----------------- SINGLE FLATTEN , JOIN  ELEMENTS------------------')
 
+# Method I
 list_of_lists = [[180.0, 1, 2, 3], [173.8], [164.2], [156.5,[45,12,[81,41,[2,3,8],4,11]]], [147.2], [138.2]]
 single_flattened = [val for sublist in list_of_lists for val in sublist]
 print(single_flattened)
+
+# Method II
+import itertools
+a = [[1, 2], [3, 4], [5, 6]]
+print(list(itertools.chain.from_iterable(a)) )
+
+# Method III
+print(sum(a, []))
+
+# Method IV
+print( [x for l in a for x in l] )
+
+# Method V
+a = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
+print( [x for l1 in a for l2 in l1 for x in l2] )
+
+# Method VI
+a = [1, 2, [3, 4], [[5, 6], [7, 8]]]
+flatten = lambda x: [y for l in x for y in flatten(l)] if type(x) is list else [x]
+print ( flatten(a) )
+
+
 
 
 print('\n----------------------- Join two lists --------------------------')
@@ -275,6 +338,25 @@ def count_repetitions(lst):
         if pos == 2 or pos == 3 or pos ==4 : cnt +=1
     return cnt
 
+print('\n----------- Finding consecutive numbers in a list -----------------')
+
+import itertools
+from operator import itemgetter
+# Find runs of consecutive numbers using groupby.  The key to the solution
+# is differencing with a range so that consecutive numbers all appear in
+# same group.
+L = [ 1, 4, 5, 6, 10, 15, 16, 17, 18, 22, 25, 26, 27, 28]
+for k, g in itertools.groupby( enumerate(L), lambda x: x[1]-x[0] ) :
+    print (list(map(itemgetter(1), g)))
+
+
+print('\n ------------ Most common elements in an iterable (collections.Counter) -------------')
+import  collections
+A = collections.Counter([1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7])
+print(A )
+print( A.most_common(1) )
+
+print ( A.most_common(3) )
 
 ######################################
 print('\n-------------------    Finding the index of an item given a list containing it in Python  -----------------------')
@@ -464,3 +546,45 @@ lists = [    ['THE', 'A'],
 for items in product(*lists):
     print (items)
 
+print('\n---------  GROUP A LIST INTO SEQUENTIAL N-TUPLES   ----------')
+
+import itertools
+
+def group(lst, n):
+    """group([0,3,4,10,2,3], 2) => iterator
+
+    Group an iterable into an n-tuples iterable. Incomplete tuples
+    are discarded e.g.
+
+    # >>> list(group(range(10), 3))
+    [(0, 1, 2), (3, 4, 5), (6, 7, 8)]
+    """
+    return itertools.zip_longest(*[itertools.islice(lst, i, None, n) for i in range(n)])
+
+print( list(group(range(10), 4)))
+
+####################
+
+import itertools
+def group_ranges(L):
+    """
+    Collapses a list of integers into a list of the start and end of
+    consecutive runs of numbers. Returns a generator of generators.
+    # >>> [list(x) for x in group_ranges([1, 2, 3, 5, 6, 8])]
+    [[1, 3], [5, 6], [8]]
+    """
+    for w, z in itertools.groupby(L, lambda x, y=itertools.count(): next(y)-x) :
+        grouped = list(z)
+        yield (x for x in [grouped[0], grouped[-1]][:len(grouped)])
+
+
+S= {1, 4, 5, 6, 10, 15, 16, 17, 18, 22, 25, 26, 27, 28}
+print(S)
+print([list(x) for x in group_ranges(S)])
+
+
+print('\n----------- Largest and smallest elements (heapq.nlargest and heapq.nsmallest) ------------')
+import random, heapq
+a = [ random.randint(0, 100) for __ in range(100)]
+print ( heapq.nsmallest(5, a) )
+print( heapq.nlargest(5, a) )

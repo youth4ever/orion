@@ -52,11 +52,16 @@ print('Identity matrix: \n',np.identity(3, dtype=int))
 print('__'*15,'MATHEMATICAL OPERATIONS', '___'*10)
 A = np.array(([[1,2,3],[2,5,7],[7,4,2]]))
 B = np.array([[8,7,4],[5,7,2],[1,6,2]])
-print('THE DOT PRODUCT: \n',np.dot(A,B))
-print('THE CROSS PRODUCT: \n',np.cross(A,B))
-print('DETERMINANT OF MATRIX A: \n',np.linalg.det(A))
-print('INVERSE OF MATRIX A: \n',np.linalg.inv(A))
 
+print('\nTHE DOT PRODUCT: \n',np.dot(A,B))
+
+print('\nTHE CROSS PRODUCT: \n',np.cross(A,B))
+
+print('\nDETERMINANT OF MATRIX A: \n',np.linalg.det(A))
+
+print('\nINVERSE OF MATRIX A: \n',np.linalg.inv(A))
+
+#####################################
 print('_____'*15)
 
 

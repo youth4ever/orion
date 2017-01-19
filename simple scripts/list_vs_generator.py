@@ -18,7 +18,7 @@ def makeRange_generator(n):           #return 0,1,2,...,n-1
     while a < n:
         yield a
         print(a)
-    a += 1
+        a += 1
 
 makeRange_generator(10)
 print(makeRange_generator(10))

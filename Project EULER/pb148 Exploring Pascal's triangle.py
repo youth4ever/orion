@@ -25,8 +25,10 @@ Find the number of entries which are not divisible by 7 in the first one billion
 '''
 
 import copy
-import time, math
+import time
+from math import sqrt, log, floor
 from pyprimes import factorise
+import functools, operator
 
 def prime_generator(lower, upper):      ### o(^_^)o  FASTEST  o(^_^)o  ###  HIghly Efficient !!!
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
@@ -79,14 +81,10 @@ def non_sevens_mechanically(row_nr):
 
 print('\n--------------------------TESTS------------------------------')
 
-print( 'Math Log 7 Test : \t' , math.log(1000, 7 ))
+print( 'Math Log 7 Test : \t' , log(10**9, 7 ))
 print( 'Math Modulo 343 Test : \t' , 1000%343   )
 print('\n--------------------------TESTS------------------------------')
 
-
-row_nr = 13
-
-print('\nTest for the function non_sevens_mechanically : ' ) ; non_sevens_mechanically(row_nr)
 # t1  = time.time()
 # t2  = time.time()
 # print('\nCompleted in :', round((t2-t1),6), 's')
@@ -123,21 +121,74 @@ print('\nTest for the function non_sevens_mechanically : ' ) ; non_sevens_mechan
 #         # print(n, end=' ,  ' )
 # print('\nNumber of NON-Sevens :\t',cnt)
 
+# S=0
 def get_non_sevens(row_nr) :
-    memo = {}
-    ml = math.log(row_nr, 7)
-    iml = math.floor(math.log(row_nr, 7))
-    if ml <= 1 :
+    m = log(row_nr, 7)
+    i = floor(m)
+    print(m, i, end='    ')
+    if m <= 1 :
         return (row_nr*(row_nr+1))//2
-    elif ml > 1 :
-        a = row_nr // (7**iml)
-        b = row_nr%(7**iml)
-        A = (a*(a+1)//2)* get_non_sevens(row_nr- b)
-        B = (a+1) * get_non_sevens(b)
-        return A+B
+    elif m > 1 :
+        a = row_nr // (7**i)
+        b = row_nr%(7**i)
+        print('(a, b)=' , a, b)
+        A = (a*(a+1)//2)* get_non_sevens(row_nr - 7)
+        print(A)
+        if (a/7) %1 ==0 or b!= 0 :
+            B = (a+1) * get_non_sevens(b)
+            A+=B
+    return A
+
+# print('\n MAIN TEST for the Function get_non_sevens :\t', get_non_sevens(row_nr))
+
+# m = math.log(row_nr)
+# i = math.floor(m)
 
 
-print('\n MAIN TEST for the Function get_non_sevens :\t', get_non_sevens(row_nr))
+rows= 1000
+
+print('\nTest function which counts the non_sevens_mechanically : ' ) ; non_sevens_mechanically(rows)
+print('----------------\n')
+
+L = [28**i for i in range(1,11)]
+print('The leveles of Pascal s Triangle :\n' ,L,'\n')
+
+Suma = 0
+F , J =[], []
+
+while rows > 7  :
+    m = log(rows, 7)
+    i = floor(m)
+    full_units = rows//(7**i)
+    inc_units = rows %(7**i)
+    F.append(full_units)
+    o = L[i-1]*(full_units*(full_units+1))/2
+    Suma += o
+    k = (inc_units+1)* (L[i-1]*(inc_units*(inc_units+1)/2)/L[i-1] )
+    Suma += k
+    print(str(i)+'.   ' , full_units ,'\t' , rows ,'\t'*2 ,inc_units ,'\t'*2  ,round(m,3),'\t'*2 , F ,'\t'*2 ,L[i-1],'    \tSuma=' ,Suma, '\tk=',k,'\to=' ,o)
+    rows = rows % (7**i)
+
+print('\nTotal Sum: ', int(Suma))
+
+@ 2016-12-22, 11:48
+I am close to the solution, need to fix the coefficients :
+Full is always sum[i] : example : sum(2)=3, sum(4)=10
+Partial is always only the second term and is
+# 3*L2 + 63*L1 + 63*L0 + 63* 21   This is VERY CORRECT
+3*28**3+63*(28**2+28+21)
+
+#
+# w10 = 10**9 % 7**10
+# print('w10 rows left: ',w10,'\n')
+#
+# print(log(w10, 7))
+# w9 = w10 % 7**9
+# print('w9 rows left: ',w9,'\n')
+#
+# print(log(w9, 7))
+# w9 = w10 % 7**9
+# print('w9 rows left: ',w9,'\n')
 
 
 print('\n================  My FIRST SOLUTION,   ===============\n')

@@ -134,3 +134,15 @@ Functional programming is a style of programming. It is not based on the order o
 Instead:
 It is based on the input and output of functions. In it, recursive functions are often used.
 '''
+
+
+print('----------- Finding consecutive numbers in a list -----------------')
+
+import itertools
+from operator import itemgetter
+# Find runs of consecutive numbers using groupby.  The key to the solution
+# is differencing with a range so that consecutive numbers all appear in
+# same group.
+L = [ 1,  4,5,6, 10, 15,16,17,18, 22, 25,26,27,28]
+for k, g in itertools.groupby( enumerate(L), lambda x_i: x_i[1]-x_i[0] ) :
+    print (list(map(itemgetter(1), g)))

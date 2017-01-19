@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Wed, 21 Dec 2016, 00:38
 #The  Euler Project  https://projecteuler.net
 '''
 Perfect Square Collection       -       Problem 142

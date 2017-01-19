@@ -12,6 +12,7 @@ For example, 14 has the positive divisors 1, 2, 7, 14   while   15 has  1, 3, 5,
 
 import time, sys
 import gmpy2
+from math import sqrt
 
 def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
     ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
@@ -67,6 +68,27 @@ def my_first_solution(up_range) :
 
 # my_first_solution(10**7)            # Answer :  986262
 
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')        # Completed in : 1586.758758 s
+
+
+
+print('\n======== My SECOND SOLUTION, 22 secs, Copied drom FJ_Sevilla ===============\n')
+t1  = time.time()
+
+
+def pb179(limit):
+
+    divisors = [0]*(limit)
+    for i in range(2, int(sqrt(limit))):
+        s=i**2
+        divisors[s] += 0.5
+        for j in range(i+s, limit, i):
+            divisors[j] += 1
+    return print(sum(divisors[i] == divisors[i - 1] for i in range(3, limit)))
+
+pb179(10**7)
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')        # Completed in : 1586.758758 s

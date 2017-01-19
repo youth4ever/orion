@@ -180,6 +180,25 @@ def unique_permutations(lst):       # VERY EFFECTIVE
                 yield (first_element,) + sub_permutation
 
 
+# PERMUTATIONS WITHOUT REPETITION           #! MUST COMPARE THE TWO VERSIONS
+# Luka Rahne @ http://stackoverflow.com/questions/6284396/permutations-with-unique-values/6285203#6285203
+# (modified)
+def permutations_wor(elements): # permutations without repetitions
+    def recurse(listunique,p_list,d):
+        if d < 0:
+            yield tuple(p_list)
+        else:
+            for i in [j for j in listunique if j[1] > 0]:
+                p_list[d] = i[0]
+                i[1] -= 1
+                for g in recurse(listunique,p_list,d-1):
+                    yield g
+                i[1] += 1
+    listunique = [[i,elements.count(i)] for i in set(elements)]
+    l = len(elements)
+    return recurse(listunique,[0]*l,l-1)
+
+
 print('\n-------------- PERMUTATION CALCULATION FORMULA OF A LIST -------------------')
 # The formula is P(total_elem_nr) / [ P(elem_1) *P(elem_2) * ...* Perm(elem_n) ]
 

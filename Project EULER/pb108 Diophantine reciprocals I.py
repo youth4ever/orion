@@ -215,7 +215,7 @@ def solution_iter_pb108():
         if gmpy2.is_prime(n) == False :
             if len(GET_DIVISORS().factorise(n)) > 7 :
                 rec = get_reciprocals(n)
-                # print( n, rec)
+                print( n, rec)
                 if rec > 1000 :
                     ans = n
                     break
@@ -224,7 +224,7 @@ def solution_iter_pb108():
 
 
 
-# solution_iter_pb108()           # Answer : 180180
+solution_iter_pb108()           # Answer : 180180
 
 
 

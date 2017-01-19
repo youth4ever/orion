@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif    ( ͡° ͜ʖ ͡°)     @
 #The  Euler Project  https://projecteuler.net
 '''
             Diophantine reciprocals II          -           Problem 110
@@ -10,7 +10,7 @@ In the following equation x, y, and n are positive integers.
 It can be verified that when n = 1260 there are 113 distinct solutions and this is the least value of n
 for which the total number of distinct solutions exceeds one hundred.
 
-What is the least value of n for which the number of distinct solutions exceeds four million?
+What is the least value of n for which the number of distinct solutions exceeds four million (4*10**6)   ?
 
 NOTE: This problem is a much more difficult version of Problem 108 and as it is well beyond the limitations
 of a brute force approach it requires a clever implementation.
@@ -77,12 +77,60 @@ t1  = time.time()
 
 
 
+import pyprimes
+import sympy
 
+def aolea_sol(n=10**3) :
 
+    listResult = [2]
+    divisors = 3
+    solutions = 2
+    flag = False
+    i1 = 2
+    while flag == False:
+        listResult.append(pyprimes.nth_prime(i1))
+        num = 1
+        for i in listResult:
+            num = num*i
+        divisors = len(list(sympy.divisors(num**2)))
+        solutions =(divisors-1)/2 + 1
+        k1, k2, k3, k4 = 0 ,0, 0, 0
+        if solutions > n:
+            while   k1+1<= len(listResult) and listResult[-1] > listResult[k1]*listResult[k1+1] and int(round(solutions*25/27))>=n :
+                    listResult.pop()
+                    listResult.append(pyprimes.nth_prime(k3+1))
+                    listResult.append(pyprimes.nth_prime(k3+2))
+                    k3 = k3 + 2
+                    k1 = k1 + 4
+                    num = 1
+                    for i in listResult:
+                        num = num * i
+                    divisors = len(list(sympy.divisors(num ** 2)))
+                    solutions = (divisors - 1) / 2 + 1
+                    listResult=sorted(listResult)
+            while   k2+1<= len(listResult) and listResult[-1] > listResult[k2]*listResult[k2+1] and int(round(solutions*49/75))>= n :
+                    listResult.pop()
+                    listResult.append(pyprimes.nth_prime(k4+1))
+                    listResult.append(pyprimes.nth_prime(k4+2))
+                    k4 = k4 + 2
+                    k2= k2 + 4
+                    num = 1
+                    for i in listResult:
+                        num = num * i
+                    divisors = len(list(sympy.divisors(num ** 2)))
+                    solutions = (divisors - 1) / 2 + 1
+                    listResult = sorted(listResult)
+            print(n, 'Number : ',num, '       Solutions :',solutions, '    Divisors:',divisors,       '             List', listResult)
+            flag = True
+        i1 = i1 + 1
 
+aolea_sol(n = 4*10**6)
+
+# Answer : 4000000 Number :  9350130049860600
+# Solutions : 4018613.0     Divisors: 8037225              List [2, 2, 2, 3, 3, 3, 5, 5, 7, 7, 11, 13, 17, 19, 23, 29, 31, 37]
 
 t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')              Completed in : 115694.617271 ms
 
 
 # print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

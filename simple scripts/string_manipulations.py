@@ -175,3 +175,21 @@ def monotonic_number(n) :
     else : return print('True. IS monotonic !')
 
 monotonic_number(145665)
+
+print('\n------------------- String, Integer Padding of a number -------------------')
+#### Method I
+print(  str(31).zfill(4), str(3).zfill(4), list(str(31).zfill(4)) )
+
+#### Method II
+add_nulls = lambda number, zero_count : "{0:0{1}d}".format(number, zero_count)
+print(add_nulls(2,3) , list(add_nulls(2,3)))
+
+#### Method III
+print(  '%0*d' % (3, 4)  )
+
+print('\n------------------- String,  fill out of a string with spaces  -------------------')
+print( 'hi'.ljust(10) )
+print('{0: <16}'.format('Hi'))
+print("'%-10s'" % 'hi')
+print( format(14, '#010b'))          #python convert to binary and keep leading zeros
+print( '{:08b}'.format(1))          #python convert to binary and keep leading zeros

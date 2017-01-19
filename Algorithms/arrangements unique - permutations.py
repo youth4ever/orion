@@ -54,8 +54,8 @@ def unique_permutations(lst):
 
 t1  = time.time()
 
-print('\n\nTest with unique_permutations Function : ', print(len(list(unique_permutations(L))), list(unique_permutations(L))))
-
+print('\n\nTest with unique_permutations Function : ',  list(unique_permutations(L)))
+print('Length' ,len(list(unique_permutations(L))))
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')

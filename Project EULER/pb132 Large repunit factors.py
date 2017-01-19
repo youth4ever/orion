@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @       Completed on Sun, 4 Dec 2016, 19:31
 #The  Euler Project  https://projecteuler.net
 '''
 Large repunit factors       -       Problem 132

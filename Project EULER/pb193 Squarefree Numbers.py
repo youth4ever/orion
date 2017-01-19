@@ -48,7 +48,7 @@ print('\n -------------  MY VERIFICATION CONCEPT ---------------------')
 
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n================  My FIRST SOLUTION, Can be improved  ===============\n')
 t1  = time.time()
 
 def square_free_numbers(up_nr) :        # Works Up_to   2**50
@@ -101,7 +101,6 @@ def square_free_numbers(up_nr) :        # Works Up_to   2**50
 # square_free_numbers(2**50)             #  RESULT :	 684465067343069
 
 
-
 # I need to condense all those 8 loops
 
 
@@ -109,7 +108,7 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')            # Completed in : 98426.629782 ms
 
 
-print('\n================  My SECOND SOLUTION,   ===============\n')
+print('\n================  My SECOND SOLUTION,  Not Working ===============\n')
 t1  = time.time()
 import functools, operator
 
@@ -119,7 +118,7 @@ def square_free_combinations(up_nr) :        # Works Up_to   2**50
     for i in range(2, 4):
         for c in itertools.combinations( P , i):
             G = (functools.reduce( operator.mul, c ))**2
-            print(c , G)
+            # print(c , G)
             if G < b :
                 if i % 2 == 0  :
                     S +=  b//G
@@ -130,8 +129,6 @@ def square_free_combinations(up_nr) :        # Works Up_to   2**50
 
 
 # square_free_combinations(10**3)
-
-
 
 
 
@@ -156,7 +153,7 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
 
-print('\n--------------------------SOLUTION 1, MOBIUS , VERY SIMPLE but SLOW  --------------------------')
+print('\n--------------------------SOLUTION 1, MOBIUS , > 10 mins  --------------------------')
 t1  = time.time()
 
 # ===== Tue, 18 Oct 2016, 15:26, aolea, Spain
@@ -166,7 +163,7 @@ import sympy
 def aolea() :
     sum193 = 0
     for d in range(1, 2**25):
-        print(d, sum193)
+        # print(d, sum193)
         sum193 = sum193 + sympy.ntheory.mobius(d)*math.floor((2**50)/(d**2))
     return print(sum193)
 

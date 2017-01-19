@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Tue, 20 Dec 2016, 21:38
 #The  Euler Project  https://projecteuler.net
 '''
             Squarefree Binomial Coefficients            -           Problem 203
@@ -107,17 +107,6 @@ for n in L:
 print('\n\nSum = ', S)          # Sum =  34029210557338
 
 
-
-
-
-
-
-
-
-
-
-
-
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
@@ -178,7 +167,7 @@ def squareFree(n):
             return False
     return True
 
-# mbh038(51)
+mbh038(51)
 
 
 t2  = time.time()

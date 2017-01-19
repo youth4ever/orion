@@ -135,7 +135,7 @@ print('\n Test for the function determine_inside_origin: ', determine_inside_ori
 # plot_triangle(A, B, C)
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n================  My FIRST SOLUTION,  25 ms ===============\n')
 t1  = time.time()
 
 
@@ -150,10 +150,10 @@ def solution_pb102():
         # os.system("pause")
     return print('\nAnswer : ', counter)
 
-solution_pb102()
+solution_pb102()            # Answer :  228
 
 t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')      #   Completed in : 26.001453 ms
 
 
 # print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

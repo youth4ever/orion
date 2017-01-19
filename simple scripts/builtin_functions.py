@@ -5,6 +5,20 @@ print(list(enumerate(seasons)))
 
 print(list(enumerate(seasons, start=1)))
 
+print('\n-----------------------  enumerate & lambda    ---------------------')
+from pyprimes import  primes_below
+N=100
+primes = primes_below(N)
+fact = [1]*(N+1)
+for p in primes:
+      for j in range(1,N//p+1):
+         fact[p*j]*=p
+         s,n = 0,0
+F = sorted(enumerate(fact), key = lambda x:x[1])
+C = sorted(enumerate(fact),key= lambda x:x[0]/x[1], reverse=True)
+print(C)
+print(F)
+
 
 print('\n-----------------Binary, Decimal, Octodecimal,  Hexadecimal  Conversions ----------------')
 print('Decimal to Binary : ',bin(14))
@@ -23,6 +37,9 @@ print('\n-----------------------   ord & chr    ---------------------')
 print('ord(a) and chr(57) return (respectively) the integer representing the given char and the char represented by the given integer.')
 print('Test ord  :   ', ord('a'))
 print('Test chr  :   ', chr(97))
+
+
+
 
 print('\n--------------------    zip    -------------------------')
 print('zip(a, b) returns an iterator that aggregates elements from each of the two iterables. '
@@ -80,6 +97,18 @@ print ('Here we filter the even numbers of the Fibonacci sequence, we display on
 
 odd = filter(lambda x: x % 2 == 0, fib)
 print ('Here we filter the odd numbers of the Fibonacci sequence, we display only even :  ',list(odd))
+
+# Lambda forms can also be used with the filter function;
+# in fact, they can be used anywhere a function is expected in Python.
+# In the fifth example, the list of squares is filtered according to whether the given entries are greater than 5 and less than 50.
+# A lambda form that returns True when this condition is met is lambda x: x > 5 and x < 50.
+# Thus, we can reproduce the fifth example as follows:
+
+squares = map(lambda x: x**2, range(10))
+special_squares = filter(lambda x: x > 5 and x < 50, squares)
+print (special_squares)
+
+
 
 print('\n -------------------------------  Reducing a list, with reduce -----------------')
 # The function reduce(func, seq) continually applies the function func() to the sequence seq. It returns a single value.

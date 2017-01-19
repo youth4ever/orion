@@ -49,7 +49,21 @@ print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
 print('---'*20,'SIEVE of ERATOSTHENES :  Efficient PRIME GENERATOR algorithms','---'*20)
 t1  = time.time()
 
-def prime_generator(lower, upper):      ### o(^_^)o  FASTEST  o(^_^)o  ###  HIghly Efficient !!!
+
+
+
+
+def primesieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    import numpy as np
+    """return array of primes 2<=p<=n"""
+    sieve=np.ones(n+1,dtype=bool)
+    for i in range(2, int((n+1)**0.5+1)):
+        if sieve[i]:
+            sieve[2*i::i]=False
+    return np.nonzero(sieve)[0][2:]
+
+
+def prime_generator(lower, upper):      #THIRD FASTEST
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
     Create a candidate list within which non-primes will be marked as None.         """
     cand = [i for i in range(3, upper + 1, 2)]
@@ -63,14 +77,15 @@ def prime_generator(lower, upper):      ### o(^_^)o  FASTEST  o(^_^)o  ###  HIgh
     # Filter out non-primes and return the list.
     return [2] + [ i for i in cand if i and i > lower ]
 
-def sieve(n):       # Need to test it
+def sieve(n):       # SECOND FASTEST
     sieve = [True] * n
     for i in range(3,int(n**0.5)+1,2):
         if sieve[i]:
             sieve[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
     return [2] + [i for i in range(3,n,2) if sieve[i]]
 
-def sieve(lower, upper_bound):          # SECOND
+
+def sieve_2(lower, upper_bound):          # FOURTH
     ''':Description:        SIEVE OF ERATOSTHENES ALGORITHM  , SECOND FASTEST
     :param:      :lower: = lower_integer including
                      :upper_bound: = upper integer excluding
@@ -87,11 +102,11 @@ def sieve(lower, upper_bound):          # SECOND
     primes = [i for i, flag in enumerate(check) if flag and i > lower ]
     return primes
 
-print(sieve(11900, 12000))
+print(sieve_2(11900, 12000))
 
 
-def gen_primes(limit):                                  # THIRD
-    ''' SIEVE of ERATOSTHENES :  Efficient PRIME GENERATOR algorithms       THIRD FASTEST
+def gen_primes(limit):                                  # FIFTH
+    ''' SIEVE of ERATOSTHENES :  Efficient PRIME GENERATOR algorithms
     Code by David Eppstein, UC Irvine, 28 Feb 2002,     http://code.activestate.com/recipes/117119/ '''
     D = {}
     i = 2
@@ -130,6 +145,29 @@ import gmpy2
 print('gmpy2 is prime Test - THE FASTEST tested :  ',gmpy2.is_prime( 10000079 ) )
 
 
+def Miller_Rabin(p, k = 50):  # Miller-Rabin primality test
+    import random
+    if p == 2: return True
+    if p < 2 or p & 1 == 0: return False
+
+    d = (p - 1) >> 1
+    while d & 1 == 0:
+        d >>= 1
+
+    for i in range(k):
+        a = random.randint(1, p - 1)
+        t = d
+        y = pow(a, t, p)
+        while t != p - 1 and y != 1 and y != p - 1:
+            y = pow(y, 2, p)
+            t <<= 1
+        if y != p - 1 and t & 1 == 0:
+            return False
+    return True
+
+print('Miller_Rabin Primality Algorithm Test: \t' , Miller_Rabin(151681868531) )
+
+
 def isprime(n):
     ''' SLOWER METHOD. But Does not depend on a pre-generated sieve or on other module !'''
     if n == 1:
@@ -143,8 +181,8 @@ def isprime(n):
 print('isprime  Function Test:    ',isprime(10000079))
 
 
-# primes = sieve(2,10000079)     # MUST BE Generated outside of the function for EFFICIENCY !
-primes = sieve(2,1000)     # MUST BE Generated outside of the function for EFFICIENCY !
+# primes = sieve_2(2,10000079)     # MUST BE Generated outside of the function for EFFICIENCY !
+primes = sieve_2(2,1000)     # MUST BE Generated outside of the function for EFFICIENCY !
 def is_prime(num):
     ''' Second Fastest DETECT PRIME BUT Dependent on the pre-generated sieve(lower, upper_bound).
         Is efficient ONLY if uses a list of pre-generated primes outside the function.

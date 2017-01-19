@@ -70,8 +70,8 @@ print(girls.get('Pamela') == None)
 # To avoid this, we can use the call hand.get('a',0). This is the "safe" way to access a value if we are not sure the key is in the dictionary.
 
 # Interogate about a value :
-print('\n Interogate about a value :')
-print(list(girls.keys())[list(girls.values()).index(78)])
+print('\n Interogate about a value :' , list(girls.keys())[list(girls.values()).index(78)] )
+
 
 
 # Reverse the Dictionary , keys become values :
@@ -199,7 +199,35 @@ print('Method I - Sort after the VALUES :' ,sorted_x)
 print('Method II - Sort after the VALUES :' ,sorted(x, key=x.get))
 
 print('-------------- Sort, after keys ---------------')
+
 # METHOD I -
 x = {1: 1, 42: 2, 13: 3, 14: 2, 117: 5, 16: 6, 27: 7, 17: 2, 39: 3, 11: 10}
 sorted_y = sorted(x.items(), key=operator.itemgetter(0))
 print('Method I - Sort after the KEYS :' ,sorted_y)
+
+print('\n-------------- Check if a key is in dictionary ---------------')
+dd = {}
+for i in range(100):
+    key = i % 10
+    if key in dd:
+        dd[key] += 1
+    else:
+        dd[key] = 1
+print(dd)
+
+print('\n ----------------- Dictionary comprehensions -------------------')
+
+m = {x: x ** 2 for x in range(5)}
+print( m )
+
+print('-------- VERY USEFUL to use to GENERATE VARIABLES DYNAMICALLY ------------- ')
+m = {x: 'A' + str(x) for x in range(10)}
+print( m )
+
+print('\n ----------------- Inverting a dictionary using a dictionary comprehension -------------------')
+m = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+print(m)
+print( {v: k for k, v in m.items()} )
+
+print('\n---------- Build Dictionary within dictionary -------------------')
+D = { x : { y: 0 for y in range(10)}  for x in range(10)}
