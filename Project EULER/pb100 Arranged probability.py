@@ -140,16 +140,6 @@ blue_da_ba_di_discs_eiffel65(1e12)
 
 
 
-
-
-
-
-
-
-
-
-
-
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 

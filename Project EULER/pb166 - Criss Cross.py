@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Wed, 18 Jan 2017, 18:54
 #The  Euler Project  https://projecteuler.net
 '''
                         Criss Cross     -       Problem 166
@@ -477,7 +477,9 @@ t1  = time.time()
 # It runs well under a minute.
 # Here is my solution in python
 
-def up_to(n):return range(n+1)
+def up_to(n):
+    return range(n+1)
+
 def no_sols(a,b,c,d,z):
     sols=set([])
     for m in up_to(b+c):
@@ -519,11 +521,46 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
-# print('\n--------------------------SOLUTION 6,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+print('\n--------------------------SOLUTION 6, 12 sec  --------------------------')
+t1  = time.time()
+
+==== Tue, 16 Feb 2010, 16:33, Obergscheidle, AWK  , Luxemburg
+
+# Slightly optimized brute-force, based on the following consideration:
+# * The outer cells of one diagonal have the same sum as the inner cells of the other diagonal
+# * For the outer cells of one diagonal and the distribution over the inner cells of the other diagonal, there are 670 possibilities
+# * The same choices exist for the assignments in the other direction
+# * once the diagonals are set, this leaves one degree of freedom for the distribution over the remaining cells in top and bottom rows,
+# and another degree of freedom for the cells in the first and last column
+# * in both cases, the number of choices is limited by the diagonals, and the number of combinations is the product of these two counts
+# The following non-optimized code takes 11 seconds
+
+
+def quad():
+    for i in range(10):
+        for j in range(10):
+            s = i+j
+            for k in range(min(s+1,10)):
+                if s-k<10:
+                    yield i, j, k, s-k
+
+def pair(n):
+    if n<10:
+        for i in range(n+1): yield i,n-i
+    else:
+        for x,y in pair(18-n): yield 9-x,9-y
+
+count = 0
+
+for d1,d4,e2,e3 in quad():
+    for e1,e4,d2,d3 in quad():
+        s = d1+d2+d3+d4
+        count1 = sum(1 for x,y in pair(s-d1-e1) if 0<= s-x-d2-e3 <=9 and 0 <= s-y-e2-d3 <= 9)
+        count2 = sum(1 for x,y in pair(s-d1-e4) if 0<= s-x-d2-e2 <=9 and 0 <= s-y-d3-e3 <= 9)
+        count += count1*count2
+
+print (count)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+

@@ -15,6 +15,7 @@ import time
 import eulerlib
 import gmpy2, functools, operator
 from itertools import  combinations, permutations
+import copy
 
 # Rules :
 # 4,6,8 must be within a number AND not at the end
@@ -96,7 +97,7 @@ def get_sevens():
     # # primes_7 = [ 9854231 ,9854261 , 9854371 , 9854623, 9854627 ]
 
     cnt = 0
-    for s in primes_7 :
+    for s in primes_7 :                 #    (7,2), (7,1,1)
         A= set(list(int(i) for i in str(s)))
         B = list(P-A)
         if B[0]%2 == 1 or B[1]%2 == 1  :
@@ -114,6 +115,8 @@ def get_sevens():
                 Sevens +=1
                 print(str(cnt)+'.    ', s ,A, d2_2)
     return Sevens
+
+# get_sevens()
 
 # print('\nThere are Sevens: \t', get_sevens() )     #   There are Sevens: 10896            Completed in : 3595.205545 ms
 Sevens = 10896
@@ -156,24 +159,52 @@ print('\n--------------- SIXES--------------')
 # print('\nThere are Sixes: \t', Sixes )     #   There are Sevens: 19871
 # Sixes = 19871
 
+### Now it remains to solve the problem of the SETS with elements of max 5 elements
+
+
+print('\n------------ SET INTERSECTION of a list of numbers -------------------------')
+# We have a list of numbers and we have a test number.
+# We want to make the intersection of the test number with every number from the list
+# and return only the numbers which have no common digits with the test number
+# lst = {257, 641, 643, 769, 389, 263, 647, 137, 521, 139, 523, 269, 397, 271, 653, 659, 149}
+# print('The initial list to of elements :\t',lst)
+# test_nr = 324
+# set_nr = set([int(i) for i in str(test_nr)])
+# print('Test number :\t', test_nr, set_nr)
+# INTERSECTION = [ s for s in lst if len(set_nr& set([int(i) for i in str(s)]) )==0 ]
+# print(' Intersection of the test_nr with every element of the list yields :\n', INTERSECTION )
+
+
+
+
 print()
-Part = []
+PART = []
 for i in partitions(9):
     if 1 < len(i) <= 5 :
         Prt = tuple(i[::-1])
         if Prt < (6,) :
             print(Prt)
+            PART.append(Prt)
 
+print('\n',PART,'\n')
 
 primes = primesieve(10**5)
-D={}
+D ={}                   # We separate length of primes in a dictionary
 for p in primes :
     l = len(str(p))
     if l not in D :
         D[l]=set([])
-        if len(str(p)) == len(set (str(11)) ) :
-            D[l].add(p)
-    else : D[l].add(p)
+        if len(str(p)) == len(set (str(p)) ) :
+            if str(p).count('0') == 0 :
+                D[l].add(p)
+    else :
+        if len(str(p)) == len(set (str(p)) ) :
+            if str(p).count('0') == 0 :
+                D[l].add(p)
+
+
+print(D)
+DI = copy.deepcopy(D)
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
@@ -182,36 +213,178 @@ print('\n----------------------------')
 t1  = time.time()
 
 P = set( [i for i in range(1,10)] )
-
+W=set()
+#                     W.add(''.join(str(i)for i in SET))
 itr, cnt, scnt= 0, 0, 1
-T = ( 2, 2, 2, 2, 1 )
-a1 = D[T[0]]
-# while scnt < 4 :
-for p1 in a1 :
-    A= set(list(int(p1) for p1 in str(p1)))
-    B = P - A
-    print(p1, A, B)
-    # scnt+=1
-    C = B
-    for i in range(1, 2 ) :        # len(T)
-        SET = set()
-        comb = list(combinations(C, T[i]))
-        # print(comb)
-        Z = []
-        if T[i] > 1 :
-            for j in comb :
-                perm = [ int(''.join([str(k) for k in s ])) for s in  list(permutations(j)) ]
-                Z = Z + perm
-        print(i,'    ',Z)
-        # for p2 in Z :
-        #     SET.add(p1)
-        #     C = B
-        #     if p2 in D[T[i]]:
-        #         SET.add(p2)
-        #         A = set(list(int(p2) for p2 in str(p2)))
-        #         C = set(C) - A
-        #         print( A, C  ,SET)
-        #         SET=set()
+T = ( 3, 2, 2, 2 )
+
+# i = 1
+# while i < len(T) :
+L1 = D[T[0]]
+print(L1)
+for p1 in L1 :
+    set_p1 = set([int(a) for a in str(p1)])
+    L2 = list(D[T[1]])
+    I = [ s for s in L2 if len(set_p1 & set([int(a) for a in str(s)]) )==0 ]
+    # print(p1, I)
+    for p2 in I :
+        SET1 = {p1, p2}
+        # print(SET1, )
+        SET1={}
+        if len(T) >2 :
+            SET1 = {p1, p2}
+            L3 = list(D[T[2]])
+            set_p1p2 = set([int(i) for i in ''.join( str(i) for i in  SET1 )])
+            I1 = [ s for s in L3 if len(set_p1p2 & set([int(a) for a in str(s)]) )==0 ]
+            # print(L3, set_p1p2, I1 )
+            for p3 in I1 :
+                SET2= {p1, p2, p3}
+                # print(SET2)
+                SET2 = {}
+                if len(T) > 3 :
+                    SET3= {p1, p2, p3}
+                    L4 = list(D[T[3]])
+                    set_p1p2p3 = set([int(i) for i in ''.join( str(i) for i in  SET3 )])
+                    I2 = [ s for s in L3 if len(set_p1p2p3 & set([int(a) for a in str(s)]) )==0 ]
+                    # print(L4, set_p1p2p3, I2)
+                    for p4 in I2 :
+                        SET3 = {p1, p2, p3, p4}
+                        print(SET3)
+                        SET3 = {}
+
+                        if len(T) > 4 :
+                            SET4= {p1, p2, p3, p4}
+                            L5 = list(D[T[4]])
+                            set_p1p2p3p4 = set([int(i) for i in ''.join( str(i) for i in  SET4 )])
+                            I3 = [ s for s in L3 if len(set_p1p2p3p4 & set([int(a) for a in str(s)]) )==0 ]
+                            # print(L5, set_p1p2p3p4, I3)
+
+
+
+@ 2017 -01-19 I can do it with recursion,
+
+while len('.join(str(i)for i in SET)) < 9 :
+
+    until we have all the numbers
+    I can reproduce all
+    i++
+
+
+
+    # i+=1
+
+
+
+
+
+
+#
+# # while len(DI[T[0]]) > 0 :
+# for p1 in D[T[0]] :
+#     # p1= list(DI[T[0]])[0]
+#     # D[T[0]].remove(p1)
+#     A= set(list(int(p1) for p1 in str(p1)))
+#     B = P - A
+#     print(p1, A, B)
+#     scnt+=1
+#     C = B
+#     # for i in range(1, 2 ) :        # len(T)
+#     SET = set([p1])
+#     comb = list(combinations(C, T[1] ))          # 2-nd element !!!!!!!
+#
+#     # print(comb)
+#     Z = []
+#
+#     for j in comb :
+#         perm = [ int(''.join([str(k) for k in s ])) for s in  list(permutations(j)) ]
+#         Z.extend(perm)
+#         # print('Z : ',Z,'    ' ,SET)
+#         for p2 in Z :
+#             C = B
+#             if p2 in D[T[1]]:
+#                 # D[T[0]].remove(p2)
+#                 SET.add(p2)
+#                 A = set(list(int(p2) for p2 in str(p2)))
+#                 C = set(C) - A
+#                 # print('A    C    SET :   ' ,A, C  ,SET)
+#                 if len(T) == 2 :
+#                     cnt+=1
+#                     print(str(cnt)+'.       ',SET)
+#                     W.add(''.join(str(i)for i in SET))
+#                 SET = set([p1])     ## We set back the set to have only the first element
+#
+#
+#                 if len(T) > 2 :                     # 3-rd element !!!!
+#                     SET = set([p1,p2])
+#                     Y=[]
+#                     comb2 = list(combinations(C, T[2]))
+#                     # print(' 3-rd term :    ',comb2)
+#                     for l in comb2 :
+#                         perm2 = [ int(''.join([str(k) for k in s ])) for s in  list(permutations(l)) ]
+#                         Y.extend(perm2)
+#                     # print(' Y   SET  C   ' ,Y, SET, C)
+#                     for p3 in Y :
+#                         F = C
+#                         if p3 in D[T[2]] :
+#                             SET.add((p3))
+#                             E = set( list(int(p3) for p3 in str(p3)) )
+#                             F = C - E
+#                             # print(' Y   SET  C   ' ,Y, SET, F )
+#                             if len(T) == 3 :
+#                                 cnt+=1
+#                                 print(str(cnt)+'.       ',SET)
+#                                 W.add(''.join(str(i)for i in SET))
+#                             SET = set([p1, p2])                # reset the set
+#
+#
+#                             if len(T) > 3 :                     # 4-th element !!!!!
+#                                 SET = set([p1,p2,p3])
+#                                 X=[]
+#                                 comb3 = list(combinations(F, T[3]))
+#                                 # print(' 4-th term :    ',comb2 , F)
+#                                 for m in comb3 :
+#                                     perm3 = [ int(''.join([str(k) for k in s ])) for s in  list(permutations(m)) ]
+#                                     X.extend(perm3)
+#                                 # print(' X   SET  F   ' ,X, SET, F)
+#                                 for p4 in X :
+#                                     G = F
+#                                     if p4 in D[T[3]] :
+#                                         SET.add((p4))
+#                                         H = set( list(int(p4) for p4 in str(p4)) )
+#                                         G = F - H
+#                                         # print(' X   SET  G   ' ,X, SET, G )
+#                                         if len(T) == 3 :
+#                                             cnt+=1
+#                                             print(str(cnt)+'.       ',SET)
+#                                             W.add(''.join(str(i)for i in SET))
+#                                         SET=set([p1, p2, p3])
+#
+#
+#                                         if len(T) > 4 :         # 5-th element !!!!!!!!!!
+#                                             SET=set([p1, p2, p3, p4])
+#                                             if list(G)[0] in D[T[4]]:       # check if it is prime
+#                                                 SET.add( list(G)[0])
+#                                                 cnt+=1
+#                                                 print(str(cnt)+'.       ',SET)
+#                                                 W.add(''.join(str(i)for i in SET))
+
+
+
+
+
+
+
+
+
+
+
+# print('\n Length of the SETS : ', len(W),'\n',W)
+
+
+
+
+
+
 
 
 

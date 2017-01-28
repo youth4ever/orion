@@ -289,3 +289,19 @@ print(p)
 print( p.x, p.y)
 
 
+
+print('\n------------ SET INTERSECTION of a list of numbers -------------------------')
+# We have a list of numbers and we have a test number.
+# We want to make the intersection of the test number with every number from the list
+# and return only the numbers which have no common digits with the test number
+lst = {257, 641, 643, 769, 389, 263, 647, 137, 521, 139, 523, 269, 397, 271, 653, 659, 149}
+print('The initial list to of elements :\t',lst)
+test_nr = 324
+set_nr = set([int(i) for i in str(test_nr)])
+print('Test number :\t', test_nr, set_nr)
+INTERSECTION = [ s for s in lst if len(set_nr& set([int(i) for i in str(s)]) )==0 ]
+print(' Intersection of the test_nr with every element of the list yields :\n', INTERSECTION )
+
+
+
+

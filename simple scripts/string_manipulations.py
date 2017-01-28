@@ -193,3 +193,30 @@ print('{0: <16}'.format('Hi'))
 print("'%-10s'" % 'hi')
 print( format(14, '#010b'))          #python convert to binary and keep leading zeros
 print( '{:08b}'.format(1))          #python convert to binary and keep leading zeros
+
+
+print('\n======== FIND & REPLACE n-th OCCURENCE ===================')
+print('-------------------  FIND the n-th occurence of a string  -------------------')
+
+def findnth(source, target, n):
+    num = 0
+    start = -1
+    while num < n:
+        start = source.find(target, start+1)
+        if start == -1: return -1
+        num += 1
+    return start
+
+Test_string = "abc=abc=abc=abc=abc"
+
+print('findnth , returns the index of the 2-nd occurence :\t',findnth(Test_string, 'abc', 2) )
+
+print('\n------------------- ,  REPLACE  the n-th occurence of a string  -------------------')
+
+def replacenth(source, old, new, n):
+    p = findnth(source, old, n)
+    if n == -1: return source
+    return source[:p] + new + source[p+len(old):]
+
+print('replacenth, replaces the 3-rd occurence :\t', replacenth(Test_string, "abc", "WXYZ", 3) )
+

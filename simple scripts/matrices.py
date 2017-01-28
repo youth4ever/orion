@@ -150,3 +150,26 @@ print([(index, row.index(val)) for index, row in enumerate(matrix) if val in row
 print('\n--------------- Returns TRUE if an element is in a matrix, Else return FALSE ------------')
 print( [val in row for row in matrix])
 print( True  if  True in [ val in row for row in matrix ]  else False)    # Nice List Comprehension Construction, by Bogdan Trif, 2016-11-01
+
+
+print('\n--------------------Hash of a Matrix ----------------')
+import hashlib
+
+M = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [0, 7, 9, 0, 5, 0, 1, 8, 0],
+     [8, 0, 0, 0, 0, 0, 0, 0, 7],
+     [0, 0, 7, 3, 0, 6, 8, 0, 0],
+     [4, 5, 0, 7, 0, 8, 0, 9, 6],
+     [0, 0, 3, 5, 0, 2, 7, 0, 0],
+     [7, 0, 0, 0, 0, 0, 0, 0, 5],
+     [0, 1, 6, 0, 3, 0, 4, 2, 0],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+signature = hashlib.md5(b'My Hello World !')
+print('The Test of Hellow World :  ',  signature.hexdigest() )
+
+X = M.copy() ;  Y = str(X)
+print(' The initial  X Matrix Hash Signature :',  hashlib.md5( Y.encode() ).hexdigest())
+X[8][8]= 10 ;  Y = str(X)
+print(X)
+print(' The MODIFIED  X Matrix Hash:',  hashlib.md5(Y.encode()).hexdigest() )

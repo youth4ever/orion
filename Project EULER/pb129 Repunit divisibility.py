@@ -6,16 +6,19 @@
 
 A number consisting entirely of ones is called a repunit.
 We shall define R(k) to be a repunit of length k;
+
 for example, R(6) = 111111.
 
 Given that n is a positive integer and GCD(n, 10) = 1, it can be shown that there always exists a value, k,
-for which R(k) is divisible by n, and let A(n) be the least such value of k;
+for which R(k) is divisible by n, and let A(n) be the least such value of k;   # R(A(n))
 
 for example, A(7) = 6 and A(41) = 5.               #  n=7, 41,  --> n - is the prime
 
-The least value of n for which A(n) first exceeds 10 is 17.
+The least value of n for which A(n) first exceeds 10 is 17.                     #    A( n = 17 ) =  16 = A(n) = R(k)   ==> n=17
 
 Find the least value of n for which A(n) first exceeds one-million (10**6) .   A(>10**6) = ?
+
+Find the least n ( =17 prime) when A(n)=R(k) first exceeds 10**6
 
 ( Find a prime factor of the repunit > 10**6 which has a factor which wasn't previously found
 A(n) is the number of 1's in the repunit. You want to find the smallest n that divides a repunit with more than 1 million digits.
@@ -84,50 +87,72 @@ print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
 
-# primes = primesieve( 10**6 )
-primes = set(prime_generator(1*10**6 ,2*10**6+20000 ))
-# for i in primes :     print(i,  end='  ')
+primes = primesieve( 10**6 )
+primes = set(prime_generator(6 , int(1.5*10**6) ))
+print(len(primes) )
+
+def test_lower_repunits( p , limit) :
+    for n in range(2, limit) :
+        if pow(10, n , 9*int(p) ) == 1:    # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
+            # print('the repunit R( '+str(n)+' )  has ',p ,' as a prime   !!')
+            return n
+    return False
+
+print('\ntest_lower_repunits : \t ', test_lower_repunits(1000003, 10**6),'\n\n')
 
 
-# cnt  = 0
-# for n in range(10**2, 10**2+50) :
-#     # if gcd (n, 10 ) == 1 :
-#         P=[]
-#         for i in primes:
-#             if pow(10, n , 9*int(i) ) == 1:    # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
-#                 P.append(i)
-#             if cnt == 40 : break
-#         print(str(n)+'.    ' ,P)
+# Just run this while enjoying tennis in the morning Federer vs Wawrinka
+def step_by_step(limit):
 
-#
-# down_range = 10**6
-# for i in range( down_range, down_range+20000 ) :
-#     P=[]
-#     for n in primes :
-#         if pow(10, i , 9*int(n) ) == 1:
-#             P.append(n)
-#             r = n
-#
-#     if len(P) > 0  :#and n < n_max :
-#         print('A(n)='+str(i)+'.      ' ,P,'      ' , r )
-#         # primes = primes - set(P)
+    primes = set(prime_generator(6 , int(1.01*10**6) ))
+    PRI = primes.copy()
+    n_min = 10**8
+    for n in range( limit, 2*10**6):             # range(10**6, 2*10**6):
+        # if gcd(n, 10) == 1 :
+            print(' -----------------------    A(n) repunit length : ', n ,' -------------------------- ',len(primes) )
+            P = []
+            for p in primes :
+                if pow(10, n , 9*int(p) ) == 1:
+                    PRI.remove(p)
+                    P.append(p)
+                    if n_min > p > limit  and n > limit :
+                        if test_lower_repunits(p, limit) == False :
+                            n_min = p
+                            print( '\n++++++++  A('+str(n_min)+') = ', n,'   ++++++++++++     ==', n_min, '\n')
+
+            # print('A(n)=', n , '       n = ',  P,'\n' )
+            primes = PRI.copy()
+
+# step_by_step (limit = int(10**6) )
 
 
+def get_repunits( lower_limit ) :
+    p_min = 10**8
+    # primes = prime_generator(10**6 , int(1.1*10**6) )
+    # primes = prime_generator(lower_limit-5 , lower_limit + 10000 )
+    # print(len(primes))
+    for n in range( lower_limit, lower_limit+1000 :
+        if gmpy2.is_prime(n) == 1 or gcd(n, 10) == 1 :
+            # n = test_lower_repunits(p, p)
+            if n != False  :
 
-for i in range(10**6+1 , 10**7, 2 ) :
-    P = []
-    for j in range(i+1, i+2000) :
-        if gmpy2.is_prime(j) :
-            P.append(j)
-    print(i, P )
 
+            if n > lower_limit :
+                print(p , '     repunit :',n )
+                if lower_limit < p < p_min and gcd(10,n) ==1  :
+                    p_min = p
+                    print('---'*10,'    this is it : \t prime =',p_min,'   repunit = ', n )
+
+    return print('\nAnswer : ', p_min)
+
+get_repunits(10**6)
 
 
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-# Tried :   1000003, 1000002
+# Tried :   1000003, 1000002, 1000170, 1000171
 
 ################        GENERAL IDEA      ####################
 # GOOD INFO : http://stdkmd.com/nrr/repunit/tm.cgi?p=100

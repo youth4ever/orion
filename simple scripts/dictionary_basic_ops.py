@@ -12,6 +12,15 @@ print('\nPrint (Reference) only a value from the dictionary :  ',d['three'])
 # Define an empty dictionary
 girls = {}
 
+#### If Clause Check if an element in the dictionary has values :
+print('\n-------------  If Clause Check if an element in the dictionary has values :   ------------------ ')
+D={ 3:[], 5:[5] }
+if D[5] : print('yes')
+else : print('no')
+if D[3] : print('yes')
+else : print('no')
+
+
 #  Make a CLONE to a dictionary :
 print('\n--------------------Make a CLONE to a dictionary :-----------------------------')
 d_clone = d.copy()

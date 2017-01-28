@@ -8,3 +8,11 @@ for iter in range(n_trials):
     if (abs(x) < 0.1 and abs(y) > 0.9 ):        # Multiple if statements
         print(x , y)
 
+
+print('\n------------- Variable Assignment--------------')
+a = 0
+b = 2
+print(' a, b =   ',a,b)
+m = a if a else 9
+n = b if b else 9
+print(' m, n =  ',m, n)

@@ -7,7 +7,8 @@
 A particular school offers cash rewards to children with good attendance and punctuality.
 If they are absent for three consecutive days or late on more than one occasion then they forfeit their prize.
 
-During an n-day period a trinary string is formed for each child consisting of L's (late), O's (on time), and A's (absent).
+During an n-day period a trinary string is formed for each child consisting of :
+            L's (late),             O's (on time),          and A's (absent).
 
 Although there are 81 trinary strings for a 4-day period that can be formed, exactly 43 strings would lead to a prize:
 
@@ -24,27 +25,49 @@ import time
 import itertools
 
 print('\n--------------------------TESTS------------------------------')
+t1  = time.time()
 
-marks=[ 'O', 'L' , 'A' ]
+print('Total available possibilities : \t',3**30)
 
-C = [p for p in itertools.product(marks, repeat=12)]
-print( len(C), C[0:100] )
-print(3**30)
+def brute_force_check( days ) :
 
-cnt = 0
-for i in range(len(C)):
-    s = ''.join(C[i])
-    a = s.find('AAA')
-    l = s.count('L')
-    # print(a, l, s)
-    if a != -1 or l>=2 :
-        cnt+=1
+    marks = [ 'O', 'L' , 'A' ]
+    C = [p for p in itertools.product( marks, repeat=days) ]
+    print( len(C), C[0:100] ,'\n--------------')
+
+    cnt, itr = 0, 0
+    for i in range(len(C)):
+        s = ''.join(C[i])
+        a = s.find('AAA')
+        l = s.count('L')
         # print(a, l, s)
+        if a != -1 or l>=2 :
+            cnt+=1
+            if l>= 2 :
+            # if a != -1 :
+                itr +=1
+                print(str(cnt)+'.       ' , a, l, '      ',s,'        ', itr)
 
-print('\n', len(C) , len(C)-cnt, cnt)
+    return print('\nPrize string WINS = ' , len(C)-cnt, '           Losses :   ', cnt , '            Total comb=', len(C) )
 
-# 81 : 43 / 38  ;   243 94 /149 ; 729 200 529   ;   2187 418 /1769  ;   6561 861 /5700  ;   19683 1753 17930    ;   59049 3536 55513
-# 177147 7077 170070    ;   531441 14071 517370
+
+brute_force_check(6)
+
+# 3             27 : 8 /  19
+# 4             81 : 43 / 38
+# 5             243 :94 /149
+#  6                729 : 200 529
+#   7               2187 : 418 /1769
+# 8                 6561 : 861 /5700
+# 9               19683 : 1753 17930
+# 10             59049 : 3536 55513
+# 11            177147 : 7077 170070
+# 12           531441 : 14071 517370
+
+# 15      Total comb= 14348907    WINS =  107236     Losses :    14241671
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()

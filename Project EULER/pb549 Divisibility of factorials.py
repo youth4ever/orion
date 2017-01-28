@@ -2,70 +2,61 @@
 # Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-Investigating progressive numbers, n, which are also square         -       Problem 141
+                    Divisibility of factorials      -       Problem 549
 
-A positive integer, n, is divided by d and the quotient and remainder are q and r respectively.
+The smallest number m such that 10 divides m! is m=5.
+The smallest number m such that 25 divides m! is m=10.
 
-In addition d, q, and r are consecutive positive integer terms in a geometric sequence, but not necessarily in that order.
+Let s(n) be the smallest number m such that n divides m!.
+So s(10)=5 and s(25)=10.
+Let S(n) be ∑s(i) for 2 ≤ i ≤ n.
+S(100) = 2012.
 
-For example, 58 divided by 6 has quotient 9 and remainder 4.
-It can also be seen that 4, 6, 9 are consecutive terms in a geometric sequence (common ratio 3/2).
-We will call such numbers, n, progressive.
+Find S(10**8).
 
-Some progressive numbers, such as 9 and 10404 = 102**2, happen to also be perfect squares.
-The sum of all progressive perfect squares below one hundred thousand is 124657.
-
-Find the sum of all progressive perfect squares below one trillion (10**12).
 
 '''
 import time
-from itertools import combinations
-import functools, operator
+import gmpy2
+from pyprimes import factorise
+
+def primesieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    import numpy as np
+    """return array of primes 2<=p<=n"""
+    sieve=np.ones(n+1,dtype=bool)
+    for i in range(2, int((n+1)**0.5+1)):
+        if sieve[i]:
+            sieve[2*i::i]=False
+    return np.nonzero(sieve)[0][2:]
+
+def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
+    ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+    return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
 
 print('\n--------------------------TESTS------------------------------')
 
-import numpy, cmath
+primes = primesieve(100)
 
-# SUMS as checks
-#                 10^5: 124657
-#                 10^6: 700738
-#                 10^8: 171436696
+
+# def brute_force():
+S=0
+for n in range(2,101):
+    if gmpy2.is_prime(n):
+        s = n
+
+    else :
+        f = get_factors(n)
+        print(n,'          ' ,  f)
+        if len(f) == len(set(f)) :
+            s = max(f)
 
 t1  = time.time()
 
-# a= numpy.complex(3,3 ) - numpy.complex(1,4)
-# print(a)
 
-# squares = [i*i for i in range(1, int((10**5)**(1/2) )) ]
-# print(len(squares), squares)
-
-# Just some naive search !
-x = 124657- 9 - 10404
-
-L = (9, 10404, 16900, 97344)
-
-print(sum(L), [ i**(1/2) for i in L ])
-
-# L = list(combinations (squares , 2 ))
-# for i in L :
-#     P = functools.reduce( operator.add , i  )
-#     if P == x :
-#         print('other two numbers : \t', i)
-#         break
-
+print( gmpy2.factorial(45394233) % 33 == 0  )
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-
-################
-t1  = time.time()
-
-
-t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-
-
-print('\n--------------------------TESTS------------------------------')
 
 
 

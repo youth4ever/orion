@@ -129,3 +129,15 @@ s = reduce(lambda x, y : x+y, range(1,101))
 print('Calculating the sum of the numbers from 1 to 100:   ', s)
 factorial = reduce(lambda x,y : x*y, range(1,6))
 print('Calculating the factorial of 5 :   ', factorial)
+
+
+print('\n------------------- Digital Sum of a number ----------------')
+N = 467
+print( N, '     and its digital sum : \t',sum(map(int, str(N))) )
+
+def ds(n):
+    ds = sum(map(int,str(n)))
+    if ds < 10 : return ds
+    else: return sum(map(int,str(ds)))
+
+

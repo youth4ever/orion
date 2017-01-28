@@ -24,7 +24,10 @@ print("XOR - Value of c is ", c)
 c = ~a;           # -61 = 1100 0011     # Returns the opposite bit of the number. 1111 will become 0000 ;  1010 becomes 0101
 print("NOT - Value of c is ", c)
 
+
+print('\n-------- Shifts the bits -  Useful to make divisionas or multiplications by powers of 2 -------------')
 #Line 5 - Value of c is  240        SHIFT         Shifts the bits
+#### !!!!!! Useful to make divisionas or multiplications by powers of 2
 c = a << 2;       # 240 = 1111 0000         # Shifts the bits to the left with 2 units. E.g.: 0011 becomes 1100
 print("SHIFT  - Value of c is ", c)
 c = a << 1;       # 120 = 0111 1000

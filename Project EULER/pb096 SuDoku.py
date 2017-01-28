@@ -39,11 +39,12 @@ for example, 483 is the 3-digit number found in the top left corner of the solut
 from macpath import split
 from copy import copy, deepcopy
 from itertools import count
-filename = "pb096_test_matrix.txt"
 from numpy import transpose
-import hashlib
+import hashlib, time
 
 #  ::::::::::::::::::::::::::::::         DIFFERENT METHODS TO LOAD A FILE          ::::::::::::::::::::::::::::::  #
+
+filename = "pb096_test_matrix.txt"
 
 def load_file_1(filename):
     M=[]
@@ -68,18 +69,9 @@ def load_file_3(filename) :
     return matrix
 
 M = load_file_1(filename)
-# print(load_file_2(filename))
-# print(load_file_3(filename))
 print(M)
 
-
 print('\n-------------  TESTS -----------------')
-J = '235012309'
-print([int(i) for i in list(J)])
-
-N = [[0]*9]*9
-# print(N)
-print('---------------------')
 
 def status(M):
     digits = {}
@@ -101,10 +93,6 @@ for i in range(len(M)):
             if j not in digits: digits[j] = 1
             else : digits[j] = digits[j]+1
 
-print(digits)
-print(digits.get(9))
-print(digits.values())
-
 
 def SubMatrix_3x3(x, y, M ):
     '''Function which cuts a given matrix  in 3x3 SubMatrices. In a 9x9 matrix there will be 9 3x3 matrices called Ninants
@@ -125,28 +113,24 @@ def intersection(nr, x, y, M):
     :return:    Returns boolean : True if the number already exists, False otherwise
     '''
     if ( nr in M[x-1]  or  nr in  transpose(M)[y-1] ) or \
-             ( True  if  True in [ nr in row for row in SubMatrix_3x3(x,y,M) ]  else False )    :
+             ( True  if  True in [ nr in row for row in SubMatrix_3x3(x, y, M) ]  else False )    :
         return True
     else : return False
 
-#Must finish the function intersection, must do the   3x3 smaller matrix check, find the ninant and check that the number is not in there
-
-
-
-print('\n SubMatrix :   ',SubMatrix_3x3(5,6,M),'\n')
+# print('\n SubMatrix :   ',SubMatrix_3x3(5, 6,M),'\n')
 # print( [ 8 in row for row in SubMatrix_3x3(5,6)])
 print( True  if  True in [ 7 in row for row in SubMatrix_3x3(1,1,M) ]  else False)        # Nice List Comprehension Construction, @Bogdan Trif
 
 
 # print(((x-1)//3)*3, ((x-1)//3)*3+3)
 # print('Get last 3 columns of a matrix : ',  [row[-3:] for row in M])
-print('----------------------')
+print('------------ Intersection Test ----------')
 
-print('\nIntersection Test :      ',intersection(2, 2, 5, M),'\n')
+print('\nIntersection Test :      ',intersection(1, 3, 7, M),'\n')
 for i in range(1,10):
     print(i ,intersection(i, 3 , 5, M), end='  ')
 
-print('\nIntersection  SUPER Test :      ',intersection(2, 2, 5, M))
+
 print('\n---------------------------')
 
 def get_to_fill_status(M):
@@ -172,22 +156,21 @@ def get_to_fill_status(M):
                 # print(answer.count(False))
     return sudoku
 
-print('get_to_fill_status Function : ' ,get_to_fill_status(M) )
+print('get_to_fill_status Function : ' ,get_to_fill_status(M) ,'\n')
 
-def one_available_spot():
+
+def one_available_spot(M):
     ''':Description:    check if there are positions in the matrix which can be filled **only** with **1**  number
     :return: boolean:   *True* if there are fields with only one possibility to fill a number, otherwise *False*
     :NOTE:  Depends on the function get_to_fill_status    '''
     return 1 in [ h.count(False) for h in  [i for i in get_to_fill_status(M).values()]   ]
 
-def two_available_spots():
+def two_available_spots(M):
     ''':Description:    check if there are positions in the matrix which can be filled **only** with **2** numbers
     :return: boolean:   True if there are fields with only one possibility to fill a number, otherwise false
     :NOTE:  Depends on the function get_to_fill_status    '''
     return 2 in [ h.count(False) for h in  [i for i in get_to_fill_status(M).values() ] ]
 
-print('Test one_available_spot Function : ', one_available_spot())
-print('Test two_available_spots Function : ', two_available_spots())
 
 def no_more_zeros(M):
     '''Returns True if the Matrix is still containing zeros , otherwise False
@@ -232,7 +215,6 @@ def validate_final(M):
     else : return False
 
 
-
 def check_doubles(M):
     ''':Description:    check if there are values 2 times or more at a position. Checks if
         there are >1 numbers on a row, a column or a 3x3 subMatrix. If there are duplicate
@@ -260,7 +242,7 @@ def check_doubles(M):
             return True
 
 
-def count_1_false():
+def get_1_choice_position(M):
     ''':Description:    Prints out the positions which have **ONLY  1 CHOICE**     '''
     melodia={}
     sudoku = get_to_fill_status(M)
@@ -275,7 +257,7 @@ def count_1_false():
     if len(melodia) != 0 : print('1 Possibility  :  ',melodia)
     else: print('1 Possibility : None')
 
-def count_2_false():
+def get_2_choices_positions(M):
     ''':Description:    Prints out the positions which have **2 CHOICES**     '''
     memom={}
     sudoku = get_to_fill_status(M)
@@ -291,58 +273,91 @@ def count_2_false():
     if len(memom) != 0 : print('2 Variants :  ',memom)
     else: print('2 Variants : None')
 
-############# END DEFINITIONS ####################
+print( '\n---------------------------- Test for spots ---------------------')
+print('Test one_available_spot Function : ', one_available_spot(M))
+print('Test two_available_spots Function : ', two_available_spots(M),'\n\n')
+
+print('Prints out the positions which have ONLY  1 CHOICE : ' ) ; get_1_choice_position(M)
+print('Prints out the positions which have 2 CHOICES : ' ) ; get_2_choices_positions(M)
+
+print('----------------------------------------------------------- \n')
+
+
+#############        END    DEFINITIONS        ####################
+t1  = time.time()
+
+
+# @ 2017-01-20, 22:42     I must rebuild the main program as it has many flaws !!! TOO COMPLICATED !!!
+# Also, many functions can be simplified !!!
+
+
 
 
 #
 # global SuperFlag
 # SuperFlag = False
-def fill_available_position(M):
-    global A
+
+def fill_1_available_position(M):       # CASE 1
     sudoku = get_to_fill_status(M)
-    if one_available_spot() == True :           # CASE 1
+    if one_available_spot(M) == True :
         for k, v in sudoku.items() :
             # print(k, v , v.count(False)     ,end=' ')
-            if v.count(False) == 1 :
+            if v.count(False) == 1 :        #  if only 1 False it can be completed with the number
                 number = v.index(False)+1
-                position = [int(i) for i in list(k)]
-                print(k  , position , ' completed with  value: ',number, '   ',v    ,'           <--   CASE  1 ')
+                position = [ int(i) for i in list(k) ]
+                print(position , ' completed with  value: ',number, '   ', v    ,'           <--   CASE  1 ')
                 M[position[0]-1 ] [position[1]-1 ] = number
-                break       # only one at a time
+                return M    # only one at a time
+    if one_available_spot(M) == False : return False
 
-    if two_available_spots() == True and one_available_spot() == False and SuperFlag == False :     # <--- Take Care here, Two False
+
+
+
+memo=[]
+def fill_2_available_positions(M, memo ):       # CASE 2
+    if two_available_spots(M) == True and one_available_spot(M) == False  :     # <--- Take Care here, Two False
         if len(memo) == 0 :
             A = deepcopy(M)
-            print('      ################         matrix A was created (memo is empty) ############:\n',A)
-        case_2()
+            print('\n\n      ################         matrix A was created (memo is empty) ############:\n',A)
 
-    if SuperFlag == True  :       # Failed case 2
-
-        case_3()
-
-    return M
-
-def case_2():           # CASE 2
     sudoku = get_to_fill_status(M)
     for k, v in sudoku.items() :
-        # print(k, v , v.count(False)     ,end=' ;  ')
+        # print(k, v , v.count(False)     ,'  % % % % % % % % %% %   ')
         if v.count(False) == 2 :
             position = [int(i) for i in list(k)]
             z = [i+1 for i, x in enumerate(v) if x == False ]
-            memo[k] = z
-            print(k  , position , '  choices: ',z , '    ',memo ,'       ' , v, '       <-- CASE 2 False Status  ' )
-            if intersection(memo[k][0] , position[0]-1 , position[1]-1, M ) == True:  # Here we check if the intersection is valid :
-                M[position[0]-1 ] [position[1]-1 ] = memo[k][0]                             # check row, column and 3x3 SubMatrix
-                print(memo[k][0],' added at', position)
-                del(memo[k][0])
-            else :
-                M[position[0]-1 ] [position[1]-1 ] = memo[k][1]
-                print(memo[k][1],' was added at ', position)
-                del(memo[k][1])
-            print(k  , position , '  value: ', M[position[0]-1 ] [position[1]-1 ],'    ' , memo,'       ' ,v ,'  : ','       <-- 2 False: Confirmation   ' )
+            first_choice = str(k)+str(z[0])
+            memo.extend( [ first_choice , str(k)+str(z[1]) ]  )
+            print(memo, memo[0][2] ,  position)
+            print( 'position :', position , '  choices: ', z , '    ',memo ,'       ' , v, '       <-- CASE 2 False Status  ' )
 
+            # if intersection( int(memo[0][2]) , position[0]-1 , position[1]-1, M ) == False :  # Here we check if the intersection is valid :
+
+            M[position[0]-1 ] [position[1]-1 ] = int(memo[0][2])                             # check row, column and 3x3 SubMatrix
+            print(int(memo[0][2]),' added at', position)
+            memo.remove( memo[0] )
+            print( memo ,M[position[0]-1 ] ,'       <-- CASE 2 False: Confirmation   ' )
+            print(M)
+            # print(get_to_fill_status(M))
             break   # only one at a time
-    return M
+    return M, memo
+
+
+while 1 :
+    if one_available_spot(M) == True :
+        fill_1_available_position(M)
+    else :
+        print(M)
+        fill_2_available_positions(M, memo)
+        break
+
+
+
+    # if SuperFlag == True  :       # Failed case 2
+    #
+    #     case_3()
+
+    # return M
 
 
 def case_3():           # !!!!!!!!!!!!!!   CASE 3     !!!!!!!!!!!!!!!
@@ -350,34 +365,38 @@ def case_3():           # !!!!!!!!!!!!!!   CASE 3     !!!!!!!!!!!!!!!
     for k, v in sudoku.items() :
         # print(k, v , v.count(False)     ,end=' ')
         if v.count(False) == 2 :
-            key = list(memo.keys())[0]
-            position = [int(i) for i in list(key)]
-            # print('==>   Memo Keys :     '  ,memo.keys(), '       ',memo)
-            # print('Position:    ==>  ',position,'    ==> ', key)
-            # print(intersection( memo[key][0] , position[0]-1 , position[1]-1, M ), memo[key][0], position[0]-1, position[1]-1,'\n',M)
-            if intersection( memo[key][0] , position[0]-1 , position[1]-1, M ) == True :       # Here we check if the intersection is valid :
-                M[position[0]-1 ] [position[1]-1 ] = memo[key][0]                                   # check row, column and 3x3 SubMatrix
-                try : memo.pop(str(key), None)
-                except KeyError:   pass
-                print(key,' from this key ', M[position[0]-1 ] [position[1]-1 ],  'was added  at position', position , '        ' ,memo, '        ->1  ' )
-            else:
-                try: memo.pop(str(key), None)
-                except KeyError:   pass
-                print(key,' key was deleted. It does not match.             ', memo, '        ->2  ')
-
-            print( position ,'    ',memo ,'     ',v ,'       <-- CASE 3 False Status   ' )
-
             if len(memo) == 0:
                 SuperFlag = False    # when finish with the replacement of the failed cases, go back to the normal case
                 print('SuperFlag was changed to False  from CASE 3 !!!')
+            else :
+                key = list(memo.keys())[0]
+                position = [int(i) for i in list(key)]
+                print( position ,'    ',memo ,'     ',v ,'       <-- CASE 3 False Status   ' )
+                # print('==>   Memo Keys :     '  ,memo.keys(), '       ',memo)
+                # print('Position:    ==>  ',position,'    ==> ', key)
+                # print(intersection( memo[key][0] , position[0]-1 , position[1]-1, M ), memo[key][0], position[0]-1, position[1]-1,'\n',M)
+                if intersection( memo[key][0] , position[0]-1 , position[1]-1, M ) == True :       # Here we check if the intersection is valid :
+                    M[position[0]-1 ] [position[1]-1 ] = memo[key][0]                                   # check row, column and 3x3 SubMatrix
+                    try : memo.pop(str(key), None)
+                    except KeyError:   pass
+                    print(key,' from this key ', M[position[0]-1 ] [position[1]-1 ],  'was added  at position', position , '        ' ,memo, '        ->1  ' )
+                else:
+                    try: memo.pop(str(key), None)
+                    except KeyError:   pass
+                    print(key,' key was deleted. It does not match.             ', memo, '        ->2  ')
+
+
+
+
             break   # only one at a time
     return M
 
 
 
-print('Check for remaining zeros : ' ,     [ val for sublist in M for val in sublist ].count(0) > 0        )
+
 
 print('\n------------------------------------------------')
+print('Check for remaining zeros : ' ,     [ val for sublist in M for val in sublist ].count(0) > 0        )
 print( 'Validate Completion Correct : ', validate_final(M) )
 
 
@@ -402,23 +421,25 @@ def main_case_3_test():
 
 
 
-def main():
+def main():         # The MAIN PROGRAM !!!
     global memo, A, SuperFlag, M               # Do not move them from here !!!!
-    memo, A,  SIGN, SuperFlag = {}, [], [] , False
-    for i in range(1, 100):
+    A,  SIGN, SuperFlag =  [], [] , False
+    # memo = {}
+    for i in range(1, 50):
         print('\n     =====      STEP ',i,'     =====' ), fill_available_position(M)
-        print('\nVALIDATIONS        : Validate Final= ',validate_final(M),   ' ;  No more Zeros= ', no_more_zeros(M), ' ;  Check Doubles= ', check_doubles(M))
-        print(M ,'\nMemo:        ' ,memo)
-        count_1_false(), count_2_false()
-        X = M.copy() ;  Y = str(X)              # We want to make md5 hashes to be able to compare
-        signature = hashlib.md5(Y.encode()).hexdigest()
-        SIGN.append(signature)
-        print(SIGN[i-1], SIGN[i-2], ' Condition Check: '  , SIGN[i-1] == SIGN[i-2] ,' --> SuperFlag: ',SuperFlag) #  Now we want to compare the previous signature of the matrix with the current one
 
-        if len(SIGN)>2 and  SIGN[i-1] == SIGN[i-2] :        # i-1 is the last the current element, & i-2 is the last elem
-            SuperFlag = True
-            M = deepcopy(A)
-            print('\n #########   matrix M was brought back to the initial completion phase #########) :\n\n', M)
+        print(M ,'\nMemo:        ' ,memo)
+        get_1_choice_position(M) ;  get_2_choices_positions(M)        # just printing the available variants
+        print('\nVALIDATIONS        : Validate Final= ',validate_final(M),   ' ;  No more Zeros= ', no_more_zeros(M), ' ;  Check Doubles= ', check_doubles(M))
+        # X = M.copy() ;  Y = str(X)              # We want to make md5 hashes to be able to compare
+        # signature = hashlib.md5(Y.encode()).hexdigest()
+        # SIGN.append(signature)
+        # print(SIGN[i-1], SIGN[i-2], ' Condition Check: '  , SIGN[i-1] == SIGN[i-2] ,' --> SuperFlag: ',SuperFlag) #  Now we want to compare the previous signature of the matrix with the current one
+
+        # if len(SIGN)>2 and  SIGN[i-1] == SIGN[i-2] :        # i-1 is the last the current element, & i-2 is the last elem
+        #     SuperFlag = True
+        #     M = deepcopy(A)
+        #     print('\n #########   matrix M was brought back to the initial completion phase #########) :\n\n', M)
 
         if check_doubles(M) == True : break
 
@@ -438,7 +459,7 @@ def main():
             break
 
 
-if __name__ == "__main__": main()
+# if __name__ == "__main__": main()
 
 print('\n\n--------------------------------------')
 print('Final Mecanic:  ',M)
@@ -456,29 +477,10 @@ print(get_status(M))
     #         print('loop   ',M, memo)
     # else: print('\nCONGRATULATIONS !!!')
 
-def solve():                                ##### I need to fix THE LOGIC OF THE LOOP HERE
-    global memo, SuperFlag, A
-    if no_more_zeros(M) == False and SuperFlag == False :
-        # while get_status(M) == False :       # The main loop
-        fill_available_position(M)
-        print('loop   ',  M)
-        print('\nStatus:    ',status(M),'   -------\n')
-        if validate_final(M) == True:
-            # del(memo)
-            return 'CONGRATULATIONS !! SUDOKU Magic Puzzle has been Correctly Solved ! '
-        solve()
 
-    if validate_final(M) == False :
-        SuperFlag = True
-        print(' -------  SuperFlag was changed to False  from Validate Final in the While Loop !! --------')
-        solve()
-    if validate_final(M) == True :
-        # del(memo)
-        return 'CONGRATULATIONS !! SUDOKU Magic Puzzle has been Correctly Solved ! '
 
-# solve()
-
-print('Mecanic:   ',M)
+print('\n===================Mecanic ==============   \n', M)
+# memo, A,  SIGN, SuperFlag = {}, [], [] , False
 # print('STEP 1  '),fill_available_position(M)
 # print('STEP 2  '),fill_available_position(M)
 # print('STEP 3  '),fill_available_position(M)
@@ -549,23 +551,27 @@ print('\n----------------------------------------')
 # print('CHECK Doubles Function Test : ',check_doubles(M))
 # X = [val for sublist in M for val in sublist]
 
-print('\n--------------------Hash of a Matrix ----------------')
 
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-signature = hashlib.md5(b'My Hello World !')
-print('The Test of Hellow World :  ',  signature.hexdigest() )
-
-X = M.copy() ;  Y = str(X)
-print(' The initial  X Matrix Hash Signature :',  hashlib.md5( Y.encode() ).hexdigest())
-X[8][8]= 0 ;  Y = str(X)
-print(X)
-print(' The MODIFIED  X Matrix Hash:',  hashlib.md5(Y.encode()).hexdigest() )
+# print('\n--------------------Hash of a Matrix ----------------')
+#
+#
+# signature = hashlib.md5(b'My Hello World !')
+# print('The Test of Hellow World :  ',  signature.hexdigest() )
+#
+# X = M.copy() ;  Y = str(X)
+# print(' The initial  X Matrix Hash Signature :',  hashlib.md5( Y.encode() ).hexdigest())
+# X[8][8]= 0 ;  Y = str(X)
+# print(X)
+# print(' The MODIFIED  X Matrix Hash:',  hashlib.md5(Y.encode()).hexdigest() )
 
 
 # s = status().values()
 # print( 'Validate Completion Correct : ', [i for i in s].count(9) == 9 )
-print("\n What's your story Sudoku ? Are you complete  ?   " ,no_more_zeros(M))
-print('Tel me if there are non-filled positions : ', False in [ i for i in [ val for sublist in get_to_fill_status(M).values() for val in sublist ]  ]  )
+# print("\n What's your story Sudoku ? Are you complete  ?   " ,no_more_zeros(M))
+# print('Tel me if there are non-filled positions : ', False in [ i for i in [ val for sublist in get_to_fill_status(M).values() for val in sublist ]  ]  )
 # print('Get 2 Unfilled Statuses  non-filled positions : ', [ i for i in get_to_fill_status(M).values()   ]  )
 # print('Get Unfilled Statuses  non-filled positions : ',  [ h.count(False) for h in  [i for i in get_to_fill_status(M).values()]   ]  )
 # print('Get 0 Unfilled Statuses  non-filled positions : ', 0 in [ h.count(False) for h in  [i for i in get_to_fill_status(M).values()]   ]  )

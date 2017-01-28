@@ -210,7 +210,7 @@ print('\nCompleted in :', round((t2-t1),6), 's\n\n')
 # N = (p1 * m2 * mod_inv(m2, m1)) mod M
 # The second addend is 0 since a2 = 0
 
-Folding it up in C# code it takes 60 msecs to do the job, prime calculation included.
+# Folding it up in C# code it takes 60 msecs to do the job, prime calculation included.
 
 print('\n================  My FIRST SOLUTION,  SUPER VERY SLOW,  3hours ===============\n')
 t1  = time.time()
@@ -499,14 +499,14 @@ t1  = time.time()
 # About 700 ms in Python. A blessed relief to be here after 10 days of failing to solve everything I have attempted!
 #
 # I realised, eventually, that for each prime pair this could be cast as a problem in solving
-# the linear Diophantine equation ax+by=c where bb is the larger of the two primes, c is the smaller and −a is 10**n
+# the linear Diophantine equation ax+by=c where b is the larger of the two primes, c is the smaller and −a is 10**n
 # , where n is the number of digits in c. Thus, for the prime pair 19 and 23, for example, {a,b,c} are {−100,23,19}.
 #
-# Given a solution x1,y1 to a prime pair, a possible value for S is S=−ax1+c,
+# Given a solution x1, y1 to a prime pair, a possible value for S is S=−ax1+c,
 # but to find the minimum value of S we need to find the minimum positive value of x1.
 #
-# I used a Euclid-esque recursive function to find a solution x1,y1 to each of the Diophantine equations,
-# then invoked the fact that, given any solution x1,y1, all x=x1−nb/gcd(a,b) and y=y1+na/gcd(a,b)
+# I used a Euclid-esque recursive function to find a solution x1, y1 to each of the Diophantine equations,
+# then invoked the fact that, given any solution x1, y1, all x=x1−nb/gcd(a,b) and y=y1+na/gcd(a,b)
 # are also solutions, for integer values of n. Given that b is prime and a is a power of 10,
 # gcd(a,b)=1, so  our  solutions for x are x=x1−nb.
 # The minimum positive value of x is thus x1 (mod b).
@@ -558,7 +558,7 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 print('\n--------------------------SOLUTION 5,   --------------------------')
 t1  = time.time()
 
-===== Sat, 15 Aug 2009, 01:02, PyRangers, Bulgaria
+# ===== Sat, 15 Aug 2009, 01:02, PyRangers, Bulgaria
 
 def extendedGCD(a, b):
     if not a % b:

@@ -32,3 +32,21 @@ def bbs_prng(s=290797, m_s=50515093, m_t=500):
         s = (s * s) % m_s
         yield s % m_t
 
+
+print('\n\n------------------ RECURSIVE GENERATOR ------------------')
+
+# RECURSIVE GENERATOR
+
+def orduples(size, start, stop, step=1):
+    if size == 0:
+        yield ()
+    elif size == 1:
+        for x in range(start, stop, step):
+            yield (x,)
+    else:
+        for u in orduples(size - 1, start, stop, step):
+            for x in range(u[-1], stop, step):
+                yield u + (x,)
+
+if __name__ == "__main__":
+    print(list(orduples(3, 0, 5)))

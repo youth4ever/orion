@@ -28,7 +28,7 @@ b = 1
 e = 1777
 for i in range(1, 1777+1) :
     b = b*e
-    print( str(i)+'.   ' ,b )
+    print( str(i)+'.   ' ,b , '         ',str(b)[-8::] )
     # print(a**i,'     ' ,b)
     b = int(str(b)[-8::])
 

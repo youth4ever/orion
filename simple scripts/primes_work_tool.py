@@ -336,6 +336,21 @@ print(get_factors(1979197919791979))
 #print(list(i[0] for i in list(factorise(3932273))))
 
 
+def prime_factors(n):       # From mhb038, England, Euler Forum
+    """returns the prime factors of n"""
+    i = 2
+    factors = []
+    while i * i <= n:
+        if n % i:
+            i += 1
+        else:
+            n //= i
+            factors.append(i)
+    if n > 1:
+        factors.append(n)
+    return factors
+
+
 def factor(n):
     '''  Factor as a dictionary. Must test the speed ...'''
     Factors = {}
@@ -357,6 +372,8 @@ def factor(n):
             p+=2
     return Factors
 factor(32)
+
+
 
 
 #####################################################
@@ -457,7 +474,7 @@ def  calculate_divisors(nr):
 
 
 
-def get_divisors(n):      ### o(^_^)o  FASTEST  o(^_^)o  ### !! FIRST FASTEST
+def get_divisors(n):      ### ( ͡° ͜ʖ ͡°)  FASTEST  ( ͡° ͜ʖ ͡°)  ### !! FIRST FASTEST
     from math import sqrt
     factors = set()
     for x in range(1, int(sqrt(n)) + 1):
@@ -514,11 +531,56 @@ print('Here we test the GET_DIVISORS CLASS :  ',GET_DIVISORS().divisors(90))
 
 
 
+print('\n----------- PAIR FACTORING OF A NUMBER -------------------')
+
+def pair_Factors(n):
+    todo, combis = [(n, 2, [])], []
+    while todo:
+        n, i, combi = todo.pop()
+        while i * i <= n:
+            if n % i == 0:
+                combis += combi + [i, n//i],
+                todo += (n//i, i, combi+[i]),
+            i += 1
+    return combis
+
+def pair_Factors_rec(n):
+    def factor(n, i, combi, combis):
+        while i * i <= n:
+            if n % i == 0:
+                combis += combi + [i, n//i],
+                factor(n//i, i, combi+[i], combis)
+            i += 1
+        return combis
+    return factor(n, 2, [], [])
 
 
+print('pair_Factors : \t', pair_Factors(90))
+print('pair_Factors_rec : \t', pair_Factors(90))
 
+print('\n------------------  Digital Root of a number --------------------  ')
 
+def dr(n) :   # Digital Root of a number
+    '''':Description: Returns the Digital Root of a number
+    https://en.wikipedia.org/wiki/Digital_root#Congruence_formula    '''
 
+    if n == 0 : return 0
+    elif n%9 == 0 : return 9
+    else : return n%9
+
+print('\nDigital Root of a number : \t 467 \t =\t' ,dr(467) )
+
+print('\n------------------  EULER Phi of a number, Euler Totient --------------------  ')
+
+def euler_totient(n):
+    """returns Euler totient (phi) of n """
+    phi=n
+    pfs=set(get_factors(n))
+    for pf in pfs:
+        phi*=(1-1/pf)
+    return int(phi)
+
+print('euler_totient : \t', euler_totient(600))
 
 
 

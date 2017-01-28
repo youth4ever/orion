@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Sat, 5 Nov 2016, 20:56
 #The  Euler Project  https://projecteuler.net
 '''
                                 Cuboid route        -       Problem 86

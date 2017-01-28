@@ -127,7 +127,7 @@ def factorPR(n):
                                         return g
         return 1
 
-def eulerphi(n):
+def eulerphi(n):                # Euler Totient Function, Has Some ERRORS sometimes !!!!
         """eulerphi(n) - Computer Euler's Phi function of n - the number of integers
         strictly less than n which are coprime to n.  Otherwise defined as the order
         of the group of integers mod n."""
@@ -179,40 +179,40 @@ def isprimitive(g,n):
                         oldfact = fact
         return True
 
-def invmod(a,n):
+def invmod(a,n):        # Inverse modulo
         """invmod(b,n) - Compute 1/b mod n."""
         return xgcd(a,n)[1] % n
 
 def sqrtmod(a,n):
-        """sqrtmod(a,n) - Compute sqrt(a) mod n using various algorithms.
-        Currently n must be prime, but will be extended to general n (when I get the time)."""
-        if(not isprime(n)): raise ValueError("*** Error ***:  Currently can only compute sqrtmod(a,n) for prime n.")
-        if(pow(a,(n-1)//2,n)!=1): raise ValueError("*** Error ***:  a is not quadratic residue, so sqrtmod(a,n) has no answer.")
-        return TSRsqrtmod(a,n-1,n)
+    """sqrtmod(a,n) - Compute sqrt(a) mod n using various algorithms.
+    Currently n must be prime, but will be extended to general n (when I get the time)."""
+    if(not isprime(n)): raise ValueError("*** Error ***:  Currently can only compute sqrtmod(a,n) for prime n.")
+    if(pow(a,(n-1)//2,n)!=1): raise ValueError("*** Error ***:  a is not quadratic residue, so sqrtmod(a,n) has no answer.")
+    return TSRsqrtmod(a,n-1,n)
 
 def TSRsqrtmod(a,grpord,p):
-        """TSRsqrtmod(a,grpord,p) - Compute sqrt(a) mod n using Tonelli-Shanks-RESSOL algorithm.
-        Here integers mod n must form a cyclic group of order grpord."""
-        # Rewrite group order as non2*(2^pow2)
-        ordpow2=0; non2=grpord
-        while(not ((non2&0x01)==1)):
-                ordpow2+=1; non2/=2
-        # Find 2-primitive g (i.e. non-QR)
-        for g in range(2,grpord-1):
-                if (pow(g,grpord//2,p)!=1):
-                        break
-        g = pow(g,non2,p)
-        # Tweak a by appropriate power of g, so result is (2^ordpow2)-residue
-        gpow=0; atweak=a
-        for pow2 in range(0,ordpow2+1):
-                if(pow(atweak,non2*2**(ordpow2-pow2),p)!=1):
-                        gpow+=2**(pow2-1)
-                        atweak = (atweak * pow(g,2**(pow2-1),p)) % p
-                        # Assert: atweak now is (2**pow2)-residue
-        # Now a*(g**powg) is in cyclic group of odd order non2 - can sqrt directly
-        d = invmod(2,non2)
-        tmp = pow(a*pow(g,gpow,p),d,p)  # sqrt(a*(g**gpow))
-        return (tmp*invmod(pow(g,gpow/2,p),p)) % p  # sqrt(a*(g**gpow))/g**(gpow/2)
+    """TSRsqrtmod(a,grpord,p) - Compute sqrt(a) mod n using Tonelli-Shanks-RESSOL algorithm.
+    Here integers mod n must form a cyclic group of order grpord."""
+    # Rewrite group order as non2*(2^pow2)
+    ordpow2=0; non2=grpord
+    while(not ((non2&0x01)==1)):
+            ordpow2+=1; non2/=2
+    # Find 2-primitive g (i.e. non-QR)
+    for g in range(2,grpord-1):
+            if (pow(g,grpord//2,p)!=1):
+                    break
+    g = pow(g,non2,p)
+    # Tweak a by appropriate power of g, so result is (2^ordpow2)-residue
+    gpow=0; atweak=a
+    for pow2 in range(0,ordpow2+1):
+            if(pow(atweak,non2*2**(ordpow2-pow2),p)!=1):
+                    gpow+=2**(pow2-1)
+                    atweak = (atweak * pow(g,2**(pow2-1),p)) % p
+                    # Assert: atweak now is (2**pow2)-residue
+    # Now a*(g**powg) is in cyclic group of odd order non2 - can sqrt directly
+    d = invmod(2,non2)
+    tmp = pow(a*pow(g,gpow,p),d,p)  # sqrt(a*(g**gpow))
+    return (tmp*invmod(pow(g,gpow/2,p),p)) % p  # sqrt(a*(g**gpow))/g**(gpow/2)
 
 def info():
         """Return information about the module"""
@@ -237,3 +237,54 @@ def info():
 #       notice, this list of conditions and the following disclaimer in
 #       the documentation and/or other materials provided with the distribution.
 ############################################################################
+
+def egcd(a, b):         #Extended Euclidian Algorithm
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+def extendedEuclid(a, b):
+    if b == 0:
+        return a, 1, 0
+    k, q = a // b, a % b # a = kb + q
+    g, xp, yp = extendedEuclid(b, a % b)
+    # g = xp * b + yp * q
+    #   = xp * b + yp * (a - kb)
+    #   = (xp - k*yp) * b * yp * a
+    return g, yp, xp - k * yp
+
+
+def modinv(a, m):       # Modular Inverse
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
+
+print('modinv Modular Inverse :\t', modinv(7, 31))
+print('modinv Modular Inverse :\t', modinv(17, 43))
+
+######################################
+
+
+def Euler_totient(n):   # o(^_^)o  @2017-01-23, 10:30 by Bogdan Trif
+    ''':Works without errors !
+        https://en.wikipedia.org/w/index.php?title=Euler%27s_totient_function&action=edit&section=3
+    :param n: int
+    :return: int, Euler Phi, Euler Totient
+    '''
+    def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
+        ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+        from pyprimes import factorise
+        return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
+    F = set(get_factors(n))
+    for i in F :
+        n*=(1-1/i)
+    return round(n)
+
+N = 100001051
+print('\nEuler_totient function : \t N=',N ,'\t' ,Euler_totient(N))
+print('eulerphi function  : \t N=', N, '\t', eulerphi(N))
+
