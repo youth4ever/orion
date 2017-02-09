@@ -203,8 +203,8 @@ x , y = L[N[0]][0],  L[N[0]][1]
 
 for i in range(1, len(N) ):
     print('(x , y) = ', (x, y) )
-    x += L[N[i]][0]
-    y += L[N[i]][1]
+    x -= L[N[i]][0]
+    y -= L[N[i]][1]
     # if N[0] % 2 == 1 :
     #     if N[i] %2 == 1 :
     #         x += L[N[i]][0]

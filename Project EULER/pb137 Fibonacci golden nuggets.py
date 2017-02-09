@@ -30,31 +30,70 @@ Find the 15th golden nugget.
 
 '''
 import time
+from math import sqrt
+import  gmpy2
+from decimal import *
+getcontext().prec = 100
+
+def Fibonacci_Binet(n_th) :
+    ''':Description:    Returns the Fibonacci corresponding to the number  and uses the Binet Formula.
+        http://mathworld.wolfram.com/BinetsFibonacciNumberFormula.html
+        :param n_th: F_nth Fibonacci in sequence
+        :return: str, first 9 digits of the Fibonacci number
+    '''
+
+    phi = Decimal((1+5**(1/2))/2)
+    phi_ = Decimal((1- 5**(1/2))/2)
+    # phi = (1+5**(1/2))/2
+    # phi_ = (1-5**(1/2))/2
+    # a = ( ( phi**n_th-phi_**n_th ) / ( phi - phi_) )%(10**9)
+    a = str(((phi**n_th)-(phi_)**n_th)/( phi - (phi_)))[0:10].replace( '.' , '')
+    # b =   ( (( 1 + np.sqrt(5))/2)**n_th - ((1 - np.sqrt(5))/2)**n_th  ) /np.sqrt(5)
+    return str(a)
+
+def Fibo_gen():
+    #   Fibonacci GENERATOR , while loop
+    a1, a2 = 0, 1
+    while True:
+        a = a1 + a2
+        yield a
+        a1, a2 = a2, a
+
+def Fibonacci_kth( k ):
+    return (1/5**(1/2) )*( ((1+ 5**(1/2)) /2 )**k - ((1- 5**(1/2))/2 )**k )
+
+print('Fibonacci_kth : ',Fibonacci_kth (541))
+
+print('Test for the Fibonacci_Binet : ', Fibonacci_Binet(50))
+print('gmpy2.fib : \t\t\t\t\t\t\t' ,gmpy2.fib(50) )
 
 
 
+A_F = lambda x : x/(1-x-x**2)
 
-
-
-
-
-
-
-
-
+print('A_F :\t', A_F(1/2))
 
 
 
 print('\n--------------------------TESTS------------------------------')
-# t1  = time.time()
+t1  = time.time()
+
+epsilon = 10**-9
+FG = Fibo_gen()
+f1=1
+for i in range(1, 500):
+    f2 = next(FG)
+    f3 = f1**2+f2**2
+    x = (pow(f3, 0.5) - f1 )/f2
+    A = A_F(x)
+    if (A-round(A)) < epsilon :
+        print(str(i)+'.    ', f1, f2,'    ' ,f3,'       ' , round(A) )
+
+    f1 = f2
 
 
-
-
-
-
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
 print('\n================  My FIRST SOLUTION,   ===============\n')

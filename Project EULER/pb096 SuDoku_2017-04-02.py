@@ -296,7 +296,7 @@ def get_1_choice_position(M):
             # print('position: ',position , v, '  choice: ',number )
         # else : print('\nNo more 1 Choice')
     if len(one_var) != 0 : return one_var
-    else: return []
+    else: return False
 
 def get_2_choices_positions(M):     # Not working properly
     ''':Description:    Return out the positions which have **2 CHOICES**     '''
@@ -314,7 +314,7 @@ def get_2_choices_positions(M):     # Not working properly
             # print( 'position: ', position , v,'  choices: ', z )
         # else : print('No more 2 Choices')
     if len(two_vars) != 0 : return two_vars
-    else: return []
+    else: return False
 
 def rotate(l, n):
     return l[-n:] + l[:-n]
@@ -383,7 +383,7 @@ def tracker_fill( M, tracker, glide):
 
 
 def show_complete(M, grid) :
-        print('=='*6+'   '+str(grid)+'   '+'=='*6)
+        print('=='*5+'   '+str(grid)+'   '+'=='*5)
         # print('=='*15 )
         for i in range(len(M)):
             print('  +++++   ', M[i] ,'   +++++  ')
@@ -434,17 +434,17 @@ def get_2_fill_available_positions(M ):
 
         tmp = get_2_choices_positions(M)
         tracker = create_tracker(tmp)
-        print('\nTracker was created, length =', len(tracker) , tmp,'\n', tracker[:3])
+        print('\nTracker was created, length =', len(tracker) , tmp,'\n', tracker)
 
     if len(tracker) != 0 :
         M = tracker_fill( M, tracker, 0)
-        print('tracker_length : ', len(tracker), tracker[:3])
+        print('tracker_length : ', len(tracker), tracker)
         return M
 
 
 
 
-def solve_sudoku( grid ):
+def solve_sudoku( k):
     global M, tracker
     tracker_change, len_tracker = 3, 0      # Tracker Flag
     while True :
@@ -457,16 +457,16 @@ def solve_sudoku( grid ):
             get_2_fill_available_positions(M)
             M = tracker_fill( M, tracker, 0)
             print('\nCASE 2', M )
-
             if len_tracker != len(tracker) :        # Update len_tracker & Flag
                 len_tracker = len(tracker)
                 tracker_change = True
-            elif len_tracker == len(tracker) and one_available_spot(M) ==False :
+            elif len_tracker == len(tracker) :
                 tracker_change = False
             print( 'tracker length : ',len(tracker), '          tracker_change :', tracker_change, '     ', len_tracker )
 
 
         print(' ONE_spot =' ,one_available_spot(M), '      TWO_spots =' ,two_available_spots(M), '    Quench : ', quench(M))
+        # print('To Fill status: ',len(get_to_fill_status(M) ) ,get_to_fill_status(M) )
         print('get_2_choices_positions : ', len(get_2_choices_positions(M)), get_2_choices_positions(M),'\n' )
 
         if quench(M) == True :
@@ -474,14 +474,15 @@ def solve_sudoku( grid ):
             tracker.pop(glide)
 
 
-        if  tracker_change == False and one_available_spot(M) == False and two_available_spots(M)==True :
-            print(' ++++++++++++++         TRACKER WIL BE UDATED    +++++++++++++++')
+
+
+        if quench(M) == False and  tracker_change == False and one_available_spot(M) == False :
             M = deepcopy(A)
             G = get_2_choices_positions(M)
             if len(G) > 8 :
                 G = G[ :3 ]
             tracker = update_tracker(G, tracker)
-            print('\nTracker was UPDATED, length =', len(tracker), G, '\n', tracker[:3])
+            print('\nTracker was UPDATED, length =', len(tracker), G, '\n', tracker[:6])
 
 
 
@@ -490,7 +491,7 @@ def solve_sudoku( grid ):
             break
 
 
-solve_sudoku(grid=14)
+solve_sudoku(k=14)
 
 
 

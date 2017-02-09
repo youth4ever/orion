@@ -86,6 +86,70 @@ print('next_palindrome : \t', next_palindrome('835'))
 print('next_palindrome : \t', next_palindrome('5384'))
 
 
+print('\n--------------- Palindrome Generator -------------------')
+
+def next_palindrome_gen(n):
+    X = len(n)>>1
+    Y = X+(len(n)&1)
+    first = n[X-1::-1]
+    second = n[Y:]
+    Z = n[:Y]
+    assert Y >= X        #, "by construction"
+    assert len(second) >= len(first)        #, "by construction"
+    if len(first) == len(second) and first > second:
+        assert int(first) > int(second)         #, "because ASCII"
+        yield Z+first
+    # if int(first) > int(second):
+    #     return Z+first
+    else:
+        bar = str(int(Z)+1)
+        yield bar+bar[:X][::-1]
+
+G = next_palindrome_gen('1000')
+for i in range(10):
+    p = next(G)
+    print(str(i+1)+'.  ', p, end='      ')
+    G = next_palindrome_gen(str(p))
 
 
+####################
 
+def palindrome_gen():
+    """
+    Generates palindromicall numbers from the
+    smallest by value.
+
+    >>> take(12, palindrome_gen())
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22]
+
+    >>> nth(palindrome_gen(), 19)
+    101
+
+    >>> nth(palindrome_gen(), 20)
+    111
+
+    >>> it = palindrome_gen()
+    >>> consume(it, 19)
+    >>> take(11, it)
+    [101, 111, 121, 131, 141, 151, 161, 171, 181, 191, 202]
+
+    >>> it = palindrome_gen()
+    >>> consume(it, 10 + 9 + 10 * 9)
+    >>> take(14, it)
+    [1001, 1111, 1221, 1331, 1441, 1551, 1661, 1771, 1881, 1991, 2002, \
+2112, 2222, 2332]
+
+    """
+    odd_half = 0
+    odd_val = int(str(odd_half) + str(odd_half)[::-1][1:])
+    even_half = 1
+    even_val = int(str(even_half) + str(even_half)[::-1])
+    while True:
+        if odd_val < even_val:
+            odd_half += 1
+            yield odd_val
+            odd_val = int(str(odd_half) + str(odd_half)[::-1][1:])
+        else:
+            even_half += 1
+            yield even_val
+            even_val = int(str(even_half) + str(even_half)[::-1])

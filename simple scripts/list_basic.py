@@ -588,3 +588,22 @@ import random, heapq
 a = [ random.randint(0, 100) for __ in range(100)]
 print ( heapq.nsmallest(5, a) )
 print( heapq.nlargest(5, a) )
+
+
+print('\n----------------------- List Rotation --------------------')
+
+# Method I
+def rotate(l, n):     return l[-n:] + l[:-n]
+
+A = [ 1, 2, 3, 4, 5, 6 ]
+print('Initial string: \t', A, '          Right rotation 1 unit :\t' , rotate(A,-1)  )
+print('Initial string: \t', A, '          Left rotation with 2 units :\t' , rotate(A, 2)  )
+
+# Method II
+import collections
+d = collections.deque( A )
+d.rotate(3)
+
+print('Initial string: \t', A, '          Right rotation 3 units :\t' , d )
+
+

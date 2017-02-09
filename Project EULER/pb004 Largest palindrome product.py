@@ -2,14 +2,21 @@
 # Solved by Bogdan Trif @ 14 Sep 16 (21:54)
 #The  Euler Project  https://projecteuler.net
 '''
-Largest palindrome product  -   Problem 4
-A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
+                    Largest palindrome product  -   Problem 4
+
+A palindromic number reads the same both ways.
+The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
 Find the largest palindrome made from the product of two 3-digit numbers.
 '''
+
 import itertools
 import time
 
-t1 = time.time()
+def is_palindrome(n):
+    n_str = str(n)
+    return n_str == n_str[::-1]
+
+
 def tuple_to_string(tup):
    if ( type(tup) == tuple ):
       strng = ''.join(map(str, (tup)))
@@ -26,6 +33,9 @@ def tuple_to_list(tup):
       return lst
    else: print('Not a tuple type !')
 
+print('\n=========== My First Solution ===============')
+
+t1 = time.time()
 
 six_digits_polidromes=[]
 three_digit_numbers=[x for x in range(100,1000)]
@@ -75,7 +85,8 @@ print('\nCompleted in :', round((t2-t1),3), 's')               #My solution was 
 #################################
 print('===='*30)
 
-print('FASTEST SOLUTION READ ON FORUM :')
+
+print('\n=========  OTHER SOLUTIONS FROM EULER FORUM ===============')
 t1 = time.time()
 
 for i in range(900,1000):
@@ -125,7 +136,7 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1),3), 's')
 ####################################
 
-print('\n ---------------------LOTS OF FOR METHOD -----------------')
+print('\n ---------------------  Pathetic METHOD using for loops-----------------')
 
 t1 = time.time()
 

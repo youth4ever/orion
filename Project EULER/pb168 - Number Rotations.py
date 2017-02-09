@@ -42,11 +42,12 @@ print('right_rotate_number Test :', right_rotate_number(142857))
 print('\n--------------------------TESTS------------------------------')
 
 
-
-for i in range(10**5, 10**6) :
+cnt = 0
+for i in range(10**7, 10**9) :
     a = right_rotate_number(i)
-    if  a/i % 1 == 0 and a/i != 1 :
-        print (a, i , a/i, a%i )
+    if  a/i % 1 == 0 and a/i != 1 :         # We will include later numbers like 666666, 777777
+        cnt+=1
+        print (str(cnt)+'.    ', a, i , a/i, a%i )
 
 
 

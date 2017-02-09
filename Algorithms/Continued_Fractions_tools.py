@@ -1,6 +1,7 @@
 from fractions import Fraction
 from itertools import cycle
 from math import floor
+from gmpy2 import mpq
 
 class CONTINUED_FRACTIONS(object):
     '''Made by Bogdan Trif @ 2016-11-18. It needs the factions.Fraction, itertools.cycle and math.floor
@@ -44,7 +45,8 @@ class CONTINUED_FRACTIONS(object):
         C = cycle(self.continued_fractions (number))
         cfr = [ next(C) for i in range(nth) ]
         # print(cfr)
-        frac = Fraction(1, cfr[-1])
+        frac = mpq(1, cfr[-1])          # gmpy2.mpq is better than Fraction
+        # frac = Fraction(1, cfr[-1])
         print(frac) #,'  <-Start')
         for i in reversed(range(1, len(cfr)-1)) :
             frac = 1 / (frac + cfr[i])

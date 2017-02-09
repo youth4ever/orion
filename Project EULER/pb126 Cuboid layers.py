@@ -21,15 +21,68 @@ It turns out that 154 is the least value of n for which C(n) = 10.
 Find the least value of n for which C(n) = 1000.
 
 '''
-import time
+import time, gmpy2
+from itertools import combinations
+from math import gcd
+import operator, functools
+
+# print(sympy.npartitions( 5 ))
 
 
+def partition_in_three(n):     #2017-02-06 Some minor losses, but no time to fix it now
+    ''':Usage:  >>> for i in P :  print( i )
+    :param n: int, number
+    :return: generator, tuple with partitions : (9, 1, 1), (8, 2, 1), (7, 3, 1) ....            '''
+    a, b, c = n-1, 0, 1
+    bc = b+c
+    while a > n/3+1 :
+        a-=1
+        bc+=1
+        for i in range( 1, bc//2+1):
+            b=bc-i ; c=bc-b
+            if a>=b :
+                yield a, b, c
+    if n%3 == 0 :
+        yield n//3, n//3, n//3
+
+# must use partition of a number to find cuboid shapes --> reverse engineering, complicated # 2016-12-02 - we'll solve it later
 print('\n--------------------------TESTS------------------------------')
 
+P = partition_in_three(11)
+cnt=0
+for i in P :
+    cnt+=1
+    print( str(cnt)+'.    ',  i )
 
-must use partition of a number to find cuboid shapes --> reverse engineering, complicated # 2016-02-12 - we'll solve it latero
+print('\n---------------------------------------------\n')
 
+def get_cuboid_layer( P ):
+    C = list( combinations(P, 2 ))
+    # F =[]
+    # for i in C :
+    #     F.append(gcd ( i[0], i[1] ) )
+    # C2 = list( combinations(F, 2 ))
+    S = 0
+    for I in C :
+        S+= functools.reduce( operator.mul, I )
 
+    return 2*S
+
+print('make_cuboid : \t ', get_cuboid_layer(  [3,2,1 ]) )
+
+D = {}
+for n in range(4, 30) :
+    P = partition_in_three(n)
+    for i in P :
+        g = get_cuboid_layer(i)
+        print(str(n)+'.     ', i, get_cuboid_layer(i))
+        if g not in D : D[g] =1
+        else : D[g]+=1
+
+print('\n', D)
+
+# @2017-02-07. I must also count the other layers.
+# Doesn't suffice to count only the firts layer of a partition configuration. Must go until the limit
 
 
 

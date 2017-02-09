@@ -220,3 +220,11 @@ def replacenth(source, old, new, n):
 
 print('replacenth, replaces the 3-rd occurence :\t', replacenth(Test_string, "abc", "WXYZ", 3) )
 
+
+print('\n-----------------------String Rotation --------------------')
+def rotate(l, n):
+    return l[-n:] + l[:-n]
+
+A = '123456'
+print('Initial string: \t', A, '          Right rotation :' , rotate(A,-1)  )
+print('Initial string: \t', A, '          Left rotation with 2 units :' , rotate(A, 2)  )

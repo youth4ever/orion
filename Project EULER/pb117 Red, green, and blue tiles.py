@@ -182,7 +182,7 @@ blue_rod_ways(10)            # VALIDATED
 
 
 
-print('\n================  My FIRST SOLUTION, With PARTITIONS  ===============\n')
+print('\n===========  My FIRST SOLUTION, With PARTITIONS, 2 sec  ===============\n')
 t1  = time.time()
 
 def solve_with_partitions(rod_length) :
@@ -197,7 +197,7 @@ def solve_with_partitions(rod_length) :
 
     return print('\nAnswer :\t', S)
 
-# solve_with_partitions(50)            #   Answer : 100808458960497
+solve_with_partitions(50)            #   Answer : 100808458960497
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')          # Completed in : 2690.154076 ms

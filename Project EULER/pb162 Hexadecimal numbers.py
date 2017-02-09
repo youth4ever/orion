@@ -32,8 +32,6 @@ print('Convert from Hexadeciamal to Decimal :  ', int(0x1A0))
 print('Convert from Hexadeciamal to Decimal :  ', int(0xA10))
 print('Convert from Hexadeciamal to Decimal :  ', int(0xA01))
 
-
-
 print(16**16)
 
 

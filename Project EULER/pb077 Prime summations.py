@@ -42,7 +42,7 @@ print(partitions[-1])
 
 
 
-print('--------------------- MY SOLUTION -----------------------------')
+print('--------------------- MY SOLUTION, 1 sec -----------------------------')
 t1  = time.time()
 
 def sieve(lower, upper_bound):         # THE FASTEST  SIEVE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

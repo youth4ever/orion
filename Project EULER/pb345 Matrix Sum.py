@@ -34,6 +34,25 @@ Find the Matrix Sum of:
 '''
 import time
 
+f = open('pb345_matrix.txt', 'r')
+# f = open('pb067_triangle.txt', 'r')
+text = f.read()
+f.close()
+# Initialize and populate matrix
+matrix = []
+print(text,'        ',type(text),'\n')
+
+for row in text.split('\n'):
+    matrix.append(list(map(int, row.split(' '))))         # This maps the strings into ints on the run, SMART TECHNIQUE
+
+# for i in range(len(matrix)):
+#     print(matrix[i])
+
+@2017-02-07
+find max on a column, then interesect with the row to confirm.
+if there as new maximum establish that maximum and go on next row.
+
+Alsmo must keep track of already marked positions !!!
 
 print('\n--------------------------TESTS------------------------------')
 

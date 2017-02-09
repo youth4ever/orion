@@ -68,17 +68,18 @@ print('_____'*15)
 A = np.array([[1,2,3,4],[5,6,7,8]])
 print(A[:,2])       # Returns the third column
 
-print('--------- Diagonals in matrix : ---------')
+print('\n--------------- Diagonals in matrix : ----------------')
 
 # Diagonals in matrix
-matrix = np.array(         [[-2,   5,   3,  2],\
-                                      [ 9,  -6,   5,  1],\
-                                      [ 3,    2,   7,  3],\
-                                      [-1,    8, -4,  8]])
+matrix = np.array(         [[1,   2,   3,  4],\
+                                      [ 5,  6,   7,  8],\
+                                      [ 9,  10,  11,  12],\
+                                      [13,  4,  15,  16]])
 
-diags = [matrix[::-1,:].diagonal(i) for i in range(-3,4)]
+diags = [matrix[::-1,:].diagonal(i) for i in range(-len(matrix)+1 , len(matrix))]
+print(diags)
 diags.extend(matrix.diagonal(i) for i in range(3,-4,-1))
-print ('All the diagonals :',[n.tolist() for n in diags])
+print ('\nAll the diagonals :',[n.tolist() for n in diags])
 #print(diags)
 
 print('\n------------  Product of a list using numpy--------------------')

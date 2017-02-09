@@ -1,12 +1,18 @@
 # A Backtracking program  in Pyhton to solve Sudoku problem
 
+# Loading an external File :
+def load_file_1(filename):
+    M=[]
+    with open(filename) as f:
+        M = [list(map(int, line.rstrip('\n') )) for line in f.readlines()]
+    return M
 
 # A Utility Function to print the Grid
-def print_grid(arr):
+def print_grid( arr ) :
     for i in range(9):
         for j in range(9):
-            print arr[i][j],
-        print ('\n')
+            print (arr[i][j], end='   ')
+        print ()
 
 
 # Function to Find the entry in the Grid that is still  not used
@@ -16,7 +22,7 @@ def print_grid(arr):
 # remain, false is returned.
 # 'l' is a list  variable that has been passed from the solve_sudoku function
 # to keep track of incrementation of Rows and Columns
-def find_empty_location(arr,l):
+def find_empty_location(arr, l):
     for row in range(9):
         for col in range(9):
             if(arr[row][col]==0):
@@ -27,7 +33,7 @@ def find_empty_location(arr,l):
 
 # Returns a boolean which indicates whether any assigned entry
 # in the specified row matches the given number.
-def used_in_row(arr,row,num):
+def used_in_row(arr, row, num):
     for i in range(9):
         if(arr[row][i] == num):
             return True
@@ -53,68 +59,66 @@ def used_in_box(arr,row,col,num):
 # Checks whether it will be legal to assign num to the given row,col
 #  Returns a boolean which indicates whether it will be legal to assign
 #  num to the given row,col location.
-def check_location_is_safe(arr,row,col,num):
-
+def check_location_is_safe(arr, row, col, num):
     # Check if 'num' is not already placed in current row,
     # current column and current 3x3 box
-    return not used_in_row(arr,row,num) and not used_in_col(arr,col,num) and not used_in_box(arr,row - row%3,col - col%3,num)
+    return not used_in_row(arr, row, num) and not used_in_col(arr, col, num) \
+           and not used_in_box(arr, row - row%3, col - col%3, num)
+
 
 # Takes a partially filled-in grid and attempts to assign values to
 # all unassigned locations in such a way to meet the requirements
 # for Sudoku solution (non-duplication across rows, columns, and boxes)
+
 def solve_sudoku(arr):
-
     # 'l' is a list variable that keeps the record of row and col in find_empty_location Function
-    l=[0,0]
-
+    l=[ 0, 0]
     # If there is no unassigned location, we are done
-    if(not find_empty_location(arr,l)):
+    if(not find_empty_location(arr, l)):
         return True
-
     # Assigning list values to row and col that we got from the above Function
-    row=l[0]
-    col=l[1]
-
+    row = l[0]
+    col = l[1]
     # consider digits 1 to 9
     for num in range(1,10):
-
         # if looks promising
-        if(check_location_is_safe(arr,row,col,num)):
-
+        if(check_location_is_safe(arr, row, col, num)):
             # make tentative assignment
-            arr[row][col]=num
-
+            arr[row][col] = num
             # return, if sucess, ya!
-            if(solve_sudoku(arr)):
+            if (solve_sudoku( arr) ) :
                 return True
-
             # failure, unmake & try again
             arr[row][col] = 0
-
     # this triggers backtracking
+
+    print(arr)
     return False
+
+
 
 # Driver main function to test above functions
 if __name__=="__main__":
-
+    import time
     # creating a 2D array for the grid
     grid=[[0 for x in range(9)]for y in range(9)]
-
     # assigning values to the grid
-    grid=[[3,0,6,5,0,8,4,0,0],
-          [5,2,0,0,0,0,0,0,0],
-          [0,8,7,0,0,0,0,3,1],
-          [0,0,3,0,1,0,0,8,0],
-          [9,0,0,8,6,3,0,0,5],
-          [0,5,0,0,9,0,6,0,0],
-          [1,3,0,0,0,0,2,5,0],
-          [0,0,0,0,0,0,0,7,4],
-          [0,0,5,2,0,6,3,0,0]]
 
-    # if sucess print the grid
-    if(solve_sudoku(grid)):
+    filename = "sudoku - backtracking - test_matrix.txt"
+
+    grid = load_file_1(filename)
+    print(' Initial grid : ', grid, '\n\n')
+
+    t1  = time.time()
+
+
+    # if success print the grid
+    if (solve_sudoku(grid) ) :
         print_grid(grid)
     else:
-        print "No solution exists"
+        print ("No solution exists")
+
+    t2  = time.time()
+    print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 # The above code has been contributed by Harshit Sidhwa.

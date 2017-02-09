@@ -223,3 +223,10 @@ def calc_perm(lst) :        ### o(^_^)o    o(^_^)o  ###
     return numerator // denominator
 
 print('\nThe Permutation Function calc_perm :\t',calc_perm(lst))
+
+
+print('\n------------------- Permutation of a string ---------------------')
+from itertools import permutations
+for i in permutations("1234", 4):
+    print("".join(i), end='  ')
+
