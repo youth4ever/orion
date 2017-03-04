@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Sat, 21 Jan 2017, 21:34
 #The  Euler Project  https://projecteuler.net
 '''
                 Pythagorean tiles       -       Problem 139
@@ -55,11 +55,6 @@ for i in PT:
 
 
 
-
-
-
-
-
 print('\n--------------------------My INITIAL SOLUTION,  Slow,  4 min------------------------------')
 t1  = time.time()
 
@@ -108,8 +103,48 @@ print('\n================  My FIRST SOLUTION,   ===============\n')
 # Next, the area of the smaller square is c*c-2*a*b=(b-a)**2 as c*c=a*a+b*b.
 # This must divide c*c (larger square area) for the square to be tiled. Therefore, c*c % (b-a)*(b-a)==0
 
+# === EUCLID FORMULA works instantly
 
 print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+
+print('\n--------------------------SOLUTION 00, INSTANT  EUCLID FORMULA  --------------------------')
+t1  = time.time()
+
+
+# ====Wed, 31 Dec 2008, 03:31, Jepso, Finland
+# I used Euclid's formula for generating the triplets: a = 2mn, b = m2 - n2, c = m2 + n2.
+# In order for a right-angle triangle to allow tiling, c % (b - a) == 0 must hold.
+# If this holds for the primitive triangle, it's true for all (k*a, k*b, k*c).
+#
+# Then I noticed a pattern between such (m, n) pairs for which this holds.
+# If we start from (m0, n0) = (2, 1), we can get all (m, n) pairs that generate correct triangles
+# with the following recursive formula: (mi, ni) = (2mi-1 + ni-1, mi-1).
+#
+# The code below runs in 0.020 seconds.
+
+
+p_max = 100 * 10**6
+cnt = 0
+
+m, n = 2, 1
+while True:
+    a = 2 * m * n
+    b = m*m - n*n
+    c = m*m + n*n
+    p = a + b + c
+    if p >= p_max:
+        break
+    cnt += p_max // p
+    print (m, n, cnt)
+    m, n = 2*m + n, m
+print (cnt)
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+
+
 print('\n--------------------------SOLUTION 0, VERY FAST, PATTERN Found  --------------------------')
 t1  = time.time()
 
@@ -133,7 +168,7 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
-print('\n--------------------------SOLUTION 1, VERY FAST  --------------------------')
+print('\n--------------------------SOLUTION 1, 200 ms, VERY FAST  --------------------------')
 t1  = time.time()
 
 # ===== Thu, 1 Dec 2016, 14:49, Khalid, Saudi Arabia
@@ -188,7 +223,7 @@ print(total)
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-print('\n--------------------------SOLUTION 2,  PELL Equation using PQa algorithm of John D. Robertson  --------------------------')
+print('\n--------------------------SOLUTION 2,  1 ms, PELL Equation using PQa algorithm of John D. Robertson  --------------------------')
 t1  = time.time()
 
 # ==== Sat, 17 Dec 2016, 18:47, mbh038, England
@@ -373,31 +408,99 @@ print(time.time()-t0)
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
+
+print('\n--------------------------SOLUTION 6,  20 sec --------------------------')
+t1  = time.time()
+
+# ==== Thu, 2 Sep 2010, 20:29, jsudhir, India
+# Generated all primitive pythagorean triplets (a,b,c).
+# Checked for c%(a-b)==0 and added n1/p1 for all p1=a+b+c till n1=10^8
+# Straightforward code. Runs in 15s in Python
+
+def p139(n1=10**8) :
+	ilm=int((n1/2)**0.5)
+	cn=0
+	for i1 in range(1,ilm+1) :
+		isq = i1*i1
+		for j1 in range(1,i1) :
+			jsq = j1*j1
+			a1, b1, c1 = isq-jsq, 2*i1*j1, isq+jsq
+			p1 = a1+b1+c1
+			if p1 >= n1 : break
+			if a1<b1 : a1, b1=b1, a1
+			if not c1%(a1-b1) and gcd(a1,b1)==1 :
+				cn+=n1/p1
+	return cn
+
+# p139(n1=10**8)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 7,  INSTANT --------------------------')
+t1  = time.time()
+
+# ==== Wed, 26 Jan 2011, 22:34, WillemW, Netherlands
+# I do not believe my eyes.
+# Of the 73 programs and program ideas posted in this thread 51 are incorrect and 20 are correct (2 I couldn't make out).
+# While most programs check for the perimeter to be less than the limit (10^8) in the calculation of the number of "derived" triangles,
+# limit divided by perimeter is used, which should have been: (limit - 1) divided by perimeter!
+# If one takes 120 as limit, the difference will show up.
 #
-# print('\n--------------------------SOLUTION 6,   --------------------------')
-# t1  = time.time()
+# Looking at all these programs I am most impressed by hyperdex solution, in spite of his (then) limited knowledge of python.
+# The corrected version could be:
+
+
+def euler_139(limit):
+	# progam based on source by hyperdex
+ 	x, y, sum = 7, 5, 0
+ 	while x + y < limit:
+ 		sum += (limit - 1) // (x + y)
+ 		x, y = 3 * x + 4 * y, 3 * y + 2 * x
+ 	return sum
+
+
+print (euler_139( 10**8 ))
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 8, INSTANT  EUCLID FORMULA  --------------------------')
+t1  = time.time()
+
+
+# ====Wed, 31 Dec 2008, 03:31, Jepso, Finland
+# I used Euclid's formula for generating the triplets: a = 2mn, b = m2 - n2, c = m2 + n2.
+# In order for a right-angle triangle to allow tiling, c % (b - a) == 0 must hold.
+# If this holds for the primitive triangle, it's true for all (k*a, k*b, k*c).
 #
+# Then I noticed a pattern between such (m, n) pairs for which this holds.
+# If we start from (m0, n0) = (2, 1), we can get all (m, n) pairs that generate correct triangles
+# with the following recursive formula: (mi, ni) = (2mi-1 + ni-1, mi-1).
 #
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 7,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 8,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+# The code below runs in 0.020 seconds.
+
+
+p_max = 100 * 10**6
+cnt = 0
+
+m, n = 2, 1
+while True:
+    a = 2 * m * n
+    b = m*m - n*n
+    c = m*m + n*n
+    p = a + b + c
+    if p >= p_max:
+        break
+    cnt += p_max // p
+    print (m, n, cnt)
+    m, n = 2*m + n, m
+print (cnt)
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
 print('\n--------------------------SOLUTION 9, 29 sec  --------------------------')
 t1  = time.time()
 

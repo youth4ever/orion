@@ -65,7 +65,7 @@ def solve_pb124(up_range, n_th_elem):
 
 # print( '\nR [4] = ',R[4-1][0], 'R [6] = ',R[6-1][0] )
 
-# solve_pb124(10**5, 10**4)             # Answer E [10000] =  21417
+solve_pb124(10**5, 10**4)             # Answer E [10000] =  21417
 
 
 

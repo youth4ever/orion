@@ -397,148 +397,207 @@ print('Test two_available_spots Function : ', two_available_spots(M),'\n\n')
 print('Prints out the positions which have ONLY  1 CHOICE : \n' , get_1_choice_position(M) )
 print('Prints out the positions which have 2 CHOICES : \n', get_2_choices_positions(M) )
 
-print('----------------------------------------------------------- \n')
+
+def get_position_choices(M, x , y):
+    ''':Description: Important function which get the *FILL STATUS* of the matrix.
+    :param M:   the matrix to be tested
+    :return:    {'71': [1, 2, 3, 5]}, False = if there is no available choice,
+     True = if the position is already filled with a number
+        E.g. :  'get_position_choices :	 {'71': [1, 2, 3, 5]}
+     :NOTE:     It depends on the **intersection function** which returns the boolean    '''
+    sudoku={}
+    answer = []
+    if M[x-1][y-1] == 0 :
+        # print('------ Position  ',x, y,'  --------------')
+        sudoku[int(str(x)+str(y))] = []
+        for n in range(1, 10):
+            # print('Nr: ',n , '     x=',x,'  y=',y ,'    ' ,intersection(n, x , y, M) )
+            # answer.append(intersection(n, x , y, M))
+            if intersection(n, x , y, M) == False :
+                answer.append(n)
+        # if len(answer) > 0 :
+        sudoku[int(str(x)+str(y))] = answer
+        return sudoku
+        # else : return False
+    else : return True
+
+print('\nget_position_choices :\t',get_position_choices(M, 7,1),'\n' )
+
+
+def next_position(ij):
+    '''    :param ij: actual position
+        :return: next position          '''
+    while True :
+        ij+=1
+        if ij %10 == 0 : ij+=1
+        yield ij
+
+def previous_position(ij):
+    '''    :param ij: actual position
+        :return: previous position   '''
+    while True :
+        ij-=1
+        if ij %10 == 0 : ij-=1
+        yield ij
+
+
+
+print('\n----------------------------------------------------------- \n')
 
 
 #############        END    DEFINITIONS        ####################
 t1  = time.time()
 
-M = [[6, 3, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 5, 0, 0, 0, 0, 8], [0, 0, 5, 6, 7, 4, 0, 0, 0], [0, 0, 0, 0, 2, 0, 0, 0, 0], [0, 0, 3, 4, 0, 1, 0, 2, 0], [0, 0, 0, 0, 0, 0, 3, 4, 5], [0, 0, 0, 0, 0, 7, 0, 0, 4], [0, 8, 0, 3, 0, 0, 9, 0, 2], [9, 4, 7, 1, 0, 0, 0, 8, 0]]
 # M = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 7, 9, 0, 5, 0, 1, 8, 0], [8, 0, 0, 0, 0, 0, 0, 0, 7], [1, 9, 7, 3, 4, 6, 8, 5, 2], [4, 5, 2, 7, 1, 8, 3, 9, 6], [6, 8, 3, 5, 9, 2, 7, 0, 0], [7, 0, 0, 0, 0, 0, 0, 0, 5], [0, 1, 6, 0, 3, 0, 4, 2, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
-   ##########         CASE 1          #########
-def fill_1_available_position(M):
-    sudoku = get_to_fill_status(M)
-    if one_available_spot(M) == True :
-        for k, v in sudoku.items() :
-            # print(k, v , v.count(False)     ,end=' ')
-            if v.count(False) == 1 :        #  if only 1 False it can be completed with the number
-                number = v.index(False)+1
-                position = [ int(i) for i in list(k) ]
-                print(position , ' completed with  value: ',number, '   ', v    ,'           <--   CASE  1 ')
-                M[position[0]-1 ] [position[1]-1 ] = number
-                return M    # only one at a time !!!!!!!!!!!!
-    if one_available_spot(M) == False :
-        return False
-
-       ###########          CASE 2          ############
-
-A, tracker, within_tracker , glide  = [], [], [], 0
-
-def get_2_fill_available_positions(M ):
-    global A, tracker, within_tracker, glide
-    if len(tracker) == 0 :
-        A = deepcopy(M)
-        print('\n\n      ################    matrix A was created (tracker is empty)   ############:\n',A)
+M = [[6, 3, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 5, 0, 0, 0, 0, 8], [0, 0, 5, 6, 7, 4, 0, 0, 0], [0, 0, 0, 0, 2, 0, 0, 0, 0], [0, 0, 3, 4, 0, 1, 0, 2, 0], [0, 0, 0, 0, 0, 0, 3, 4, 5], [0, 0, 0, 0, 0, 7, 0, 0, 4], [0, 8, 0, 3, 0, 0, 9, 0, 2], [9, 4, 7, 1, 0, 0, 0, 8, 0]]
 
 
-        tmp = get_2_choices_positions(M)
-        tracker = create_tracker(tmp)
-        print('\nTracker was created, length =', len(tracker) , tmp,'\n', tracker[:3])
+for x in range(1,10):
+    for y in range(1,10):
+        print(str(x)+str(y)+'.     ', get_position_choices(M, x, y))
 
-    if len(tracker) != 0 :
-        M = tracker_fill( M, tracker, 0)
-        print('tracker_length : ', len(tracker), tracker[:3])
-        return M
+G = previous_position(19)
+for i in range(10):     print(str(i+1)+'.  ', next(G), end='   ')
+
+print('\n----------------------------------------------------------- \n')
+#    ##########         CASE 1          #########
+# def fill_1_available_position(M):
+#     sudoku = get_to_fill_status(M)
+#     if one_available_spot(M) == True :
+#         for k, v in sudoku.items() :
+#             # print(k, v , v.count(False)     ,end=' ')
+#             if v.count(False) == 1 :        #  if only 1 False it can be completed with the number
+#                 number = v.index(False)+1
+#                 position = [ int(i) for i in list(k) ]
+#                 print(position , ' completed with  value: ',number, '   ', v    ,'           <--   CASE  1 ')
+#                 M[position[0]-1 ] [position[1]-1 ] = number
+#                 return M    # only one at a time !!!!!!!!!!!!
+#     if one_available_spot(M) == False :
+#         return False
+#
+#        ###########          CASE 2          ############
+#
+# A, tracker, within_tracker , glide  = [], [], [], 0
+#
+# def get_2_fill_available_positions(M ):
+#     global A, tracker, within_tracker, glide
+#     if len(tracker) == 0 :
+#         A = deepcopy(M)
+#         print('\n\n      ################    matrix A was created (tracker is empty)   ############:\n',A)
+#
+#
+#         tmp = get_2_choices_positions(M)
+#         tracker = create_tracker(tmp)
+#         print('\nTracker was created, length =', len(tracker) , tmp,'\n', tracker[:3])
+#
+#     if len(tracker) != 0 :
+#         M = tracker_fill( M, tracker, 0)
+#         print('tracker_length : ', len(tracker), tracker[:3])
+#         return M
+#
+#
+#
+#
+# def solve_sudoku( grid ):
+#     global M, tracker
+#     tracker_change, len_tracker = 3, 0      # Tracker Flag
+#     while True :
+#
+#         if one_available_spot(M) == True :
+#             fill_1_available_position(M)
+#             print('\nCASE 1', M)
+#
+#         if two_available_spots(M) == True :
+#             get_2_fill_available_positions(M)
+#             M = tracker_fill( M, tracker, 0)
+#             print('\nCASE 2', M )
+#
+#             if len_tracker != len(tracker) :        # Update len_tracker & Flag
+#                 len_tracker = len(tracker)
+#                 tracker_change = True
+#             elif len_tracker == len(tracker) and one_available_spot(M) ==False :
+#                 tracker_change = False
+#             print( 'tracker length : ',len(tracker), '          tracker_change :', tracker_change, '     ', len_tracker )
+#
+#
+#         print(' ONE_spot =' ,one_available_spot(M), '      TWO_spots =' ,two_available_spots(M), '    Quench : ', quench(M))
+#         print('get_2_choices_positions : ', len(get_2_choices_positions(M)), get_2_choices_positions(M),'\n' )
+#
+#         if quench(M) == True :
+#             M = deepcopy(A)
+#             tracker.pop(glide)
+#
+#
+#         if  tracker_change == False and one_available_spot(M) == False and two_available_spots(M)==True :
+#             print(' ++++++++++++++         TRACKER WIL BE UDATED    +++++++++++++++')
+#             M = deepcopy(A)
+#             G = get_2_choices_positions(M)
+#             if len(G) > 8 :
+#                 G = G[ :3 ]
+#             tracker = update_tracker(G, tracker)
+#             print('\nTracker was UPDATED, length =', len(tracker), G, '\n', tracker[:3])
+#
+#
+#
+#         if validate_final(M) == True :
+#             show_complete(M, grid )
+#             break
+#
+# # solve_sudoku(grid=14)
+
+Flag = 100
+Tracker = {}
+pos = 11
+N = next_position(pos)
+P = previous_position(pos)
+A = deepcopy(M)
+for b in range(20) :
+    x, y = int(str(pos)[0]), int(str(pos)[1])
+
+    if A[x-1][y-1] != 0 :
+        while  A[x-1][y-1] != 0 :
+            pos = next(N)
+            x, y = int(str(pos)[0]), int(str(pos)[1])
+
+    g = get_position_choices(M, x, y )
+    print('get_pos  -->\t\t',g)
+    if g != True or len(g[pos]) > 0 :
+        if pos not in Tracker : Tracker.update(g)
+
+    ###### Fill the matrix ###
+    if pos in Tracker :
+        if len( Tracker[pos] ) > 0 :
+            M[x-1][y-1] = Tracker[pos][0]
+            print( g ,Tracker[pos], '    ',Tracker, '      ', M)
+            # pos = next(N)
+
+    if pos not in Tracker :
+        print('NO !')
+    ##### Start Backtracking ####
+
+    # if len(g[pos]) > 0 :
+    #     pos = next(P)
+    #     if len( Tracker[pos] ) == 1 :
+    #         M[x-1][y-1] = 0
+    #         Tracker.pop(pos)
+    #     if len( Tracker[pos] ) > 1 :
+    #         Tracker[pos].pop(0)
+    #         M[x-1][y-1] = Tracker[pos][0]
+    #     print('back :\t ',   '      ', M)
+
+
+    if len( Tracker[pos] ) > 0 :
+        pos = next(N)
+        Flag = 1
 
 
 
 
-def solve_sudoku( grid ):
-    global M, tracker
-    tracker_change, len_tracker = 3, 0      # Tracker Flag
-    while True :
-
-        if one_available_spot(M) == True :
-            fill_1_available_position(M)
-            print('\nCASE 1', M)
-
-        if two_available_spots(M) == True :
-            get_2_fill_available_positions(M)
-            M = tracker_fill( M, tracker, 0)
-            print('\nCASE 2', M )
-
-            if len_tracker != len(tracker) :        # Update len_tracker & Flag
-                len_tracker = len(tracker)
-                tracker_change = True
-            elif len_tracker == len(tracker) and one_available_spot(M) ==False :
-                tracker_change = False
-            print( 'tracker length : ',len(tracker), '          tracker_change :', tracker_change, '     ', len_tracker )
-
-
-        print(' ONE_spot =' ,one_available_spot(M), '      TWO_spots =' ,two_available_spots(M), '    Quench : ', quench(M))
-        print('get_2_choices_positions : ', len(get_2_choices_positions(M)), get_2_choices_positions(M),'\n' )
-
-        if quench(M) == True :
-            M = deepcopy(A)
-            tracker.pop(glide)
-
-
-        if  tracker_change == False and one_available_spot(M) == False and two_available_spots(M)==True :
-            print(' ++++++++++++++         TRACKER WIL BE UDATED    +++++++++++++++')
-            M = deepcopy(A)
-            G = get_2_choices_positions(M)
-            if len(G) > 8 :
-                G = G[ :3 ]
-            tracker = update_tracker(G, tracker)
-            print('\nTracker was UPDATED, length =', len(tracker), G, '\n', tracker[:3])
 
 
 
-        if validate_final(M) == True :
-            show_complete(M, grid )
-            break
 
 
-solve_sudoku(grid=14)
-
-
-
-# cnt= 0
-# for k, v in Mall.items() :
-#     cnt+=1
-#     M, grid = v, k
-#     solve_sudoku( grid )
-#     Mall[k] = M
-#     print(str(cnt)+'.    ' , k,'    ' , M)
-
-
-
-# print('\n===================Mecanic ==============   \n', M)
-# memo, A,  SIGN, SuperFlag = {}, [], [] , False
-# print('STEP 1  '),fill_available_position(M)
-# print('STEP 2  '),fill_available_position(M)
-# print('STEP 3  '),fill_available_position(M)
-# print('STEP 4  '),fill_available_position(M)
-# print('STEP 5  '),fill_available_position(M)
-# print('STEP 6  '),fill_available_position(M)
-# print('Intermediary:  ',M)
-# print('STEP 7  '),fill_available_position(M)
-# # # print(M)
-# print('STEP 8  '),fill_available_position(M)
-# print('STEP 9  '),fill_available_position(M)
-# print('CHECK Doubles Test : ',check_doubles(M))
-# print('STEP 10  '),fill_available_position(M)
-# print('STEP 11  '),fill_available_position(M)
-# print('STEP 12  '),fill_available_position(M)
-# print('STEP 13  '),fill_available_position(M)
-# print('CHECK Doubles Test : ',check_doubles(M), memo)
-# print('Intermediary:  ',M)
-# print('STEP 14  '),fill_available_position(M)
-# print('STEP 15  '),fill_available_position(M)
-# print('STEP 16  '),fill_available_position(M)
-# print('CHECK Doubles Test : ',check_doubles(M), memo)
-# print('STEP 17  '),fill_available_position(M)
-# print('STEP 18  '),fill_available_position(M)
-# # print('Intermediary:  ',M)
-# print('STEP 19  '),fill_available_position(M)
-# print('CHECK Doubles Test : ',check_doubles(M), memo)
-# print('STEP 20  '),fill_available_position(M)
-# print('STEP 21  '),fill_available_position(M)
-# print('STEP 22  '),fill_available_position(M)
-# print('STEP 24  '),fill_available_position(M)
-# print('STEP 25  '),fill_available_position(M)
-# print('STEP 26  '),fill_available_position(M)
 
 
 

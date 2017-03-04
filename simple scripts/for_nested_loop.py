@@ -1,5 +1,12 @@
-from itertools import combinations_with_replacement, product
+######## @ 2017-02-23, 10:47 . Note: I finally learn how to replace those boring nested loops with itertools
 import itertools
+
+for a, b, c, d in itertools.product(range(1, 4+1), repeat=4):
+    print(a, b,c, d, end='   ')
+
+
+from itertools import combinations_with_replacement, product
+
 print("j   ", "    i  ","       i+j")
 print("------"*20)
 

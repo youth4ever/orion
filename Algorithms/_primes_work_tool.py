@@ -53,24 +53,24 @@ t1  = time.time()
 
 
 
-def primesieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+def numpy_prime_sieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
     import numpy as np
     """return array of primes 2<=p<=n"""
-    sieve=np.ones(n+1,dtype=bool)
-    for i in range(2, int((n+1)**0.5+1)):
-        if sieve[i]:
-            sieve[2*i::i]=False
+    sieve=np.ones( n+1, dtype=bool )
+    for i in range( 2, int((n+1)**0.5+1) ) :
+        if sieve[i] :
+            sieve[2*i :: i] = False
     return np.nonzero(sieve)[0][2:]
 
 
-def sieve(n):       # SECOND FASTEST
+def prime_sieve(n):       # SECOND FASTEST        o(^_^)o
     sieve = [True] * n
-    for i in range(3,int(n**0.5)+1,2):
+    for i in range(3, int(n**0.5)+1, 2):
         if sieve[i]:
-            sieve[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
-    return [2] + [i for i in range(3,n,2) if sieve[i]]
+            sieve[ i*i :: 2*i ] = [False] * ( (n-i*i-1) // (2*i) +1 )
+    return [2] + [i for i in range(3, n , 2) if sieve[i] ]
 
-def prime_generator(lower, upper):      #THIRD FASTEST
+def prime_sieve_generator(lower, upper):      #THIRD FASTEST
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
     Create a candidate list within which non-primes will be marked as None.         """
     cand = [i for i in range(3, upper + 1, 2)]
@@ -105,6 +105,25 @@ def sieve_2(lower, upper_bound):          # FOURTH
     return primes
 
 print(sieve_2(11900, 12000))
+
+
+import math
+def primes_up_to(n):            #### FIFTTH
+    ''' SIEVE of ERATOSTHENES :  PRIME GENERATOR algorithms
+        # http://code.activestate.com/recipes/576640/ '''
+    import math
+    nroot = int(math.sqrt(n))
+    sieve = [True] * (n + 1)# range(n + 1)
+    sieve[0] = False
+    sieve[1] = False
+
+    for i in range(2, nroot+1):
+        if sieve[i]:
+            m = n / i - i
+            # print(i,'   ', m )
+            sieve[i * i: n + 1: i] = [False] * (int(m) + 1)
+
+    return [i for i in range(n+1) if sieve[i]]
 
 
 def gen_primes(limit):                                  # FIFTH
@@ -535,14 +554,17 @@ print('Here we test the GET_DIVISORS CLASS :  ',GET_DIVISORS().divisors(90))
 
 print('\n----------- PAIR FACTORING OF A NUMBER -------------------')
 
-def pair_Factors(n):
+def pair_Factors(n):        # VERY EFFICIENT !!!! SUPER INTELLIGENT ALGORITHM
+    '''Pair Factoring, VERY EFFICIENT !
+    :param n:
+    :return:     '''
     todo, combis = [(n, 2, [])], []
     while todo:
         n, i, combi = todo.pop()
         while i * i <= n:
             if n % i == 0:
                 combis += combi + [i, n//i],
-                todo += (n//i, i, combi+[i]),
+                todo += (n//i, i, combi+[i]),       # If needed only PAIRS (a,b) comment this line !!!
             i += 1
     return combis
 
@@ -572,10 +594,18 @@ def dr(n) :   # Digital Root of a number
 
 print('\nDigital Root of a number : \t 467 \t =\t' ,dr(467) )
 
-print('\n------------------  EULER Phi of a number, Euler Totient --------------------  ')
+print('\n------------------  EULER Phi,  Φ (n) of a number, EULER TOTIENT -------------------- ')
 
-def euler_totient(n):
-    """returns Euler totient (phi) of n """
+def euler_totient(n):           # Remark : For large array better use Sieve approach
+    """returns Euler totient (phi) of n = Φ (n)
+        Uses the formula of the Totient  : Φ (n) =  Π {p | n}  n *(1 - 1/p) ;
+        where p are each prime factors and n is the number  for which we compute
+        In number theory, Euler's totient function counts the positive integers up to a given integer n
+        that are relatively prime to n. It is written using the Greek letter phi as φ(n) or ϕ(n),
+        and may also be called Euler's phi function.
+        Example : Φ (12) = 4 =   [1,5,7,11]
+        https://en.wikipedia.org/wiki/Euler's_totient_function
+        http://marcharper.codes/2015-08-07/totients.html            """
     phi=n
     pfs=set(get_factors(n))
     for pf in pfs:
@@ -584,6 +614,32 @@ def euler_totient(n):
 
 print('euler_totient : \t', euler_totient(600))
 
+def Euler_Totient_Sieve(n):
+    ''' Constructs a SIEVE of totients up to n
+    :param n: up range number
+    :return: list, totients     '''
+    phi = list(range(n+1))
+    for i in range(2,n+1):
+        if phi[i]==i:
+            for x in range(i,n+1,i):
+                phi[x]-=phi[x]//i
+    return phi[1:][:100]            # Take care to remove the [:100], it is only for printing
 
+print('Euler Totient Sieve : \t', Euler_Totient_Sieve(600))
+
+
+
+print('\n------------------  divisor_square_sum_sigma_2 -------------------- ')
+def divisor_square_sum_sigma_2(n):
+    '''     Π  = ((p_1**(a_1+1)*2)-1) / (p_1 -1)*...*((p_k**(a_k+1)*2)-1) / (p_k -1)
+    where p_1, p_2,...p_k are the prime factors of the number , together with their
+    coefficients exponentials a_1, a_2,...,a_k
+    :param n: int, number
+    :return: int, sigma2 representing the Sum of the squares of its divisors !              '''
+    # http://math.stackexchange.com/questions/166501/delta-2n-the-sum-of-the-squares-of-the-positive-divisors-of-n
+    D = list(factorise (n ))
+    P = [( i[0]**((i[1]+1)*2)-1 ) //(i[0]**2-1) for i in D ]
+    # print(D)
+    return functools.reduce(operator.mul, P)
 
 

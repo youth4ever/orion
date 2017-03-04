@@ -273,14 +273,85 @@ P303()
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-# print('\n--------------------------SOLUTION 4,   --------------------------')
-# t1  = time.time()
+print('\n--------------------------SOLUTION 4,   --------------------------')
+t1  = time.time()
+
+# ==== Sun, 6 May 2012, 00:08, nevralia, USA
+# Numbers like 9, 99, 999, etc. are the hardest to calculate with straightforward computation,
+# but as @mvaneerde has noted, there's an interesting pattern to their least multipliers f(n)/n:
 #
+# f(9)/9 = 1357 + 1
+# f(99)/99 = 11335577 + 1
+# f(999)/999 = 111333555777 + 1
+# f(9999)/9999 = 1111333355557777 + 1
+# f(99999)/99999 = 11111333335555577777 + 1
 #
+# With some optimization for these special cases, this Python script finds the solution for n = 1 to 10,000
+# in about 7.5 sec on a laptop with Core i7 620M:
 #
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+# real	0m7.516s
+# user	0m7.472s
+# sys	0m0.008s
 #
+# For n = 1 to 100,000, this terminates in about 6.5 min:
+
+
+import functools
+import itertools
+import re
+
+def to_int(tup):
+    result = functools.reduce(lambda x, y: x * 10 + y, tup, 0)
+    return result
+
+pattern_9s = re.compile('^(9+)(0*)$')
+
+def special_case(x):
+    result = 0
+    m = pattern_9s.match(str(x))
+    if m != None:
+        x = []
+        n = len(m.group(1))
+        for d in range(1, 9, 2):
+            x.extend([d] * n)
+        result = to_int(x) + 1
+    return result
+
+def least_multiplier(x):
+    mod_map = {}
+    num_digits, result = 0, special_case(x)
+    while result == 0:
+        m, offset = 0, 10 ** num_digits
+        for digits in itertools.product([0, 1], repeat=num_digits):
+            n = offset + to_int(digits)
+            r = n % x
+            mod_map.setdefault(r, n)
+            if mod_map[r] > n:
+                mod_map[r] = n
+        num_digits += 1
+        if 0 in mod_map:
+            m = mod_map[0]
+        mod_0s = []
+        for i in mod_map.keys():
+            if (x - i) in mod_map:
+                mod_0s.append(mod_map[i] + mod_map[x - i])
+        if len(mod_0s) > 0:
+            min_mod_0 = min(mod_0s)
+            if m == 0 or min_mod_0 < m:
+                m = min_mod_0
+        if m > 0:
+            result = m // x
+    return result
+
+if __name__ == '__main__':
+    ans = 0
+    for x in range(1, 10001):
+        ans += least_multiplier(x)
+    print(ans)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
 # print('\n--------------------------SOLUTION 5,   --------------------------')
 # t1  = time.time()
 #

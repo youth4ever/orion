@@ -2,7 +2,8 @@
 # Solved by Bogdan Trif @   Completed on Sat, 15 Oct 2016, 00:16
 #The  Euler Project  https://projecteuler.net
 '''
-Totient permutation     -       Problem 70
+                        Totient permutation     -       Problem 70
+
 Euler's Totient function, φ(n) [sometimes called the phi function], is used to determine the number of
 positive numbers less than or equal to n which are relatively prime to n.
 For example, as 1, 2, 4, 5, 7, and 8, are all less than nine and relatively prime to nine, φ(9)=6.
@@ -87,21 +88,27 @@ algo = Bogdan_Totient_algorithm()
 a = algo.count_elements(10)
 print(a)
 
-#
-# minv = 10
-# for i in primes :
-#     for j in primes:
-#             # P = primes[n] * primes[m]
-#             n = i*j
-#             if n < 10**7 :
-#                 phi = algo.count_elements(n)
-#                 #print(i, j,'  ;    n= ' ,n, '      phi(n)= ' ,phi , '       n/phi(n) =  ',n/phi )
-#                 p = ''.join(sorted(str(phi)))
-#                 q = ''.join(sorted(str(n)))
-#                 if p == q and n/phi < minv:
-#                     minv = n/phi
-#                     print('YES ! A Permutation!  ------   >',  i, j, p , q ,'  ;    n= ' ,n, '      phi(n)= ' ,phi , '       n/phi(n) =  ',n/phi )
+print('\n==============My NAIVE First Solution, SLOW  1 min ==============\n')
+t1  = time.time()
 
+def my_first_solution():
+    minv, N = 10, 0
+    for i in primes :
+        for j in primes:
+                # P = primes[n] * primes[m]
+                n = i*j
+                if n < 10**7 :
+                    phi = algo.count_elements(n)
+                    #print(i, j,'  ;    n= ' ,n, '      phi(n)= ' ,phi , '       n/phi(n) =  ',n/phi )
+                    p = ''.join(sorted(str(phi)))
+                    q = ''.join(sorted(str(n)))
+                    if p == q and n/phi < minv:
+                        minv = n/phi
+                        N = n
+                        print('YES ! A Permutation!  ------   >',  i, j, p , q ,'  ;    n= ' ,n, '      phi(n)= ' ,phi , '       n/phi(n) =  ',n/phi )
+    return print('\nAnswer : \t', N)
+
+my_first_solution()
 # Answer : 8319823
 
 # Take 2 sieves of primes such that their product < 10**7 and make combinations between them
@@ -113,14 +120,17 @@ print(a)
 # 1765937/1757796
 # 1.0046313679175514
 
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-print('\n--------------------------SOLUTION 1 ,  the KING, VERY FAST, mbh038 , England --------------------------')
+print('\n--------------------------SOLUTION 1 , 1 sec , the KING, VERY FAST, mbh038 , England --------------------------')
+
 # After first posting here my original solution which took 400s, here is an update that gets the answer in 0.75 s or so.
-# It guesses that the minimal ratio of nϕ(n)nϕ(n), if nn cannot be prime (since then ϕ(n)ϕ(n) would be n−1n−1
-# and it would not have the same digits as nn) occurs when nn has two distinct prime factors,
+# It guesses that the minimal ratio of nϕ(n), if n cannot be prime (since then ϕ(n) would be n−1
+# and it would not have the same digits as n) occurs when n has two distinct prime factors,
 # these both being around n√n. I search for factors within a factor 3 of n√n and use the fact that,
-# where a number nn has two distinct prime factors, p1p1 and p2p2, then ϕ(n)=(p1−1)(p2−1)ϕ(n)=(p1−1)(p2−1).
+# where a number nn has two distinct prime factors, p1 and p2, then ϕ(n)=(p1−1)(p2−1) .
 
 t1  = time.time()
 
@@ -154,87 +164,90 @@ p70(10**7)
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-print('\n--------------------------SOLUTION 2 ,  FAST, nopria , Italy --------------------------')
+print('\n--------------------------SOLUTION 2 , 20sec  ,FAST, nopria , Italy --------------------------')
 ## http://codegolf.stackexchange.com/a/26753/53996  modified as generator
 # I found here a very interesting and fast algorithm to calculate totien(n) for all n under a certain limit,
 # and then used it to find the lowest ratio required. It runs in less than 20 seconds with plain Python 3:
 
 t1  = time.time()
-#
+
 # TOTIENT GENERATOR VERY FAST
-# def totient_gen(limit):
-#     phi = (limit+1)*[0]
-#     phi[1] = 1
-#     yield 1
-#     for n in range(2,limit):
-#         if phi[n] == 0:
-#             phi[n] = n - 1
-#             for j in range(2,int(limit/n)):
-#                 if phi[j] != 0:
-#                     q = j
-#                     f = n - 1
-#                     while q % n == 0:
-#                         f *= n
-#                         q //= n
-#                     phi[n * j] = f * phi[q]
-#         yield phi[n]
-# # for i in totient_gen(100):     print(i, end=' ')
-#
-# min_ratio = 10 # big initial value
-# n=0
-# for phi in totient_gen(10000000):
-#     n += 1
-#     if n/phi < min_ratio:
-#         if sorted(str(phi)) == sorted(str(n)):
-#             if n > 1:
-#                 min_ratio = n/phi
-#                 print('{:9d}{:9d}{:12.8f}'.format(n,phi,min_ratio))
+def totient_gen(limit):
+    phi = (limit+1)*[0]
+    phi[1] = 1
+    yield 1
+    for n in range(2,limit):
+        if phi[n] == 0:
+            phi[n] = n - 1
+            for j in range(2,int(limit/n)):
+                if phi[j] != 0:
+                    q = j
+                    f = n - 1
+                    while q % n == 0:
+                        f *= n
+                        q //= n
+                    phi[n * j] = f * phi[q]
+        yield phi[n]
+# for i in totient_gen(100):     print(i, end=' ')
+
+min_ratio = 10 # big initial value
+n=0
+for phi in totient_gen(10000000):
+    n += 1
+    if n/phi < min_ratio:
+        if sorted(str(phi)) == sorted(str(n)):
+            if n > 1:
+                min_ratio = n/phi
+                print('{:9d}{:9d}{:12.8f}'.format(n,phi,min_ratio))
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-print('\n--------------------------SOLUTION 3 ,  INTERESTING but SLOWER, fioi , France --------------------------')
+print('\n--------------------------SOLUTION 3 , 2 min,   INTERESTING but SLOWER, fioi , France --------------------------')
 t1  = time.time()
 
-UPPER_BOUND = 10 ** 7
+def fioi() :
+    UPPER_BOUND = 10 ** 7
 
-def is_permutation(n, m):
-    s1, s2 = list(str(n)), list(str(m))
-    s1.sort()
-    s2.sort()
-    return s1 == s2
+    def is_permutation(n, m):
+        s1, s2 = list(str(n)), list(str(m))
+        s1.sort()
+        s2.sort()
+        return s1 == s2
 
-print("Generating primes...")
-prime = [True] * UPPER_BOUND
-prime_list = []
+    print("Generating primes...")
+    prime = [True] * UPPER_BOUND
+    prime_list = []
 
-for i in range(2, UPPER_BOUND):
-    if prime[i]:
-        prime_list.append(i)
-        for j in range(i + i, UPPER_BOUND, i):
-            prime[j] = False
+    for i in range(2, UPPER_BOUND):
+        if prime[i]:
+            prime_list.append(i)
+            for j in range(i + i, UPPER_BOUND, i):
+                prime[j] = False
 
-totient = [1] * UPPER_BOUND
+    totient = [1] * UPPER_BOUND
 
-print("Computing totient function...")
-for p in prime_list:
-    for i in range(1, (UPPER_BOUND - 1) // p + 1):
-        q = p
-        while i * q < UPPER_BOUND:
-            totient[i * q] = totient[i] * (q - q // p)
-            q *= p
+    print("Computing totient function...")
+    for p in prime_list:
+        for i in range(1, (UPPER_BOUND - 1) // p + 1):
+            q = p
+            while i * q < UPPER_BOUND:
+                totient[i * q] = totient[i] * (q - q // p)
+                q *= p
 
-print("Looking for permutations...")
-min_i = -1
-min_ratio = float('inf')
-for i in range(2, UPPER_BOUND):
-    if is_permutation(i, totient[i]):
-        print(i, totient[i], "found")
-        curr_ratio = i / totient[i]
-        if curr_ratio < min_ratio:
-            min_ratio = curr_ratio
-            min_i = i
-print(min_i, "with", min_ratio)
+    print("Looking for permutations...")
+    min_i = -1
+    min_ratio = float('inf')
+    for i in range(2, UPPER_BOUND):
+        if is_permutation(i, totient[i]):
+            print(i, totient[i], "found")
+            curr_ratio = i / totient[i]
+            if curr_ratio < min_ratio:
+                min_ratio = curr_ratio
+                min_i = i
+    return print(min_i, "with", min_ratio)
+
+# fioi()
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')

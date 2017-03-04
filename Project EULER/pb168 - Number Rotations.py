@@ -35,24 +35,62 @@ def right_rotate_number(n):
 
 print(circulate_number(142857))
 print('is_prime :\t',gmpy2.is_prime(142857))
-print('right_rotate_number Test :', right_rotate_number(142857))
+print('right_rotate_number Test :', right_rotate_number(142857142857142857))
+print(714285714285714285 / 142857142857142857)
+
+#### IMPORTANT - THE IDEA OF THE PROBLEM  ::  #############
+# If we take  102564 and we right-rotate it ==> 410256  = 102564 * 4
+# Let's multiply it step by step :
+# 4 * 4 = 16                       => 6 keep 1        <<-- Start
+# 6 * 4 = 24 + keep 1 = 25 => 5 keep 2
+# 5 * 4 = 24 + keep 2 = 26 => 6 keep 2
+# 2 * 4 =  8 + keep 2 = 10 => 0 keep 1
+# 0 * 4 =  0 + keep 1 = 1 =>  1 keep 0        <<-- End
+# 1 * 4  = 4
+# Therefore the number is : 410256
+# The trick is that this sequence keeps reapeating itself because we have again the 4 which multiplied by 4
+# give 16 ==> 6 keep 1 ...and so on and so on :
+# Therefore all the numbers of the type 102564, 102564.102564, 102564.102564.102564 repeat themselves
+# All we need to do for this problem is to see how many are in 10**100 => digit length = 6 => 100 //6  = 16
+
+
 
 
 
 print('\n--------------------------TESTS------------------------------')
+t1  = time.time()
 
-
+SUM = 0
+S = []
 cnt = 0
-for i in range(10**7, 10**9) :
-    a = right_rotate_number(i)
-    if  a/i % 1 == 0 and a/i != 1 :         # We will include later numbers like 666666, 777777
+for n in range(10, 10**6) :
+    a = right_rotate_number(n)
+    if  a%n == 0 : #and len( set([int(i) for i in str(n)] ) ) > 1 :         # We will include later numbers like 666666, 777777
+        if  len( set([int(i) for i in str(n)] ) ) > 1 :
+            S.append(n)
         cnt+=1
-        print (str(cnt)+'.    ', a, i , a/i, a%i )
+        print (str(cnt)+'.      n=', n,'     a=', a , '     a / n=', a//n  )
+        SUM+= n
 
+print('\nPartial Answer : \t', SUM,'\n')
 
+O = [ int( (str(i)*6 ) ) for i in range(1,10) ]
+print('One digits : \t' , O )
+print('6-digits :\t', S )
 
+lim=100
+one_digits = (lim-6) * sum(O)
+six_digits = (lim//6 -1 ) * sum(S)
 
+print('\nOne digits : ',one_digits  )
+print( '6-digits  : \t', six_digits )
 
+print('\nAnswer :\t', (one_digits + six_digits +SUM )%10**5 )
+
+# TRIED : 40706, 40701
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()
 

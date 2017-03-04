@@ -56,8 +56,54 @@ from sympy import factor, sqrt
 from sympy.abc import x, y
 print(sympy.factor(2*x**5 + 2*x**4*y + 4*x**3 + 4*x**2*y + 2*x + 2*y))
 
+from sympy.abc import x, y
+from sympy.core.evaluate import evaluate
+print( '\nEvaluate : \t ' ,  ( (x-1/2 )**2 + (y-1/2)**2 - 1/4 ) )
+print('Simplify : ' , sympy.simplify(  ( (x-1/2 )**2 + (y-1/2)**2 - 1/4 ) ) )
 
-# sympy.e
+
+################################
+print('\n---------------------------------------------')
+
+from sympy import *
+x, y, z = symbols("x y z")
+
+expr = cos(x) + 1
+print( expr.subs(x, y) )
+
+print (expr.subs(x, 0) )
+
+print('\n---------------- Equation Manipulations, Math variable Substitution, Lambdify ')
+
+# The main equation, we substitute y=f(x) = x into it
+expr = (x- (1/2))**2 + (y-(1/2))**2 - (1/4)
+v1 = expr.subs( x, y )
+print( 'The SUBSTITUTED expression : \t'  ,v1 )
+v2 = sympy.expand (v1)
+print('The expanded expression : \t' ,v2 )
+# we find the roots of the quadratic equation :
+y = sympy.Symbol('y')
+print('Solving quadratic, finding its roots : \t', sympy.solve( v2, y ) )
+
+
+print('\n-----Second example, more detailed : -------\n')
+# The main equation, we substitute y=f(x) = x/2 into it, ##### actually we do x=2*y
+w1 = expr.subs( y, x/2 )
+print('The SUBSTITUTED expression : \t' , v2 )
+
+#Expand, Put in standard form
+w2 = sympy.expand (w1)
+print('The EXPANDED expression : \t' ,  w2 )
+# Lambdify, which means that we create a function from the previous expression
+J =  sympy.lambdify(x, w2)
+print('We simply test the function with some values : \t',J(0), J(1), J(1/2))
+# we find the roots of the quadratic equation :
+x = sympy.Symbol('x')
+print('Solving quadratic, finding its roots : \t', sympy.solve( w2, x ) )
+min_root = min ( sympy.solve( w2, x ) )
+print('The smallest root is : \t', min_root)
+
+
 
 
 

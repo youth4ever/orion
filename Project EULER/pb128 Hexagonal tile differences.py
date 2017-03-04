@@ -260,14 +260,14 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n================  My FIRST SOLUTION,  GOOD, 1 sec ===============\n')
 t1  = time.time()
 
 def gen_hex_lattice():
     ''':Generator: for Hex (or centered hexagonal) numbers: 3*n*(n+1)+1 (crystal ball sequence for hexagonal lattice) :
     :return:  int  1, 7, 19, 37, 61, 91, 127, 169, 217, 271, 331, 397, 469....
     :Usage: >>> HL = gen_hex_lattice()
-                >>> for i in range(2,11):  print(str(i)+'==.   ', next(HL))    '''
+                # >>> for i in range(2,11):  print(str(i)+'==.   ', next(HL))    '''
     n = 2
     while True :
         yield 3*n*(n+1)+1
@@ -380,25 +380,14 @@ def solution_pb128() :
 
         row+=1
 
-
-    return print('\nAnswer:\t ' ,  PD[-1] ,    '\n\nPD list :', PD[-10::], '\nLength (in case +1 longer) :\t', len(PD) )
-    # return print('\nAnswer:\t ' ,  nr1 )
+    # return print('\nAnswer:\t ' ,  PD[-1] ,    '\n\nPD list :', PD[-10::], '\nLength (in case +1 longer) :\t', len(PD) )
+    return print('\nAnswer:\t ' ,  nr1 )
 
 solution_pb128()        # Answer:	  14516824220
 
 
-
-
 t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-
-
-
-
-
-
-
-
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')
 
 
 print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

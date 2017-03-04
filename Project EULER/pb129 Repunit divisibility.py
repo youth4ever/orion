@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Wed, 15 Feb 2017, 17:23
 #The  Euler Project  https://projecteuler.net
 '''
                         Repunit divisibility        -   Problem 129
@@ -20,7 +20,7 @@ Find the least value of n for which A(n) first exceeds one-million (10**6) .   A
 
 Find the least n ( =17 prime) when A(n)=R(k) first exceeds 10**6
 
-( Find a prime factor of the repunit > 10**6 which has a factor which wasn't previously found
+( Find a number of the repunit > 10**6 which has a factor which wasn't previously found
 A(n) is the number of 1's in the repunit. You want to find the smallest n that divides a repunit with more than 1 million digits.
 
 '''
@@ -85,67 +85,23 @@ def primesieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient
 
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
+#
+#
+# primes = primesieve( 10**6 )
+# primes = set(prime_generator(6 , int(1.5*10**6) ))
+# print(len(primes) )
+#
+# def test_lower_repunits( p , limit) :
+#     for n in range(2, limit) :
+#         if pow(10, n , 9*int(p) ) == 1:    # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
+#             # print('the repunit R( '+str(n)+' )  has ',p ,' as a prime   !!')
+#             return n
+#     return False
+#
+# print('\ntest_lower_repunits : \t ', test_lower_repunits(1000003, 10**6),'\n\n')
+#
+#
 
-
-primes = primesieve( 10**6 )
-primes = set(prime_generator(6 , int(1.5*10**6) ))
-print(len(primes) )
-
-def test_lower_repunits( p , limit) :
-    for n in range(2, limit) :
-        if pow(10, n , 9*int(p) ) == 1:    # If R(k)=(10**k-1)/9  => R(k)=(10**k)%(9*prime_nr) == 1   IIF 10**k is divisible with prime_nr
-            # print('the repunit R( '+str(n)+' )  has ',p ,' as a prime   !!')
-            return n
-    return False
-
-print('\ntest_lower_repunits : \t ', test_lower_repunits(1000003, 10**6),'\n\n')
-
-
-# Just run this while enjoying tennis in the morning Federer vs Wawrinka
-def step_by_step(limit):
-
-    primes = set(prime_generator(6 , int(1.01*10**6) ))
-    PRI = primes.copy()
-    n_min = 10**8
-    for n in range( limit, 2*10**6):             # range(10**6, 2*10**6):
-        # if gcd(n, 10) == 1 :
-            print(' -----------------------    A(n) repunit length : ', n ,' -------------------------- ',len(primes) )
-            P = []
-            for p in primes :
-                if pow(10, n , 9*int(p) ) == 1:
-                    PRI.remove(p)
-                    P.append(p)
-                    if n_min > p > limit  and n > limit :
-                        if test_lower_repunits(p, limit) == False :
-                            n_min = p
-                            print( '\n++++++++  A('+str(n_min)+') = ', n,'   ++++++++++++     ==', n_min, '\n')
-
-            # print('A(n)=', n , '       n = ',  P,'\n' )
-            primes = PRI.copy()
-
-# step_by_step (limit = int(10**6) )
-
-
-def get_repunits( lower_limit ) :
-    p_min = 10**8
-    # primes = prime_generator(10**6 , int(1.1*10**6) )
-    # primes = prime_generator(lower_limit-5 , lower_limit + 10000 )
-    # print(len(primes))
-    for n in range( lower_limit, lower_limit+1000 :
-        if gmpy2.is_prime(n) == 1 or gcd(n, 10) == 1 :
-            # n = test_lower_repunits(p, p)
-            if n != False  :
-
-
-            if n > lower_limit :
-                print(p , '     repunit :',n )
-                if lower_limit < p < p_min and gcd(10,n) ==1  :
-                    p_min = p
-                    print('---'*10,'    this is it : \t prime =',p_min,'   repunit = ', n )
-
-    return print('\nAnswer : ', p_min)
-
-get_repunits(10**6)
 
 
 
@@ -153,6 +109,7 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 # Tried :   1000003, 1000002, 1000170, 1000171
+# 1002253, 1000117, 1000023
 
 ################        GENERAL IDEA      ####################
 # GOOD INFO : http://stdkmd.com/nrr/repunit/tm.cgi?p=100
@@ -163,62 +120,194 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 print('\nTherefore we can test this idea with 11111 which has 41 as a factor : ', pow(10,5 ,41* 9)  )   # with 3 args pow makes modulo
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
-# t1  = time.time()
+print('\n================  My FIRST SOLUTION, 20 sec  ===============\n')
+t1  = time.time()
+
+def A(n):
+    if gcd(n,10) != 1 : return 0
+    x, k = 1, 1
+    while k < n :
+        if pow(10, k, 9*n) == 1:
+            return k
+        k+=1
+    return 0
+
+
+def solution_pb_129(lim = 10**2) :
+
+    n = lim +1
+    while True :
+        # print(n , '    ',A(n))
+        n+= 2
+        if A(n) > lim :
+            return print('\nAnswer : ',  n, '    corresponding to the Repunit ',  A(n) )
+
+# solution_pb_129(10**6)          #       Answer :  1000023
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 's\n\n')
+
+print('\n================  My SECOND SOLUTION, Copied  ===============\n')
+t1  = time.time()
 
 
 
+def A(n):       # Smart Function
+    if gcd(n,10) != 1 : return 0
+    x, k = 1, 1
+    while x != 0  :
+        x = (x*10+1) % n
+        # print(x)
+        k+=1
+
+    return k
+
+print('A(n) :\t', A(41) )
 
 
+def solution_pb_129(lim = 10**2) :
+    n = lim +1
+    while True :
+        # print(n , '    ',A(n))
+        n+= 2
+        if A(n) > lim :
+            return print('\nAnswer : ',  n, '    corresponding to the Repunit ',  A(n) )
+
+# solution_pb_129(10**6)
 
 
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')          #       Answer :  1000023
 
 
+print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+print('\n--------------------------SOLUTION 1,   --------------------------')
+t1  = time.time()
+
+# ==== Fri, 2 Dec 2016, 12:30, mbh038, England
+# About 410 ms in Python. I explored a bit and found that A(n)<n always,
+# and that for lower limits, the value of n for which A(n) first exceeds that limit is itself only just larger than the limit.
+# Hence I dispensed with sieving to generate loads of valid values of nn for which gcd(n,10)=1 and
+# just started with n=999999, incremented it by two each time and ignored those n which were multiples of 5,
+# in the full expectation that I would soon find the answer.
+# To avoid calculating enormous R(k),
+# I just worked with R(k) (mod n), and noted that R(k+1) (mod n) = 10*R(k)+1 (mod n)
 
 
+def p129(limit):
+    n=limit-1
+    k=0
+    while k<=limit:
+        n+=2
+        if not n%5:
+            continue
+        k=1
+        R=1
+        while R%n:
+            k+=1
+            R=(10*R+1)%n
+    print(n,k)
 
+p129(10**6)
 
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
+print('\n--------------------------SOLUTION 2,   --------------------------')
+t1  = time.time()
 
+# ==== Wed, 26 Oct 2016, 19:02, aolea, Spain
+# Euler Theorem : a**phi(n)=1(mod n) with a and n coprimes.
+# so:
+# k = phi(9*n) --> 10**k = 1 (mod9*n) --> n | R(k) --> n | R(some_divisor_of(k))
 
+def aolea():
+    import sympy
 
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+    A = 0
+    n = 10**6-1
 
+    while True:
+        if n % 2 != 0 and n % 5 != 0:
+            aux1 = sympy.ntheory.totient(9*n)
+            for i1 in sympy.divisors(aux1):
+                if 10**i1 % (9*n) == 1:
+                    A = i1
+                    break
+            if A != 0:
+                if A > 10**6:
+                    return print(n,A)
+                    break
+        n = n + 1
 
-# print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-# print('\n--------------------------SOLUTION 1,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 2,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 3,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 4,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+# aolea()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 3,   --------------------------')
+t1  = time.time()
+
+# === Mon, 20 Apr 2015, 13:27, Haroun, Algeria
+# We check number in the form 10k+1,10k+3,10k+7,10k+910k+1,10k+3,10k+7,10k+9 only, this speeds up the calculations.
+
+def f(n):
+	r=1;c=1;
+	while r%n:
+		c+=1;
+		r=(10*r+1)%n;
+	return c;
+limit=10**6;k=limit+1;
+while True:
+	if f(k)>limit :
+		sol=k;
+		break;
+	k+=2;
+	if f(k)>limit :
+		sol=k;
+		break;
+	k+=4;
+	if f(k)>limit :
+		sol=k;
+		break;
+	k+=2;
+	if f(k)>limit :
+		sol=k;
+		break;
+	k+=2;
+
+print ("the answser is : \t" , sol )
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 4,  10 sec --------------------------')
+t1  = time.time()
+
+# ==== Sun, 5 Jul 2015, 03:49, hacatu, USA
+# Thankful for Python's modular pow function:
+
+def A(n):
+	n *= 9
+	k = 1
+	while pow(10, k, n) != 1:
+		k += 1
+	return k
+
+n = 999999
+while True:
+	n += 2
+	if n%5 == 0:
+		continue
+	a = A(n)
+	if a > 1000000:
+		break
+print(n)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
 # print('\n--------------------------SOLUTION 5,   --------------------------')
 # t1  = time.time()
 #

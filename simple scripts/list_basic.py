@@ -41,7 +41,7 @@ slice(-3, None, None)
 print( a[LASTTHREE] )
 
 print('\n-------------------------------- slice ------------------------')
-sl = slice(0,6, 1)
+sl = slice(0, 6, 1)
 print ('Using slice we can build custom ranges :  ',my_lst[sl])
 
 
@@ -56,6 +56,7 @@ print( list(group_adjacent(a, 2)) )
 print( list(group_adjacent(a, 1)) )
 
 # Using slices
+print('---- Using slices ----')
 from itertools import islice
 group_adjacent = lambda a, k: zip(*(islice(a, i, None, k) for i in range(k)))
 print( list(group_adjacent(a, 3)) )
@@ -606,4 +607,28 @@ d.rotate(3)
 
 print('Initial string: \t', A, '          Right rotation 3 units :\t' , d )
 
+
+print('\n--------- Multiply a list or tuple each element with a number -----------')
+
+print('Initial list :', A)
+print('Multiple each element of the LIST with a number : \t ',list(map(5 .__mul__, A )) )
+print('Multiple each element of the TUPLE with a number : \t ', tuple(map(5 .__mul__, A)) )
+
+
+print('\n-------------- Perform tuple element wise operations ------------')
+### Method I - Using numpy
+import numpy
+a = numpy.power((5, 9), (5, 2 ))
+print('Element wise power operation on tuples : ', a)
+
+### Method II , Using zip:
+a = [1,2,3,4]
+b = [2,3,4,5]
+print('Element wise power operation on tuples : ',   [ a**b for a,b in zip(a,b)] )
+
+print('\n---------------- Second, Third Largest Number in the list using heapq----------------')
+el = [20,67,3,2.6,7,74,2.8,90.8,52.8,4,3,2,5,7]
+import heapq
+print( 'Second Largest element in the list : ',heapq.nlargest(2, el) )
+print( 'Third Largest element in the list : ',heapq.nlargest(3, el) )
 

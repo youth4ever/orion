@@ -1,5 +1,5 @@
 #!/usr/bin/python                   ( ͡° ͜ʖ ͡°)
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @       Completed on Wed, 1 Feb 2017, 20:31
 #The  Euler Project  https://projecteuler.net
 '''
                 Totient Chains      -       Problem 214
@@ -149,17 +149,29 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
-# print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-# print('\n--------------------------SOLUTION 1,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-print('\n--------------------------SOLUTION 2,   --------------------------')
+print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+print('\n--------------------------SOLUTION 1,   --------------------------')
 t1  = time.time()
+
+# === Mon, 6 May 2013, 12:10, tom.wheldon, England
+# I calculate phi(n) and chain length with a single pass through a sieve.
+# Runs in ~84s, which seems reasonable for Python.
+# This was my 200th problem - thanks to all at Project Euler for the fun I've had solving them.
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 2,  40 sec --------------------------')
+t1  = time.time()
+
+# ==== Wed, 3 Aug 2016, 05:16, j123, Canada
+# We only have to compute phi values up to half the limit, since for a prime p, we have
+# ϕ(ϕ(p))=ϕ((p−1)/2)∗ { 2 , if p ≡ 1(mod 4)
+#                                   {1 , otherwise
+# Here's clean Python code that runs in about 30 seconds on my ancient laptop (interpreted);
+# adapting to pypy (using Animus's code for computing phi values and replacing itertools calls with explicit loops)
+# gives a program that runs about 30% faster than his.
+# There is a redundant calculation of primes up to 20,000,000 but it only takes a fraction of a second.
 
 try: #i.e. if using Python2
     range=xrange
@@ -200,41 +212,159 @@ def do(N=4*10**7, k=25):
     return sum(p for p in primes(N)
                if x[phi[p // 2] * (2 if p & 3 == 1 else 1)] == k - 2)
 
-print(do())
+# print(do())
+
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-# print('\n--------------------------SOLUTION 3,   --------------------------')
-# t1  = time.time()
+print('\n--------------------------SOLUTION 3,  30 sec --------------------------')
+t1  = time.time()
+
+# ==== Fri, 11 Nov 2016, 13:22, mbh038, England
+# bout 13 s with this (after a lot of effort to get it within 1 minute, never mind that low!), in Python 3.
+# About 8 s of the  time is spent in the euler totient sieve for n=20,000,000.
+# The prime sieve, on the other hand, takes 250 ms for n=40,000,000.
+# Animus says his/her code runs in 4 s using PyPy. Without PyPy, that code runs in 53 s on my machine.
 #
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 4,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 5,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-#
-# print('\n--------------------------SOLUTION 6,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+# I create an array of totient values and, starting from each prime, iterate my way through this until I arrive at a power of two.
+# So far, when I have tried to memoise this part of the task beyond dipping out when I hit a power of two,
+# I have not been able to get the overhead down to the point where it was worth the effort.
+
+
+import numpy as np
+
+def pe214(n,length):
+
+    t=time.clock()
+
+    primes=primesieve(n)
+    lowprimes=primes[primes[:] <=n//2]
+    highprimes=primes[primes[:] > n//2]
+    ets=etsieve(n//2,lowprimes)
+    lowprimes=lowprimes[lowprimes[:] >2**(length-2)]
+    chains2={2**x:x+1 for x in range(25)}
+
+    csum=0
+    def clength(pos,ets,count,required):
+        while 1:
+            if pos in chains2:
+                count+=chains2[pos]
+                break
+            count+=1
+            pos=ets[pos]
+        return count==required
+
+    for prime in lowprimes:
+        if clength(prime-1,ets,1,length): csum+=prime
+
+    tf={0:2,2:1}
+    for prime in highprimes:
+        if clength((prime-1)//2,ets,tf[(prime-1)%4],length): csum+=prime
+
+    print(csum,time.clock()-t)
+
+def primesieve(n):
+    """return array of primes 2<=p<=n"""
+    sieve=np.ones(n+1,dtype=bool)
+    for i in range(2, int((n+1)**0.5+1)):
+        if sieve[i]:
+            sieve[2*i::i]=False
+    return np.nonzero(sieve)[0][2:]
+
+def etsieve(n,primes):
+    """return array of totient(x) for x from 2 to n"""
+    sieve=np.array(range(n+1),dtype=float)
+    for i in primes:
+        if sieve[i]==i:
+            sieve[i::i]*=(1-1/i)
+    return sieve.astype(int)
+
+# pe214(40000000, 25)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 4, SIEVING ,  120 sec --------------------------')
+t1  = time.time()
+
+# === Sat, 10 Aug 2013, 19:59, Animus, Germany
+# Just 2 seconds in Python (using PyPy) due to an efficient totient sieve.
+def animus():
+    n = 4 * 10 ** 7
+
+    # fill totient sieve
+    phi = [1] * (n + 2)
+    p = 2
+    while p <= n:
+        off = p
+        while off <= n:
+            phi[off] *= p - 1
+            off += p
+        pot = p * p
+        while pot <= n:
+            off = pot
+            while off <= n:
+                phi[off] *= p
+                off += pot
+            pot *= p
+        p += 1
+        while phi[p] > 1:
+            p += 1
+
+    # build chains
+    su = 0
+    ch = [1] * n
+    ch[1] = 1
+    for i in range(2, n):
+        ch[i] = 1 + ch[phi[i]]
+        if ch[i] == 25 and phi[i] == i - 1:
+            su += i
+
+    return print (su)
+
+# animus()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 5,  2.2 min  --------------------------')
+t1  = time.time()
+
+# === Thu, 19 Apr 2012, 20:13, ving, USA
+# Calculating phi, lengths of chains, and the required sum all in one short sieve:
+
+def problem214(n, chainlength):
+    nums = n*[1]
+    s = 0
+    for p in range(2, n):
+        c = nums[p]
+        if c == 1:  # p is a prime
+            c = nums[p-1] + 1
+            if c == chainlength:
+                s += p
+            nums[p] = c
+            for i in range(2*p, n, p):  # update phi
+                nums[i] *= p-1
+                ii = i // p
+                while ii % p == 0:
+                    nums[i] *= p
+                    ii //= p
+        else:
+            nums[p] = nums[c] + 1
+    return s
+
+# problem214(4*10**7, 25 )
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+
+print('\n--------------------------SOLUTION 6,   --------------------------')
+t1  = time.time()
+
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+

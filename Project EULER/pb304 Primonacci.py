@@ -50,6 +50,11 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
+
+# 2017-02-26. 11:15 - Finally understood what the problem asks for :
+# you take next_prime(10**14) term of the Fibonacci serie
+# I think that it can be done ONLY with Binet Formula
+
 F = fibonacci_gen()
 next(F)
 
@@ -59,11 +64,10 @@ for i in range(1,10**2):
     print(next(F),'     ' ,a)
     a = gmpy2.next_prime(a)
 
-s=''
-for i in range(1,200) :
-    s+=str(i)
-
-print(s)
+# s=''
+# for i in range(1,200) :
+#     s+=str(i)
+# print(s)
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')

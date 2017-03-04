@@ -240,3 +240,8 @@ print( {v: k for k, v in m.items()} )
 
 print('\n---------- Build Dictionary within dictionary -------------------')
 D = { x : { y: 0 for y in range(10)}  for x in range(10)}
+
+print('\n----------  Print only a range of values from a Dictionary -------------- ')
+SQD = {x*x: x for x in range(1000) }
+print('This prints only the k,v fro the dictionary if the values are < 100 :')
+print( 'Length : ',len(SQD) , '\n', { k:v for k,v in SQD.items() if v<100 } )

@@ -40,32 +40,50 @@ Note: if, for some n, f(n,d)=n for more than one value of d this value of n is c
 import time
 
 print('--------------------------TESTS------------------------------')
+t1  = time.time()
 
+# def f(n, d ) :
+#     L = [ int(i) for i in str(n) ]
+#     if
+
+def string_brute_force_check(n, d):
+    s = ''
+    for i in range(1, n+1):
+        s+=str(i)
+    # print(len(s))
+    # print( s.count(str(d))  )
+    return s.count(str(d))
+
+print('string_brute_force_check : \t ',string_brute_force_check(15, 1) )
+print('string_brute_force_check : \t ',string_brute_force_check(199981, 1) )
+print('string_brute_force_check : \t ',string_brute_force_check(200001, 1) )
+
+# Algorithm construction and logic approach !! I must go from above, see if the count digit is bellow S
+# if we are bellow go up, if the count(digit) > number go down
+
+def algorithm_logic():
+    S, s = 0, ''
+    i = 1
+    d = 1
+    while S < 10**7 :
+        S += str(i).count(str(d))
+        if i == S :
+            print(str(i)+'.     ', S)
+        i+=1
+
+# algorithm_logic()
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
+t1  = time.time()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# t1  = time.time()
-
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
 # print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

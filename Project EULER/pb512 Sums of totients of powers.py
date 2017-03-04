@@ -25,8 +25,8 @@ import gmpy2
 
 import eulerlib
 import scipy
-eulerlib.Divisors
-pyprimes.
+
+
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
 t1  = time.time()

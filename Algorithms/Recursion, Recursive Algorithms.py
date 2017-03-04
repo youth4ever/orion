@@ -182,3 +182,45 @@ def rec_loop_for(i):
         return
 
 rec_loop_for(len(L))
+
+
+print('\n---------------- REcursive Mutliplication -------------------')
+
+def multiplication(m , n) :
+    if m == 1 : return n
+    if n == 1 : return m
+    return  n+multiplication(m-1, n)
+
+print(multiplication( 2, 8) )
+
+def power(b , e):
+    if e == 1 or b==1 : return b
+    return  b * power(b, e-1)
+
+print(power( 3, 5 ))
+
+
+############ DRAGON HEIGHWAY ##############
+print('\n-----------------Dragon Heighway Recursive Algorithm -------------\n')
+
+def dragonpos(n) :
+    c = [0,1]
+    steps = 1
+    length = 1
+    while length < n :
+        c = [ c[0] + c[1], c[1] - c[0] ]
+        length*=2
+
+    if length == n :
+        return c
+
+    m = length-n
+    c2 = dragonpos(m)
+    c2 = [ -c2[1], c2[0] ]
+
+    print(c, length, n, m)
+
+    return [ c[0]+c2[0], c[1]+c2[1] ]
+
+
+print(dragonpos(5))

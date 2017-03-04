@@ -39,7 +39,8 @@ def decompose_number(n):
         # print(n)
     return N
 
-print('function decompose_number testing : \t',decompose_number(10**1))
+
+print('function decompose_number testing : \t',decompose_number(10**3))
 
 print('\n--------------------')
 

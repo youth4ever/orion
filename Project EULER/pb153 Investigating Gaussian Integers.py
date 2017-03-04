@@ -106,6 +106,13 @@ print('\n--------------------------TESTS------------------------------')
 # a**2+b**2 = n
 # You must decompose a number in two perfect squares. Must solve other problems first
 
+
+10: 161
+100: 16749
+1000: 1752541
+10000: 178231226
+100000: 17924657155
+
 print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()
 
