@@ -67,15 +67,20 @@ def Sp(p):
 # fac 3 = 6    ;     mod 7 = 6
 # fac 2 = 2    ;     mod 7 = 2
 # Sp : 	 4
+
 #### @ 2017-02-27 - Got that for the prime p first  p-1 (mod p ) is p-1, 2-nd p-2 is always 1
 # and 3-rd p-3 is always p-1/2 (p-1 is always even). I need to find the rest of two p-4 and p-5
 # I can do the DIRECT OPERATION STARTing from p-5 but I can't find the inverse operation
 
 # print('gmpy2 fac : \t',gmpy2.fac(7) ,'\n')
 
+lim = 10**2
+primes = prime_generator(4, lim )
+print(len(primes), primes[:50])
 
+for p in primes :
+    print('Sp : \t', brute_force_Sp(p),'\n')
 
-print('Sp : \t', brute_force_Sp(37),'\n')
 
 
 # print('Sp : \t', Sp(19))
@@ -86,9 +91,9 @@ print('Sp : \t', brute_force_Sp(37),'\n')
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
-lim = 10**2
-primes = prime_generator(4, lim )
-print(len(primes), primes[:50])
+
+
+
 
 # cnt = 0
 # SUM = 0

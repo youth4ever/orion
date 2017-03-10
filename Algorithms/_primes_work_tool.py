@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import time, functools
-from math import  gcd, sqrt
+from math import  gcd, sqrt, log
 # The Most basic
 
 # Prime numbers GENERATOR
@@ -61,6 +61,12 @@ def numpy_prime_sieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Ef
         if sieve[i] :
             sieve[2*i :: i] = False
     return np.nonzero(sieve)[0][2:]
+
+
+print('-----To generate 10 to some power of primes use the bellow formula, log is in 10 base :-------')
+lim = 10**5
+primes = numpy_prime_sieve(int( lim * log(lim)*1.2 ) )
+print(len(primes), primes[:50] ,'\n\n' )
 
 
 def prime_sieve(n):       # SECOND FASTEST        o(^_^)o

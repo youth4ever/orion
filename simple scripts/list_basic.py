@@ -98,6 +98,14 @@ roman = ['MMMMDCLXXII', 'MMDCCCLXXXIII']
 print("Join a list of strings :",  ''.join( roman ) , type( ''.join( roman )  ))
 
 
+print('\n--------  CORECT WAY TO CREATE A NESTED LIST -  MATRIX -----------------')
+# The correct way to create a Nested list (Matrix).
+# If this method is not respected, when in some row an element is changed, it will be done in ALL
+# previous ROWS !! That's very annoying
+
+V = [[0 for x in range(5+1)] for x in range(4+1)]
+print(V)
+
 print('\n------------ CLONING, CLONE A LIST  ----------------------')
 # Doing this way if you modify one list it will not affect the other as it will do with M=L where both will point out to the same list
 M = L[:]        # However this doesn''t work for nested lists, like matrices ...etc...
@@ -297,6 +305,29 @@ for i in set(test_2):
 
 print('Count a single element at a time :  ',[1, 2, 3, 4, 1, 4, 1].count(1))
 
+print('\n ---------- Count the number of items in a list with collections Counter --------')
+import collections
+
+a = [1,1,9,1,7,3,1,2,7,2,2,7,9,2,3,3,4,5,5]
+
+counter=collections.Counter(a)
+print(counter)
+# Counter({1: 4, 2: 4, 3: 2, 5: 2, 4: 1})
+print(counter.values())
+# [4, 4, 2, 1, 2]
+print(counter.keys())
+# [1, 2, 3, 4, 5]
+print(counter.most_common(3))
+# [(1, 4), (2, 4), (3, 2)]
+
+print(counter.items())
+print(counter[9])
+print(type(counter))
+
+for i in counter:
+    print(i, counter[i],end=' ')
+
+
 
 from collections import Counter
 lst = ['blue', 'red', 'blue', 'yellow', 'blue', 'red']
@@ -338,6 +369,8 @@ def count_repetitions(lst):
         if pos == 1 : cnt +=2
         if pos == 2 or pos == 3 or pos ==4 : cnt +=1
     return cnt
+
+##############################
 
 print('\n----------- Finding consecutive numbers in a list -----------------')
 

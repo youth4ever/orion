@@ -28,17 +28,25 @@ def prime_sieve(n):       # SECOND FASTEST        o(^_^)o
     return [2] + [i for i in range(3, n , 2) if sieve[i] ]
 
 
+def factorial_digits_2_5_factors(n):
+    '''return the number of factors of 2 & 5 found in a factorial
+    :param n:  factorial
+    :return: tuple, factors of 2 and 5    '''
+    arr = []
+    for p in [2,5] :
+        e , cnt = 1, 0
+        pe = p**e
+        while pe <= n :
+            cnt += n // pe
+    #         print(str(e)+'.   ', pe,  n/pe, '   ', n//pe)
+            e+=1
+            pe = p**e
+        arr.append(cnt)
+    return arr
 
 
-
-
-
-print('\n--------------------------Preliminary TESTS------------------------------')
-t1  = time.time()
-
-
-# 2017-02-03, 12:06 --> Miss the idea  completely !
 def factorial_non_zero(b):
+    ''' Manually finds the last ten non-zero elements of a factorial '''
     s = 1
     for i in range(1, b+1):
         s *= i
@@ -47,14 +55,21 @@ def factorial_non_zero(b):
         s = s % 10**10
     return s
 
-print('factorial_non_zero : \t' ,factorial_non_zero( 10**5 ) )
+# 2017-02-03, 12:06 --> Miss the idea  completely !
 
-# 4109700 27753472000000
-# 996.     633088
-# 997.     188736
-# 998.     358528
-# 999.     169472
-# factorial non zero digit
+print('\n--------------------------Preliminary TESTS------------------------------')
+t1  = time.time()
+
+print('factorial_digits_2_5_factors : \t' ,factorial_digits_2_5_factors(10) )
+
+
+print('\n-------------')
+print('10             ',factorial_non_zero(10**1))
+print('100           ',factorial_non_zero(10**2))
+print('1.000          ',factorial_non_zero(10**3))
+print('10.000          ',factorial_non_zero(10**4))
+print('100.000        ',factorial_non_zero(10**5))
+# print('1.000.000        ',factorial_non_zero(10**6))
 
 # f(               10)=36288
 # f(              100)=16864
@@ -73,7 +88,7 @@ print('factorial_non_zero : \t' ,factorial_non_zero( 10**5 ) )
 # https://comeoncodeon.wordpress.com/2009/06/20/lastnon-zero-digit-of-factorial/
 
 
-print('\n' , len(str(fac(10**4))) , str(factorial(10**4)) )                   # 27753472
+# print('\n' , len(str(fac(10**4))) , str(factorial(10**4)) )                   # 27753472
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n')
@@ -82,44 +97,74 @@ print('\n================  My FIRST SOLUTION,   ===============\n')
 t1  = time.time()
 
 def factorial_trailing_digits(n) :
-    # primes = [2, 3, 5, 7]
-    primes = prime_sieve(10**5)
-    F = []
-    for p in primes :
-        e = 1
-        pe = p**e
-        f = 0
-        while pe <= n :
-            if p == 5 :
-                F[0][1] = F[0][1]-n//pe
-            else : f+= n//pe
-            # print(p , 'exp=', e, '    ',p**e ,'     ',n//pe  )
-            e+=1
-            pe = p**e
-        F .append([p,f ] )
-    # print(F)
-    # F[0][1] = F[0][1]-fives
-    # F.pop(2)
-    # print(F[:50])
+    '''Actually is powers of ten '''
+    o = 1
+    a = factorial_non_zero( 10**(n-o) )
+    b = factorial_digits_2_5_factors( 10**n )
+    c = factorial_digits_2_5_factors( 10**(n-o) )
+    d = [ i-j for i, j in zip(b,c)  ]
+    diff = d[0]-d[1]
+    res = (   pow( a , 10**(o) , 10**7 ) * ((diff)%10**7)        )   %10**7
+    print(a,  '      ', (a**(10**o) )%10**6 , '      ', b, c,'     ', d, diff , '      res = ', res , '      ', n )
 
-    return functools.reduce( operator.mul , [ i[0]**i[1] for i in F ] ) %10**5
+factorial_trailing_digits(2)
 
-# print('\nfactorial_trailing_digits : \t', factorial_trailing_digits(10**2) )
 
-g = factorial_trailing_digits(10**2)
+### CONCEPT BUILDING  ####
+q = 36288
+for i in range(11, 100+1):
+    # if i % 10 != 0 and i %5 !=0 :
+    if i % 10 == 0 :
+        q//=10
+    else :
+        if i % 25 == 0  :
+            q//= 4
+            continue
+    q*=i
+    print(i,'     ', q % 10**30 , '               ',  factorial_non_zero(i)  )
 
-print('g=' , g)
-print('pow mod : \t' ,pow( g , 10**1, 10**5 )  )
 
-print(factorial_trailing_digits(10**4))
-print('pow mod : \t' ,pow( factorial_trailing_digits(10**4) , 10**0, 10**5 )  )
-print('\n-------------')
-print('10             ',factorial_non_zero(10**1))
-print('100           ',factorial_non_zero(10**2))
-print('1.000          ',factorial_non_zero(10**3))
-print('10.000          ',factorial_non_zero(10**4))
-print('100.000        ',factorial_non_zero(10**5))
-print('1.000.000        ',factorial_non_zero(10**6))
+    # else :
+    #     if q %25 == 0 :
+    #         q /= 4
+    #     if q%5 == 0 and q%25 !=0 :
+    #         q /= 2
+
+print('\n Res : ', (q// 10**0) %10**30)
+
+print('obladioblada :' , (pow( 36288, 10, 100000 )*2**67 ) %10**5    )
+
+# def factorial_trailing_digits(n) :
+#     # primes = [2, 3, 5, 7]
+#     primes = prime_sieve(10**5)
+#     F = []
+#     for p in primes :
+#         e = 1
+#         pe = p**e
+#         f = 0
+#         while pe <= n :
+#             if p == 5 :
+#                 F[0][1] = F[0][1]-n//pe
+#             else : f+= n//pe
+#             # print(p , 'exp=', e, '    ',p**e ,'     ',n//pe  )
+#             e+=1
+#             pe = p**e
+#         F .append([p,f ] )
+#     # print(F)
+#     # F[0][1] = F[0][1]-fives
+#     # F.pop(2)
+#     # print(F[:50])
+#
+#     return functools.reduce( operator.mul , [ i[0]**i[1] for i in F ] ) %10**5
+
+
+# res = factorial_trailing_digits(10**2)
+# print('res=' , res)
+# print('pow mod : \t' ,pow( g , 10**1, 10**5 )  )
+#
+# print(factorial_trailing_digits(10**4))
+# print('pow mod : \t' ,pow( factorial_trailing_digits(10**4) , 10**0, 10**5 )  )
+
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')

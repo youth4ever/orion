@@ -35,9 +35,52 @@ You are given that s(1)=22786974071.
 
 Find ∑ s(d) for 1 ≤ d ≤ 9.
 
-Note: if, for some n, f(n,d)=n for more than one value of d this value of n is counted again for every value of d for which f(n,d)=n.
+Note: if, for some n, f(n,d)=n for more than one value of d this value of n is counted again
+for every value of d for which f(n,d)=n.
 '''
-import time
+
+import time, zzz
+
+D = {(k+1): int((k+1)*10**k) for k in range(-1, 15 )}
+
+def f(n, d, D ) :
+
+    # Dictionary will be EXTERNAL
+    L = [ int(i) for i in str(n) ]
+    # D = {(k+1): int((k+1)*10**k) for k in range(-1, len(L))}
+        # STEP 1 : FIRST decompose the number into powers of base 10 :
+
+    digits = 0
+
+        # STEP 2 : loop through list and assign from dictionary
+    bol, N =[], []
+    for j in range(len(L)) :
+        w = len(str(n))-j-1
+        diff = L[j] - d
+
+        if diff > 0 :
+            digits += 10**(w)
+            bol.append(0)
+            N.append(L[j]*10**(len(L)-j-1) )
+        if diff == 0 :
+            digits+=1
+            bol.append(1)
+            N.append( L[j]*10**(len(L)-j-1) )
+        if diff < 0 :
+            bol.append(0)
+            N.append(L[j]*10**(len(L)-j-1) )
+
+        # print(' diff : ', L[j]  ,diff, 'digits : ' ,10**(w), ' dict=',D[w] , '  w=',w)
+        digits += L[j] * D[w]
+    @ 2017-03-10 --> Must correct the function. Missing some lower terms
+        #     N.append(L[-1])
+    M = [ bol[i]*N[i+1] for i in range(len(L)-1) ]
+    # if L[0] ==d : digits +=L[-1]
+    # print(L, D, digits, bol, N,    M)
+    return digits + sum(M)
+
+print( 'f function test: \t' , f(9006, 6, D) )
+
 
 print('--------------------------TESTS------------------------------')
 t1  = time.time()
@@ -73,6 +116,21 @@ def algorithm_logic():
 
 # algorithm_logic()
 
+def test_main_function( up_lim , d  ):
+    S, s = 0, ''
+    i = 1
+    while S < up_lim :
+        S += str(i).count(str(d))
+        if S != f(i, d, D  ) :
+            print(str(i)+'.     ', S , '             f = ', f(i, d, D))
+        i+=1
+
+
+test_main_function( 10**4  , 1 )
+
+
+
+# zzz.Star_Wars()
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')

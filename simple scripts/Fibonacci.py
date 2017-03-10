@@ -38,7 +38,7 @@ def Fibon(n):
 		counter += 1
 	return b
 
-print('\n--------------  Recursion function Fibonacci with memoization; Memoization keep tracks of already calculated values --------------')
+print('\n----------  Recursion function Fibonacci with memoization; Memoization keep tracks of already calculated values --------------')
 
 d={1:1, 2:1}
 def fib(n, d):

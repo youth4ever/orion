@@ -58,3 +58,16 @@ from decimal import Decimal
 from fractions import Fraction
 value = 2/3
 print(isinstance(value, (int, float, Decimal)))
+
+
+D = {(3, 4): 6, (2, 4):8 }
+print('\ndict d : \t',D)
+print( isinstance( D[(3,4)] , tuple) )
+print( isinstance( D[(3,4)] , int) )
+
+def get_pos_of(i):
+    if isinstance(D[i], int):
+        i = D[i]
+    return i
+
+print('get_pos_of  :\t', get_pos_of( (2,4) ))

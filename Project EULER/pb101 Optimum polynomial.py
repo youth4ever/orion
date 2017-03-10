@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @       Completed on Fri, 20 Jan 2017, 19:40
 #The  Euler Project  https://projecteuler.net
 '''
                     Optimum polynomial      -       Problem 101

@@ -49,7 +49,7 @@ for i in range(len(P) )  :
         print(P[i], P[j], '      ',sqube2)
         print(P[i], P[j], '      ',sqube1)
 
-print('\n--------------------------------------')
+print('\n----------------function ----------------------')
 
 
 def prime_proof(n) :
@@ -71,8 +71,8 @@ def prime_proof(n) :
         m = n
         for q in range(0, 10) :
             m = (q * 10**(k)) #% (10**k)
-            @2017-01-29, Federer won today 18-th Grand Slamp title at Australian Open
-            Must finish the function
+            # @2017-01-29, Federer won today 18-th Grand Slamp title at Australian Open
+            # Must finish the function
             print(m)
 
 

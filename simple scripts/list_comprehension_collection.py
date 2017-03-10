@@ -5,7 +5,7 @@ from itertools import *
 
 tags = [u'man', u'you', u'are', u'awesome']
 entries = [[u'man', u'thats'],[ u'right',u'awesome']]
-[entry for tag in tags for entry in entries if tag in entry]
+# [entry for tag in tags for entry in entries if tag in entry]
 
 
 lst1=['1035', '1000', '3000', '7600', '1225', '1275', '1326']

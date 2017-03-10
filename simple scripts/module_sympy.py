@@ -97,6 +97,7 @@ print('The EXPANDED expression : \t' ,  w2 )
 # Lambdify, which means that we create a function from the previous expression
 J =  sympy.lambdify(x, w2)
 print('We simply test the function with some values : \t',J(0), J(1), J(1/2))
+
 # we find the roots of the quadratic equation :
 x = sympy.Symbol('x')
 print('Solving quadratic, finding its roots : \t', sympy.solve( w2, x ) )

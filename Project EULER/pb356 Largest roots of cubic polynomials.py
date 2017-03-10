@@ -2,16 +2,31 @@
 # © Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-Arithmetic expressions      -       Problem 93
+Largest roots of cubic polynomials      -       Problem 356
 
-bla
-bla
+Let an be the largest real root of a polynomial g(x) = x3 - 2n·x2 + n.
 
+For example, a2 = 3.86619826...
+
+Find the last eight digits of  Σ {i=1, 30}  [a]**987654321
+
+Note:  [a] represents the floor function.
 
 '''
-import time, zzz
+import time, zzz, math
+import numpy as np
+np.set_printoptions(precision=10)       # Set precision, how many digits of numpy
 
 
+
+
+S=0
+for n in range(1, 11) :
+    A = np.array([ 1, -2**n , 0. , n  ])
+    B = np.roots(A)
+    a_max = max(B)
+    z = ( math.floor(math.pow (a_max, 321)) )  %10**8        #   987654321
+    print(str(n)+'.     ' ,  a_max, '       ', B , '         ' ,  z )
 
 
 

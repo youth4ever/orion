@@ -60,26 +60,27 @@ print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
 
-G = Pythagorean_triplets_gen()
-Q = set()
-
+# G = Pythagorean_triplets_gen()
+# Q = set()
+#
 n = 5040*3
-
-cnt=0
-for i in range( n*n//8 ):
-    PT = next(G)
-    if PT[0] == n or PT[1] == n or n % PT[0] == 0 or n%PT[1] == 0 :
-        cnt+=1
-        print(str(i)+'.    ', PT,'         ' ,cnt)
-    if PT[0] == n or PT[1] == n :
-        Q.add(PT[2])
-    if n % PT[0] == 0 :
-        Q.add(PT[2]* n//PT[0] )
-    if n%PT[1] == 0  :
-        Q.add(PT[2]* n//PT[1] )
-
-
-print('\n', n,'---> ',len(Q),'   ' ,get_factors(n))
+#
+# cnt=0
+# for i in range( n*n//8 ):
+#     PT = next(G)
+#     print(PT)
+#     if PT[0] == n or PT[1] == n or n % PT[0] == 0 or n%PT[1] == 0 :
+#         cnt+=1
+#         print(str(i)+'.    ', PT,'         ' ,cnt)
+#     if PT[0] == n or PT[1] == n :
+#         Q.add(PT[2])
+#     if n % PT[0] == 0 :
+#         Q.add(PT[2]* n//PT[0] )
+#     if n%PT[1] == 0  :
+#         Q.add(PT[2]* n//PT[1] )
+#
+#
+# print('\n', n,'---> ',len(Q),'   ' ,get_factors(n))
 
 # 30 --->  4     [2, 3, 5]
 # 60 --->  13     [2, 2, 3, 5]
@@ -115,24 +116,40 @@ print('\n', n,'---> ',len(Q),'   ' ,get_factors(n))
 
 # 10080 --> 202       [2, 2, 2, 2, 3, 3, 5, 7]
 
+def small_brute_force_test(nr):
+    cnt = 0
+    for b in range(3, 2000*nr):
+        if  gmpy2.is_square( nr**2 + b**2 ) :
+            cnt+=1
+            print(str(cnt)+'.     ',nr, b, pow(nr**2 + b**2, 1/2) )
+    return print('\nAnswer : \t', cnt)
+
+nr = 2*2*3*5*7*11*13
+small_brute_force_test(nr)
+print('Its Totient : \t',ntheory.totient(nr) )
 
 
+# 357.      60060 100200091 100200109.0    Answer : 	 357     Its Totient : 	 11520    Completed in : 235.903493 s
+
+@2017-03-09 - This must be done with some kind of totient type method.
+OBSERVATION : I observed that the totient number is in some kind of correlation with
+the number of pythagorean triplets that share a cathetus. Must find some kind of relation
 
 t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms')
+print('\nCompleted in :', round((t2-t1),6), 's')
 
-print('\n----------Get Divisors------------\n')
-t1  = time.time()
+# print('\n----------Get Divisors------------\n')
+# t1  = time.time()
+#
+# for i in (n, n+1):
+#     print( i, get_divisors(i) ,'    Divisors : ', len(get_divisors(i))-2 , '       Totient :\t',ntheory.totient(i) )
+#
+#
+# t2  = time.time()
+# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-for i in (n, n+1):
-    print( i, get_divisors(i) ,'    Divisors : ', len(get_divisors(i))-2 , '       Totient :\t',ntheory.totient(i) )
 
-
-t2  = time.time()
-print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-
-
-print('\n================  My FIRST SOLUTION,   ===============\n')
+# print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()
 
 

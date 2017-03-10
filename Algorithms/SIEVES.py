@@ -152,8 +152,13 @@ def Euler_Totient_Sieve(n):
     :param n: up range number
     :return: list, totients     '''
     phi = list(range(n+1))
-    for i in range(2,n+1):
-        if phi[i]==i:
-            for x in range(i,n+1,i):
-                phi[x]-=phi[x]//i
+    for i in range(2, n+1):
+        if phi[i] == i:
+            for x in range(i, n+1, i):
+                phi[x] -= phi[x] // i
     return phi[1:][:100]            # Take care to remove the [:100], it is only for printing
+
+print('Euler_Totient_Sieve :\n' , Euler_Totient_Sieve(100))
+
+
+#########
