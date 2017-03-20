@@ -50,11 +50,28 @@ What is ∑ s(n) for 1 ≤ n ≤ 10**8?
 
 '''
 import time
-
+from math import gcd
 
 print('\n--------------------------TESTS------------------------------')
 
 import numpy, cmath
+
+
+def divisor_sum_sieve(n):
+    import numpy as np
+    # sieve = np.array([0] * (n + 1) )
+    sieve = [0] * (n + 1)
+    # sieve[4 :: 2]= [2]*len(sieve[4 :: 2])   #### ATTENTION !!!! MODIFICATION for Gaussian Integer
+    limit =  int( n**(1/2) ) + 1
+    for i in range(1, limit):
+        sieve[i * i] += i
+        temp = i + 1
+        for j in range(i * i + i, n + 1, i):
+            sieve[j] += i  +  temp
+            temp += 1
+#     print('Divisors Sum sieve ', sieve)
+    return sieve
+
 
 
 
@@ -73,19 +90,19 @@ print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 ################
 t1  = time.time()
 
-z = 1-2j
-print(z, z.conjugate() , z.imag, abs(z)   )
-print( 5/(z) )
-print()
-
-a = 3+4j
-print(a, a.conjugate() , a.imag, abs(a)   )
-print( 25/(a) )
-
-print()
-b = 2+2j
-print(b ,b.conjugate() ,  b.real ,b.imag, abs(b)   )
-print( 4/(b) )
+# z = 1-2j
+# print(z, z.conjugate() , z.imag, abs(z)   )
+# print( 5/(z) )
+# print()
+#
+# a = 3+4j
+# print(a, a.conjugate() , a.imag, abs(a)   )
+# print( 25/(a) )
+#
+# print()
+# b = 2+2j
+# print(b ,b.conjugate() ,  b.real ,b.imag, abs(b)   )
+# print( 4/(b) )
 
 
 print()
@@ -99,33 +116,65 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
-print('\n--------------------------TESTS------------------------------')
+
+print('\n--------------------------MY FIRST SOLUTION, 1 hour------------------------------')
+t1  = time.time()
 
 # 2016-12-18 17:48
 # OBSERVATION : The problem Reduces in finding to a number n, decompose it into 2 parts a & b such that:
 # a**2+b**2 = n
 # You must decompose a number in two perfect squares. Must solve other problems first
+# Can you predict from what kind of numbers 3+4i will be a divisor? And 3-4i    ?
+# @2017-03-18,01:30 missed divisors of 10 : look in the notebook : their total sum = 38 (for 10)
 
 
-10: 161
-100: 16749
-1000: 1752541
-10000: 178231226
-100000: 17924657155
+def gaussian_integers_sol_1(lim = 10**2) :
+    spec_value = 52
+    up = int( lim**(1/2))
+    GI = divisor_sum_sieve( lim )
+    # print( 'Gaussian Integers init list : ' ,len(GI) ,GI[:20], GI[-20::] ,'\n' )
+    print( '\nSpecial value check of the value : \t ' , spec_value , '     ' ,GI[spec_value] ,'\n' )
+
+    for i in range(1, up+1 ):
+        for j in range(1, i+1 ) :
+            if gcd(i,j) ==1 :
+                q = i**2+j**2
+                if q > lim  : break
+
+                factor = q
+                print(' ===   q= ', q ,'       i, j =  ', i, j ,'       factor= '  ,  factor ,'=======')
+                while q <= lim :
+
+                    for k in range(q  ,lim+1, q ) :
+                        if i == j :
+                            add = (i+j) * k//q
+                        if i != j :
+                            add = 2*(i+j) * k//q
+
+                        GI[k] +=add
+
+                        # print('--- q = ', k,'     incr= ', k//q,'     factor = ', factor, '     i, j = ' ,i*k//q, j*k//q, '          Add : ' ,   add )
+
+                    q += factor
+
+    print( '\nGaussian Integers final list : ' ,len(GI) ,GI[:20],'\n' ,GI[-20::] ,'\n' )
+    # print( '\nSpecial value check of the value : \t ' , spec_value , '      ' ,GI[spec_value] ,'\n' )
+
+    return print('\nAnswer : \t', sum(GI)  )
+
+
+gaussian_integers_sol_1(10**8)              #   Answer : 	 17971254122360635
+
+
+# CHECK VALUES :
+# 10: 161       # 100: 16749           # 1000: 1752541          # 10000: 178231226          # 100000: 17924657155
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)/60,6), 'min\n\n')                   #     Completed in : 3735.53666 s
 
 print('\n================  My FIRST SOLUTION,   ===============\n')
 # t1  = time.time()
-
-
-
-
-
-
-
-
-
-
-
 
 
 

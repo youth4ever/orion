@@ -19,9 +19,26 @@ Find ∑b(n) for 1≤n≤100 000. Give your answer mod 1234567891011.
 
 
 '''
-import time
-import gmpy2
+import time, gmpy2
+from decimal import *
+getcontext().prec = 100
 
+
+def Fibonacci_Binet(n_th) :
+    ''':Description:    Returns the Fibonacci corresponding to the number  and uses the Binet Formula.
+        http://mathworld.wolfram.com/BinetsFibonacciNumberFormula.html
+        :param n_th: F_nth Fibonacci in sequence
+        :return: str, first 9 digits of the Fibonacci number
+    '''
+    # phi = Decimal((5**(1/2)+1)/2)
+    # phi_ = Decimal((1- 5**(1/2))/2)
+    m = 1234567891011
+    phi = (1+5**(1/2))/2
+    phi_ = (1-5**(1/2))/2
+    a =  (  (phi**n_th)% m  - ( phi_**n_th)% m  ) / ( phi % m - phi_ %m )
+    # a = str(((phi**n_th)-(phi_)**n_th)/( phi - (phi_)))[0:10].replace( '.' , '')
+    # b =   ( (( 1 + np.sqrt(5))/2)**n_th - ((1 - np.sqrt(5))/2)**n_th  ) /np.sqrt(5)
+    return a
 
 def fibonacci_gen():
     """Fibonacci numbers generator"""
@@ -30,8 +47,14 @@ def fibonacci_gen():
         yield a
         a, b = b, a + b
 
+# def fib(x) :
+#     a = matrix(GF, [0, 1])
+#     b = matrix(GF, [[0, 1],
+#                     [1, 1]])
+#     return (a * b88(x - 1))[0][1]
 
-
+# http://www.topcoder.com/tc?module=Static&d1=features&d2=010408
+# b(1)=428,562,224,098 mod 1234567891011
 
 t1  = time.time()
 
@@ -59,9 +82,8 @@ F = fibonacci_gen()
 next(F)
 
 a= gmpy2.next_prime(10**14)
-for i in range(1,10**2):
-
-    print(next(F),'     ' ,a)
+for i in range(1, 10**2):
+    print( a ,'         ',  Fibonacci_Binet(a ) )
     a = gmpy2.next_prime(a)
 
 # s=''

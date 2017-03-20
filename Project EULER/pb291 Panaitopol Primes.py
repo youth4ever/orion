@@ -1,26 +1,20 @@
 #!/usr/bin/python                   o(^_^)o         ( ͡° ͜ʖ ͡°)
-# © Solved by Bogdan Trif @
+# © Solved by Bogdan Trif @     Completed on Sat, 11 Mar 2017, 12:46
 #The  Euler Project  https://projecteuler.net
 '''
-Finding numbers for which the sum of the squares of the digits is a square      -           Problem 171
+                Panaitopol Primes           -       Problem 291
 
-For a positive integer n, let f(n) be the sum of the squares of the digits (in base 10) of n, e.g.
+A prime number p is called a Panaitopol prime if  :
 
-f(3) = 32 = 9,
-f(25) = 22 + 52 = 4 + 25 = 29,
-f(442) = 42 + 42 + 22 = 16 + 16 + 4 = 36
+                            p = (x**4 - y**4 ) / (  x**3 + y**3 )
 
-Find the last nine digits of the sum of all n, 0 < n < 10**20,
-such that f(n) is a perfect square.
+for some positive integers  x and y.
+
+Find how many Panaitopol primes are less than 5×10**15.
+
 '''
 import time, zzz, gmpy2
-
-def f(n):
-    l = sum([ int(i)**2 for i in str(n)])
-    return l
-
-print('test f : \t' , f(3) )
-
+from itertools import count
 
 
 
@@ -29,53 +23,48 @@ print('test f : \t' , f(3) )
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
-# # 2017-03-09 - APPROACH : I must identify for a given length of number which is the combination
-# of digits whose squares gives another square .
-# For example : for a length 2 I would immediately know that wa can use Pytagora. therefore :
-# 34, 43 gives the perfect square 25;    68, 86 gives 100, there are also the 10 multiples.
-#
-# Then we must go to the 3 digit numbers. We already have some from the two's and we add 0, like
-# 340 or 430 or 403 or 304 .
-#
-#
-# https://plus.maths.org/content/triples-and-quadruples
-# https://en.wikipedia.org/wiki/Pythagorean_quadruple
+def brute_force(up_lim) :
+    cnt = 0
+    for x in range(2, up_lim):
+        for y in range(1, x ) :
+            p = (x**4 - y**4 ) / (  x**3 + y**3 )
+            if p %1 ==0 :
+                if gmpy2.is_prime(int(p)):
+                    cnt+=1
+                    print( str(cnt) +'.      ', p, '       x, y = ', x, y )
+    return print('\nAnswer : \t', cnt)
 
-## IMportant OBSERVATION : maximum number is 10**20 => 20 digits => maximum square will be :
-9**2 +....+ 9**2 = 81*20 = 1620
-Those numbers must be broken into 2,3,4,.... parts squares such that :
-So the problem reduces to ways to partition a square into squares :) NICE :)
-
-Example : in a 4 digit number, let's say that we have the result, the square is 169
-must broke into 4 squares : how we do it ?
-we try : 169 - 16 = 153 - 36 = 117 - 81 = 36. Therefore we obtained the digits : 4,6,9,4 .
-And from here we make permutations of that number. We must take for the zero case
-and permutate accordingly
-
-make a dictionary of squares
-
-
-for i in range(1,10**4) :
-    if gmpy2.is_square( f(i) ) :
-        print(str(i)+'.      ', f(i))
-
-
+# brute_force(5*10**2)
 
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
-# t1  = time.time()
+print('\n==========  My FIRST SOLUTION,  8 min, with help from Internet  =============\n')
+t1  = time.time()
+
+# https://mathproblems123.wordpress.com/2017/02/04/panaitopol-primes-simple-representation/#comment-10041
+
+def Panaitopol_primes(up_lim) :
+    n, cnt = 1, 0
+    while 1 :
+        p = n**2 + (n+1)**2
+        if p >= up_lim : break
+        if gmpy2.is_prime(p) :
+            cnt +=1
+            print(str(cnt)+'.      ',  p, '     ', len(str(p)))
+
+        n+=1
+
+    return print('\nAnswer : \t', cnt)
+
+Panaitopol_primes(5*10**15 )                #       Answer : 	 4037526
 
 
 
 
-
-
-
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)/60 ,6), 'min\n\n')      #   Completed in : 8 min
 
 
 # print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')

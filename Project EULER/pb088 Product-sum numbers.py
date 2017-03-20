@@ -24,7 +24,7 @@ note that 8 is only counted once in the sum.
 
 In fact, as the complete set of minimal product-sum numbers for 2≤k≤12  is  {4, 6, 8, 12, 15, 16}, the sum is 61.
 
-What is the sum of all the minimal product-sum numbers for 2k12000?
+What is the sum of all the minimal product-sum numbers for 2  ≤ k ≤ 12000?
 '''
 import time
 import gmpy2
@@ -568,7 +568,7 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
-print('\n--------------------------SOLUTION 6, VET FAST , nanogyth, USA --------------------------')
+print('\n--------------------------SOLUTION 6, VERY FAST , nanogyth, USA --------------------------')
 t1  = time.time()
 
         ####   METHOD I  ####

@@ -2,15 +2,12 @@
 # © Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-Almost right-angled triangles I     -       Problem 223
+        Almost right-angled triangles I     -       Problem 223
 
 Let us call an integer sided triangle with sides a ≤ b ≤ c barely acute if the sides satisfy
-a2 + b2 = c2 + 1.
+a**2 + b**2 = c**2 + 1.
 
 How many barely acute triangles are there with perimeter ≤ 25,000,000  (2.5*10**7)  ?
-
-bla
-bla
 
 
 '''
@@ -45,7 +42,7 @@ def brute_force( u ,up_lim) :
     return print('\nAnswer : \t', cnt,'        ', ba_max)
 
 up_lim = 25*10**2
-# brute_force(up_lim//2, up_lim )
+brute_force(up_lim//2, up_lim )
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')
@@ -55,28 +52,28 @@ t1  = time.time()
 
 # http://echochamber.me/viewtopic.php?t=45132
 
-up_lim = 25*10**3
-
-SQ = [i*i for i in range(up_lim//2)]
-SQD = {x*x: x for x in range(up_lim//2) }
-# SQD2 = dict(zip(SQD.values(),SQD.keys()))
-print( len(SQ) ,SQ[:200])
-print( len(SQD) , { k:v for k,v in SQD.items() if v<100 } ,'\n\n')
-
-
-cnt=0
-for a in range(2, len(SQ) ):
-    if a > up_lim //3 : break
-    for b in range(a+1, len(SQ)):
-        c_sq = SQ[a] + SQ[b] - 1
-        if c_sq in SQD :
-            c = SQD[c_sq]
-            if a+b+c > up_lim : break
-            if a+b+c <= up_lim :
-                cnt+=1
-                print(str(cnt)+'.      ', a, b, c,'     ', a+b+c  , '        ', get_factors(a),'    ' ,get_factors(b),'    ' ,get_factors(c)      )
-
-print('\nAnswer : \t',  cnt )
+# up_lim = 25*10**3
+#
+# SQ = [i*i for i in range(up_lim//2)]
+# SQD = {x*x: x for x in range(up_lim//2) }
+# # SQD2 = dict(zip(SQD.values(),SQD.keys()))
+# print( len(SQ) ,SQ[:200])
+# print( len(SQD) , { k:v for k,v in SQD.items() if v<100 } ,'\n\n')
+#
+#
+# cnt=0
+# for a in range(2, len(SQ) ):
+#     if a > up_lim //3 : break
+#     for b in range(a+1, len(SQ)):
+#         c_sq = SQ[a] + SQ[b] - 1
+#         if c_sq in SQD :
+#             c = SQD[c_sq]
+#             if a+b+c > up_lim : break
+#             if a+b+c <= up_lim :
+#                 cnt+=1
+#                 print(str(cnt)+'.      ', a, b, c,'     ', a+b+c  , '        ', get_factors(a),'    ' ,get_factors(b),'    ' ,get_factors(c)      )
+#
+# print('\nAnswer : \t',  cnt )
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')

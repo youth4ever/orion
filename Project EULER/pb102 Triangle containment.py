@@ -5,7 +5,7 @@
 Triangle containment    -       Problem 102
 
 Three distinct points are plotted at random on a Cartesian plane, for which -1000 ≤ x, y ≤ 1000,
-uch that a triangle is formed.
+such that a triangle is formed.
 
 Consider the following two triangles:
 
@@ -24,7 +24,7 @@ NOTE: The first two examples in the file represent the triangles in the example 
 
 '''
 import time
-from pylab import *
+# from pylab import *
 import itertools
 
 filename="pb102_triangles.txt"
@@ -115,7 +115,7 @@ def determine_inside_origin(lst) :
     # print( 'Y Min & Max :  ', min(A[1], B[1], C[1]), max(A[1], B[1], C[1]) )
     # print('The cross : ',CR)
     # print('---------------------')
-    plot_triangle(A, B, C)      # Here we plot each triangle
+    # plot_triangle(A, B, C)      # Here we plot each triangle
     if  len(CR['x']) >1 and len(CR['y']) >1 :       # Check if the cuts  of Ox & Oy form a cross :)
         if  max(CR['x']) > 0 and min(CR['x']) < 0 and max(CR['y']) > 0 and min(CR['y']) < 0 :
             return True
@@ -266,7 +266,8 @@ t1  = time.time()
 #     x3, y3, 1
 #
 #
-# With that in mind, I found the areas of triangles AOB, BOC, COA, and added them to see if they equaled the area of triangle ABC.
+# With that in mind, I found the areas of triangles AOB, BOC, COA,
+# and added them to see if they equaled the area of triangle ABC.
 #
 # I also graphed them -- but only because I was curious how to graph using the graphics.py module for python.
 
@@ -365,17 +366,38 @@ t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 
+print('\n--------------------------SOLUTION 6, Barycentric Coordinates  --------------------------')
+t1  = time.time()
+
+# ==== Thu, 27 Oct 2016, 09:25, mandeepb, USA
+# I also solved the problem using barycentric coordinates.
+# I had never heard of them before, but had a lot of fun reading about them.
+
+def cartesian_to_barycentric(x1, y1, x2, y2, x3, y3):
+    """Convert cartesian coordinates to barycentric coordinates and return all > 0.
+
+    Reference: https://en.wikipedia.org/wiki/Barycentric_coordinate_system_(mathematics)
+    """
+    alpha = (((y2 - y3) * (0 - x3) + (x3 - x2) * (0 - y3)) /
+             ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3)))
+    beta = (((y3 - y1) * (0 - x3) + (x1 - x3) * (0 - y3)) /
+            ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3)))
+    gamma = 1 - alpha - beta
+
+    return alpha > 0 and beta > 0 and gamma > 0
+
+count = 0
+with open(filename) as text:
+    for triangle in text.read().split():
+        x1, y1, x2, y2, x3, y3 = [int(coord) for coord in triangle.split(',')]
+        if cartesian_to_barycentric(x1, y1, x2, y2, x3, y3):
+            count += 1
+print(count)
 
 
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
-# print('\n--------------------------SOLUTION 6,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
 print('\n--------------------------SOLUTION 7,  CLASSES & OOP,   aristarchos, USA --------------------------')
 t1  = time.time()
 

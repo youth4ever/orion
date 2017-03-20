@@ -91,7 +91,7 @@ print(new_girls[19])
 
 # Length, Count the number of elements
 print('\nLength (size, count elements) of the dictionary: ', len(girls))
-print('Print the list with ordered names: ', sorted(girls))
+print('Print the list with ordered (sorted ) names: ', sorted(girls))
 
 print('\nGet elements using a for loop:')
 for k, v in girls.items():
@@ -137,6 +137,11 @@ def biggest(aDict):
     return (key, len(v))
 animals = {'a': ['aardvark'], 'b': ['baboon'], 'c': ['coati'], 'd': ['donkey', 'dog', 'dingo']}
 print(biggest(animals))
+
+print('\n------------------Return the largest (max) Key --------------------------')
+Tracker = { 2 : 4, 3 : 2 , 5: 2 }
+print('Maximum value of the key in a dict :', max(Tracker, key=int) )
+
 
 print('\n--------------Pb060 Euler, Nice function to store sorted nrs as key with lists as values ------------------------------')
 

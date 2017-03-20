@@ -109,6 +109,12 @@ special_squares = filter(lambda x: x > 5 and x < 50, squares)
 print (special_squares)
 
 
+A = [6, 7, 8, 9, 10, 11, 12]
+subset_of_A = set([6, 9, 12]) # the subset of A
+result = [a for a in A if a not in subset_of_A]
+a = list(filter(lambda x: x not in subset_of_A, A))
+print(a)
+
 
 print('\n -------------------------------  Reducing a list, with reduce -----------------')
 # The function reduce(func, seq) continually applies the function func() to the sequence seq. It returns a single value.
@@ -452,7 +458,7 @@ print('Completed in : ',time.time() -t1)
 # Version 2: append to bytearray.
 t1=time.time()
 
-for i in range(0, 1000  00):
+for i in range(0, 1000 ):
     x = bytearray()
     for v in range(0, 255):
         x.append(v)

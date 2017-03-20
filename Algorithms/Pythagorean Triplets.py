@@ -186,5 +186,34 @@ print(list((a,b,c) for a,b,c in itertools.product(range(1, 100), repeat=3) if a<
 print(list(x for x in itertools.product(range(1, 100), repeat=3) if x[0]<=x[1] <=x[2] and x[0]**2 + x[1]**2 == x[2]**2))
 
 
+print('\n########### MATRIX METHOD TO GENERATE PYTHAGOREAN TRIPLETS ##########\n')
+########### MATRIX METHOD TO GENERATE PYTHAGOREAN TRIPLETS ##########
+# https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples
+# https://en.wikipedia.org/wiki/Formulas_for_generating_Pythagorean_triples
+
+
+def vecprod(M,V):
+  nlM=len(M)
+  return [sum([l[j]*V[j] for j in range(nlM)]) for l in M]
+
+pmax=10**2
+A=[[1,-2,2],[2,-1,2],[2,-2,3]]
+B=[[1,2,2],[2,1,2],[2,2,3]]
+C=[[-1,2,2],[-2,1,2],[-2,2,3]]
+listmat=(A,B,C)
+
+liste=[[3,4,5]]
+compte=0
+
+while liste:
+    list2=[]
+    for t in liste:
+        for m in listmat:
+            t2=sorted(vecprod(m,t))
+            p=sum(t2)
+            if p<pmax:
+                list2.append(t2)
+    liste=list(list2)
+    print(liste)
 
 

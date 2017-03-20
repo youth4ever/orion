@@ -151,10 +151,13 @@ print('This loop stops at 100 even if normally will go to Infinity :'  , list( e
 
 print('\n ---------------------   List Comprehension, IF ELSE Statements Together, same proposition ----------')
 
+
 l = [22, 13, 45, 50, 98, 69, 43, 44, 1]
 print(' IF ELSE Statements Together : \t' , [x+1 if x >= 45 else x+5 for x in l] )
 
-
+print('\n ---------------------   List Comprehension, Double if statement list comprehension----------')
+print(' Double if statement list comprehension : \t ' , [i for i in range(100) if i > 10 if i < 30] )
+print(' Double if statement list comprehension : \t ' , [i for i in range(100)  if ( i > 10 and  i < 30 ) ] )
 
 
 

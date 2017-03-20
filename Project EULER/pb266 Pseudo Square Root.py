@@ -15,10 +15,11 @@ Find PSR(p) mod 10**16.
 
 
 '''
-import time, math
+import time, math, zzz
 import  itertools
 from functools import reduce
 from operator import mul
+from itertools import combinations, cycle
 
 def prime_generator(lower, upper):      #THIRD FASTEST
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
@@ -127,7 +128,7 @@ sqr = (reduce(mul, test_A) )**(1/2)
 
 def brute_force_testing( lst, sqr ) :
     A, B = 0, 0
-    C = list(itertools.combinations(test_A, len(test_A)//2   ))
+    C = list(combinations(test_A, len(test_A)//2   ))
     print(len(C))
 
     mmin = 10**8
@@ -231,10 +232,10 @@ def balanced_pair_lists_products(lst , alpha) :
     DIFF, A, B = 10**48, [], []
     u, v = reduce(mul, U), reduce(mul, V)
     key=[   -2, -1, 1, 2, 3 ]
-    Cyc = itertools.cycle(key)
-    for loop in range(18) :
+    Cyc = cycle(key)
+    for loop in range(20) :
         c = next(Cyc)
-        U = rotate(U, -2)
+        U = rotate(U, 2)
 
         for lup in range(alpha) :
             # print(U, reduce(mul, U) ,'        ',V  , reduce(mul, V) , '        ', REF )
@@ -260,17 +261,17 @@ def balanced_pair_lists_products(lst , alpha) :
             if abs(u-v) < DIFF :
                 DIFF = abs(u-v)
                 A, B = U[:], V[:]
+                print(U, reduce(mul, U) ,'        ',V  , reduce(mul, V) , '        ', DIFF )
             d = next(Cyc)
             V = rotate(V, -1)
-            print(U, reduce(mul, U) ,'        ',V  , reduce(mul, V) , '        ', DIFF )
+
 
     return sorted(A), sorted(B), DIFF
 # !!! MUST CORRECT THE ALGORITHM !!! @ 2017-03-07, I will try next to rotate one of the list
 # compare them and then switch elements between the two !
 # balanced_pair_lists_products(W)
 
-A, B, DIFF = balanced_pair_lists_products(P_primes, 16 )
-
+A, B, DIFF = balanced_pair_lists_products(P_primes, 19 )
 # THE RESULT SHOULD BE  :   [2, 5, 11, 23, 29, 37)]           [3, 7, 13, 17, 19, 31]
 print('\n Answer : \n',A, '\n' ,B, '\n',DIFF)
 
@@ -298,9 +299,36 @@ print('\n', min(a,b)%10**16 )
 # List 2 : 	 2321103790381000776999449235158663229 37
 # DIFF = 	 4232248090417575765285385481694781 34
 
+min_diff, E, F = 10**80, [], []
+cnt=0
+for i in range(5, 6) :
+    print('\t\t\t\t\t\t---------------------      ', i, '      ---------------------' )
+    for m in combinations(A, i ):
+        for n in combinations(B, i ):
+            cnt+=1
+            t_A = set(A[:]) ; t_A -= set(m) ; t_A |= set(n) ; t_A = sorted(list(t_A))
+            t_B = set(B[:]) ; t_B -= set(n) ; t_B |= set(m) ; t_B = sorted(list(t_B))
+            # print(A, a, b, t_A)
+            m_check, n_check = reduce(mul, t_A), reduce(mul, t_B)
+            val = abs(m_check - n_check)
+            if val < min_diff :
+                min_diff = val
+                E, F = t_A[:], t_B[:]
+                print(m, n,'      ' , len(str(min_diff)) , '         ',min_diff , '         ', str(m_check)[:16] , '    ', str(n_check)[:16] )
+            if cnt%10**6 == 0 : print(cnt)
+print('\n Answer : \n',E, '\n' ,F, '\n',min_diff)
+
+e, f = reduce(mul, E), reduce(mul, F)
+print('\nList 1 : \t' , e, len(str(e)), '\nList 2 : \t' ,  f , len(str(f)) ,'\nDIFF = \t' ,abs(e-f), len(str(abs(e-f))) )
+sqroot = reduce(mul, P_primes)
+print( '\nsqrt(P) =  \t',  round(math.sqrt(sqroot)) ,' \t' ,len(str(round(math.sqrt(sqroot))))   )
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+zzz.Star_Wars()
+
+https://www.google.ro/?gws_rd=cr,ssl&ei=fFPFWOLnH4j7UOjIl8AN#q=subset+product+problem&*
 
 # print('\n================  My SECOND SOLUTION,   ===============\n')
 # t1  = time.time()

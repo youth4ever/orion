@@ -52,8 +52,30 @@ t1  = time.time()
 
 
 
+import numpy
+def prime_sieve_numpy(n):                       ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    """ Input n>=6, Returns a array of primes, 2 <= p < n
+    http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188 """
+    sieve = numpy.ones(n//3 + (n%6==2), dtype=numpy.bool)
+    for i in range(1,int(n**0.5)//3+1):
+        if sieve[i]:
+            k=3*i+1|1
+            sieve[       k*k//3     ::2*k] = False
+            sieve[k*(k-2*(i&1)+4)//3::2*k] = False
+    return numpy.r_[2,3,((3*numpy.nonzero(sieve)[0][1:]+1)|1)]
 
-def numpy_prime_sieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+
+def primesfrom3to(n):               ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    """ Returns a array of primes, 3 <= p < n
+    http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188
+      SIEVE of ERATOSTHENES                       """
+    sieve = numpy.ones(n//2, dtype=numpy.bool)
+    for i in range(3, int(n**0.5)+1,2):
+        if sieve[i//2]:
+            sieve[i*i//2::i] = False
+    return 2*numpy.nonzero(sieve)[0][1::]+1
+
+def prime_sieve_numpy_2(n):          ### THIRD
     import numpy as np
     """return array of primes 2<=p<=n"""
     sieve=np.ones( n+1, dtype=bool )
@@ -65,18 +87,18 @@ def numpy_prime_sieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Ef
 
 print('-----To generate 10 to some power of primes use the bellow formula, log is in 10 base :-------')
 lim = 10**5
-primes = numpy_prime_sieve(int( lim * log(lim)*1.2 ) )
+primes = prime_sieve_numpy(int( lim * log(lim)*1.2 ) )
 print(len(primes), primes[:50] ,'\n\n' )
 
 
-def prime_sieve(n):       # SECOND FASTEST        o(^_^)o
+def prime_sieve(n):       # FOURTH      o(^_^)o
     sieve = [True] * n
     for i in range(3, int(n**0.5)+1, 2):
         if sieve[i]:
             sieve[ i*i :: 2*i ] = [False] * ( (n-i*i-1) // (2*i) +1 )
     return [2] + [i for i in range(3, n , 2) if sieve[i] ]
 
-def prime_sieve_generator(lower, upper):      #THIRD FASTEST
+def prime_sieve_generator(lower, upper):      #FIFTH FASTEST
     """  Sieve of Eratosthenes              !!!!!!!!! THE FASTEST SIEVE. It won the battle with sieve
     Create a candidate list within which non-primes will be marked as None.         """
     cand = [i for i in range(3, upper + 1, 2)]
@@ -93,7 +115,7 @@ def prime_sieve_generator(lower, upper):      #THIRD FASTEST
 
 
 
-def sieve_2(lower, upper_bound):          # FOURTH
+def sieve_2(lower, upper_bound):          # FIFTH
     ''':Description:        SIEVE OF ERATOSTHENES ALGORITHM  , SECOND FASTEST
     :param:      :lower: = lower_integer including
                      :upper_bound: = upper integer excluding
@@ -113,8 +135,7 @@ def sieve_2(lower, upper_bound):          # FOURTH
 print(sieve_2(11900, 12000))
 
 
-import math
-def primes_up_to(n):            #### FIFTTH
+def primes_up_to(n):            #### SIXTH
     ''' SIEVE of ERATOSTHENES :  PRIME GENERATOR algorithms
         # http://code.activestate.com/recipes/576640/ '''
     import math
@@ -132,7 +153,7 @@ def primes_up_to(n):            #### FIFTTH
     return [i for i in range(n+1) if sieve[i]]
 
 
-def gen_primes(limit):                                  # FIFTH
+def gen_primes(limit):                                  # EIGHTH
     ''' SIEVE of ERATOSTHENES :  Efficient PRIME GENERATOR algorithms
     Code by David Eppstein, UC Irvine, 28 Feb 2002,     http://code.activestate.com/recipes/117119/ '''
     D = {}
@@ -157,7 +178,20 @@ print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
 
 t1  = time.time()
 
+from itertools import filterfalse
+def Eratosthène_sieve(N) :
+    ## -- Crible d'Eratosthène jusqu'à N ------------------
+    vPrime = list(range(N + 1))
+    vPrime[1] = 0
 
+    d = 2
+    while d**2 <= N:
+        vPrime[d*2::d] = [0]*(N//d - 1)
+        d += 1
+        while not vPrime[d]:
+            d += 1
+    vPrime = list(filter(lambda i : i!=0 in vPrime  , vPrime ))
+    return vPrime
 
 t2  = time.time()
 print('\n' ,' primes generated in :', round((t2-t1)*1000,4), 'ms\n')
@@ -635,17 +669,50 @@ print('Euler Totient Sieve : \t', Euler_Totient_Sieve(600))
 
 
 
-print('\n------------------  divisor_square_sum_sigma_2 -------------------- ')
+print('\n------------------  Divisor Square Sum  - sigma_2 -------------------- ')
+
 def divisor_square_sum_sigma_2(n):
-    '''     Π  = ((p_1**(a_1+1)*2)-1) / (p_1 -1)*...*((p_k**(a_k+1)*2)-1) / (p_k -1)
-    where p_1, p_2,...p_k are the prime factors of the number , together with their
-    coefficients exponentials a_1, a_2,...,a_k
-    :param n: int, number
-    :return: int, sigma2 representing the Sum of the squares of its divisors !              '''
+    '''     **Π  = [((p_1**(a_1+1)*2)-1) / (p_1**2 -1)]*...*[ ((p_k**(a_k+1)*2)-1) / (p_k**2 -1) ]**
+
+        condensed form:  = **Π  {p_k - prime, a_k - the exponential of the prime } ((p_k**(a_k+1)*2)-1) / (p_k**2 -1)**
+    :where: p_1, p_2,...p_k are the prime factors of the number , together with their
+    corresponding coefficients exponentials a_1, a_2,...,a_k
+        :param n: int, number
+        :return: int, sigma2 representing the Sum of the *Squares* of its divisors !              '''
     # http://math.stackexchange.com/questions/166501/delta-2n-the-sum-of-the-squares-of-the-positive-divisors-of-n
+    from pyprimes import factorise
+    import functools, operator
     D = list(factorise (n ))
     P = [( i[0]**((i[1]+1)*2)-1 ) //(i[0]**2-1) for i in D ]
     # print(D)
     return functools.reduce(operator.mul, P)
+
+print('Divisor Square Sum Sigma : \t ', divisor_square_sum_sigma_2(429606) )
+
+
+print('\n------------------  Divisor Sum  - sigma -------------------- ')
+
+def divisor_sum_sigma(n):
+    '''    **Π  = [(p_1**(a_1+1)-1) / (p_1 -1)]*...*[ (p_k**(a_k+1)-1) / (p_k -1) ]**
+     condensed :  = **Π  {p_k - prime, a_k - the exp of the prime } =  ((p_k**(a_k+1)-1) / (p_k -1)**
+    :where: p_1, p_2,...p_k are the prime factors of the number , together with their
+    corresponding coefficients exponentials a_1, a_2,...,a_k
+        :param n: int, number
+        :return: int, sigma representing the Sum of its divisors !              '''
+    # https://en.wikipedia.org/w/index.php?title=Divisor_function&action=edit&section=4
+    from pyprimes import factorise
+    import functools, operator
+    D = list(factorise (n ))
+    P = [( i[0]**(i[1]+1)-1 ) //(i[0]-1) for i in D ]
+    # print(D)
+    return functools.reduce(operator.mul, P)
+
+test_nr = 429606
+print(' divisor_sum_sigma : \t' ,divisor_sum_sigma(test_nr) )
+
+divisors = get_divisors(test_nr)
+print('Divisor Sum Term by term Verification Check: ', sum(divisors) ,'\n' ,divisors)
+
+
 
 

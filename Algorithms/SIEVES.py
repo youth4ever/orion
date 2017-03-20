@@ -78,7 +78,7 @@ print('\nCompleted in :', round((t2-t1),6), 's\n\n')
 ############# DIVISOR SQUARE SUM ,  ELEGANT &  FAST SIEVE ##############
 
 
-def divisor_square_sum_sieve(n):
+def divisor_square_sum_sieve(n):            # Working WELL
     sieve = [0] * (n + 1)
     limit =  int( n**(1/2) ) + 1
     for i in range(1, limit):
@@ -91,6 +91,28 @@ def divisor_square_sum_sieve(n):
     return sieve
 
 divisor_square_sum_sieve(100)
+
+
+
+############# DIVISORS  SUM  ,  ELEGANT &  FAST SIEVE ##############
+
+
+def divisor_sum_sieve(n):           # Working WELL
+    sieve = [0] * (n + 1)
+    limit =  int( n**(1/2) ) + 1
+    for i in range(1, limit):
+        sieve[i * i] += i
+        temp = i + 1
+        for j in range(i * i + i, n + 1, i):
+            sieve[j] += i  +  temp
+            temp += 1
+    print('Divisors Sum sieve ', sieve)
+    return sieve
+
+divisor_sum_sieve(100)
+
+
+
 
 
 #############     EULER TOTIENT SIEVE FAST ALGORITHM , first variant, slower  ##############
@@ -161,4 +183,27 @@ def Euler_Totient_Sieve(n):
 print('Euler_Totient_Sieve :\n' , Euler_Totient_Sieve(100))
 
 
-#########
+######### TOTIENT AND FACTORIZATION AT ONCE  #############
+print('\n---------------   Sieve Factorization and Totient Sieve at once  -----------------')
+def sieve_factorization(n):   # Sieve Factorization and Totient Sieve at once
+    ''':Description: Sieve Factorization and Totient Sieve at once
+        The factorization is done only with the largest prime powers
+        This is needed for the Idempotents Euler Problem 407             '''
+
+    from collections import defaultdict
+    F = defaultdict(list)
+    T = list(range(n+1))
+    for p in range(2, n+1):
+        if p not in F :
+            T[p] = p-1
+            for i in range(p+p, n+1, p ) :
+                j, k = i, 1
+                while j % p == 0 :
+                    j //= p
+                    k *= p
+                F[i].append(k)
+                T[i] = T[i] * (p-1)//p
+
+    return print('\n',F,'\n', T)
+
+sieve_factorization(20)

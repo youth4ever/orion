@@ -17,7 +17,7 @@ import time
 
 print('\n--------------------------TESTS------------------------------')
 
-
+http://math.stackexchange.com/questions/610621/a-geometric-problem-in-placing-two-spheres-in-a-pipe
 
 
 

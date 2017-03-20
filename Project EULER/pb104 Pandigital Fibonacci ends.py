@@ -13,7 +13,8 @@ last nine digits are 1-9 pandigital (contain all the digits 1 to 9, but not nece
 
 And F_2749, which contains 575 digits, is the first Fibonacci number for which the first nine digits are 1-9 pandigital.
 
-Given that F_k is the first Fibonacci number for which the FIRST nine digits AND the LAST nine digits are 1-9 pandigital, find k.
+Given that F_k is the first Fibonacci number for which the FIRST nine digits AND
+the LAST nine digits are 1-9 pandigital, find k.
 
 
 '''
@@ -106,7 +107,7 @@ print('\n================  My FIRST SOLUTION, SLOW 30 sec  ===============\n')
 t1  = time.time()
 
 # !!! IMPORTANT OBSERVATIONS : FIRST Fib number to have the LAST 9 digits pandigital is a prime
-# FIRST Fib number to have the FIRTS 9 digits pandigital is a prime
+# FIRST Fib number to have the FIRST 9 digits pandigital is a prime
 
 def my_first_solution():
     pan = '123456789'

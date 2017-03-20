@@ -18,9 +18,21 @@ What is the sum of all semidivisible numbers not exceeding 999966663333 ?
 
 
 '''
-import time
+import time, gmpy2, zzz, math
+import sympy
 
 
+def numpy_prime_sieve(n):          ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    import numpy as np
+    """return array of primes 2<=p<=n"""
+    sieve=np.ones( n+1, dtype=bool )
+    for i in range( 2, int((n+1)**0.5+1) ) :
+        if sieve[i] :
+            sieve[2*i :: i] = False
+    return np.nonzero(sieve)[0][2:]
+
+
+print(sympy.prevprime(4))
 
 
 
@@ -32,9 +44,28 @@ import time
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
+UP_NR = 999966663333
+print('Square root of UP_NR : \t', math.sqrt(UP_NR),'\n'  )     # 1 milion is affordable :) !
+So we need a sieve up to 10**6, EASY PROBLEM !!!!
 
 
+def brute_force_testing(lim) :
+    S, cnt = 0, 0
+    for n in range(7, lim+1):
+        if gmpy2.is_square(n) : continue
+        sqd = math.floor((n**(1/2)))
+        squ = math.ceil((n**(1/2)))
+        # print(sq)
+        lps = sympy.prevprime(squ)
+        ups = gmpy2.next_prime(sqd)
+        if (n%lps !=0 and n%ups == 0) or (n%lps ==0 and n%ups != 0)  :
+            cnt += 1
+            print(str(cnt)+'.     n=', n , '    lps=',lps, '      ups=',ups  )
+            S+=n
 
+    return print('\nAnswer : \t', S)
+
+brute_force_testing(1000)
 
 
 t2  = time.time()

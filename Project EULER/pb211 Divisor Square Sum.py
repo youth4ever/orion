@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @           Completed on Fri, 24 Feb 2017, 21:15
 #The  Euler Project  https://projecteuler.net
 '''
 Divisor Square Sum      -       Problem 211
@@ -37,9 +37,6 @@ def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
 
     return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
 
-print('\n--------------------------TESTS, 3 hours------------------------------')
-t1  = time.time()
-
 def divisor_square_sum_sigma_2(n):
     '''     Π  = ((p_1**(a_1+1)*2)-1) / (p_1 -1)*...*((p_k**(a_k+1)*2)-1) / (p_k -1)
     where p_1, p_2,...p_k are the prime factors of the number , together with their
@@ -51,6 +48,9 @@ def divisor_square_sum_sigma_2(n):
     P = [( i[0]**((i[1]+1)*2)-1 ) //(i[0]**2-1) for i in D ]
     # print(D)
     return functools.reduce(operator.mul, P)
+
+print('\n--------------------------TESTS, 3 hours------------------------------')
+t1  = time.time()
 
 print( list( factorise(64000)))
 print( divisor_square_sum_sigma_2(64000) ,'' )                  #       1422213156
@@ -65,24 +65,14 @@ def slow_brute_force(lim):
             if gmpy2.is_square(dsq) :
                 S+=dsq
                 print(str(i)+'.       ', dsq ,'          ', get_factors(i)  ,  '         ', D, sum(D) )
+    # if i%10**6 == 0 : print(i)
 
     return print('\nTotal sum :\t', S,'\n\n')
 
 # slow_brute_force(40000)
 
 
-def brute_force_sigma_2(lim):
-    S=0
-    for i in range( lim , 2, -1 ) :
-        if gmpy2.is_prime(i) == False :
-            dsq = divisor_square_sum_sigma_2(i)
-            if gmpy2.is_square(dsq) :
-                S+=i
-                print(str(i)+'.       ', dsq ,'          ', get_factors(i)  )
 
-    return print('\nTotal sum :\t', S+1)
-
-# brute_force_sigma_2(lim = 64*10**6)                 #   ANSWER : Total sum :	 1922364685
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1), 6), 's\n\n')
@@ -102,32 +92,30 @@ print('\nCompleted in :', round((t2-t1), 6), 's\n\n')
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1), 6), 's\n\n')
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n================  My SMART BRUTE FORCE SOLUTION,  SLOW ===============\n')
 t1  = time.time()
 
-lim = 64*10**3
-primes=sieve( lim//20 )
-for p in primes:
-    e = 1
-    while p**e < lim :
-        p1 = p**e
+# lim = 64*10**3
+# primes=sieve( lim//20 )
+# for p in primes:
+#     e = 1
+#     while p**e < lim :
+#         p1 = p**e
+#
+#         e+=1
 
-        e+=1
+def smart_brute_force_sigma_2(lim):
+    S=0
+    for i in range( lim , 2, -1 ) :
+        if gmpy2.is_prime(i) == False :
+            dsq = divisor_square_sum_sigma_2(i)
+            if gmpy2.is_square(dsq) :
+                S+=i
+                print(str(i)+'.       ', dsq ,'          ', get_factors(i)  )
+    if i%10**6 == 0 : print(i)
+    return print('\nTotal sum :\t', S+1)
 
-# for i in range(1, 64*10**6):
-#     a=i
-# print('finished')
-
-
-
-
-
-
-
-
-
-
-
+# smart_brute_force_sigma_2( lim = 64*10**6 )                 #   ANSWER : Total sum :	 1922364685
 
 
 t2  = time.time()
@@ -189,6 +177,8 @@ print('\nCompleted in :', round((t2-t1)/60, 6), 'min\n\n')
 
 print('\n--------------------------SOLUTION 3,   --------------------------')
 t1  = time.time()
+
+
 
 
 

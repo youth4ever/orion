@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Solved by Bogdan Trif @
+# Solved by Bogdan Trif @   Completed on Thu, 9 Mar 2017, 19:22
 #The  Euler Project  https://projecteuler.net
 '''
 Connectedness of a network      -       Problem 186
@@ -262,61 +262,359 @@ def calls_number_solution() :
             return print( '\nCalls : \t', calls , '\t\t PM conn : \t', PMnr_set_len, '    Total nrs :   ', len(TS) )
 
 
-calls_number_solution()         #       Calls : 	 2325629 , PM conn : 	 990000     Total nrs :    990458
+# calls_number_solution()         #       Calls : 	 2325629 , PM conn : 	 990000     Total nrs :    990458
 
 
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1), 6), 's\n\n')
-zzz.Star_Wars()
+# zzz.Star_Wars()
 
-# print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-# print('\n--------------------------SOLUTION 1,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 2,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 3,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 4,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 5,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-#
-# print('\n--------------------------SOLUTION 6,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+print('\n--------------------------SOLUTION 1,  1 min , Union Find data structure with path compression --------------------------')
+t1  = time.time()
+
+# ==== Sat, 4 Jun 2016, 05:55, will.fiset, Canada
+# Here is my solution in Python3 using pypy, it runs in 2seconds using a Union Find data structure with path compression!
+
+
+class UnionFind (object):
+
+  def __init__(self, n):
+    self.n = n
+    self.id = [i for i in range(n)]
+    self.sz = [1 for _ in range(n)]
+
+  def find(self, p):
+    root = p
+    while (root != self.id[root]):
+      root = self.id[root]
+    while(p != root): # Compress
+      _next = self.id[p]
+      self.id[p] = root
+      p = _next
+    return root
+
+  def connected(self, p, q):
+    return self.find(p) == self.find(q)
+
+  def getSize(self, p):
+    return self.sz[self.find(p)]
+
+  def union(self, p, q):
+    root1 = self.find(p)
+    root2 = self.find(q)
+    if root1 == root2: return
+    if self.sz[root1] == self.sz[root2]:
+      self.sz[root2] += self.sz[root1]
+      self.id[root1] = root2
+    else:
+      self.sz[root1] += self.sz[root2]
+      self.id[root2] = root1
+
+MOD = 1000000
+PRIME_MINISTER_NUMBER = 524287
+THRESHOLD = 990000
+
+people = set()
+uf = UnionFind(MOD+1)
+S = [0] # One Based, thus the zero placeholder
+
+def pmHasEnoughFriends( uf ):
+
+  prime_minister_friends = uf.getSize( PRIME_MINISTER_NUMBER )
+  numPeople = len(people)
+  if prime_minister_friends >= THRESHOLD:
+    return True
+  return False
+
+
+def solution_1():
+    k = 1
+    successful_calls = 0
+    caller, called = 0, 0
+    while k <= 55:
+
+        phone_number = (100003 - 200003*k + 300007*k*k*k) % MOD
+        people.add(phone_number)
+        S.append(phone_number)
+
+        if k % 2 == 0:
+            called = phone_number
+        if caller != called:
+            uf.union(caller, called)
+            successful_calls += 1
+        else:
+            caller = phone_number
+
+        k += 1
+
+    while True: # K ≥ 56
+
+        phone_number = (S[k - 24] + S[k - 55]) % MOD
+        S.append(phone_number)
+
+        if k % 2 == 0:
+            called = phone_number
+        if caller != called:
+            uf.union(caller, called)
+            successful_calls += 1
+            if pmHasEnoughFriends(uf): break
+        else:
+            caller = phone_number
+
+        k += 1
+
+    return print ('successful_calls : \t',successful_calls)
+
+# solution_1()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------- SOLUTION 2,  20 sec ,union-find algorithm from Sedgewick  book--------------------')
+t1  = time.time()
+
+# ==== Sat, 3 Oct 2015, 01:11, anumoshsad, Bancgladesh
+# Used union-find algorithm from Sedgewick's book. First stored the values of sequences upto 1 million
+# terms which needs time and memory. Then just run the loop until prime-minister has 99% friends.
+
+class WeightedQuickUnion:
+	def __init__(self,N):
+		self.count = N
+		self.parent = [i for i in range(N)]
+		self.size = [1 for i in range(N)]
+	def find(self,p):
+		root = p
+		while root != self.parent[root]:
+			root = self.parent[root]
+		return root
+	def connected(self,p,q):
+		return self.find(p)==self.find(q)
+	def union(self,p,q):
+		if p==q:return
+		else:
+			rootP,rootQ = self.find(p),self.find(q)
+			if rootP==rootQ : return
+			elif self.size[rootP]<self.size[rootQ]:
+				self.parent[rootP]=rootQ
+				self.size[rootQ]+=self.size[rootP]
+			else:
+				self.parent[rootQ]=rootP
+				self.size[rootP]+=self.size[rootQ]
+			self.count-=1
+def pe186():
+
+	seq=[0]
+	for k in range(1,56):
+		seq.append((100003 - 200003*k + 300007*k**3)%1000000)
+	for k in range(56,10000000):
+		seq.append((seq[k-24]+seq[k-55])%1000000)
+	x = WeightedQuickUnion(1000001)
+	res = 0
+	for i in range(len(seq)//2):
+		a, b = seq[2*i+1],seq[2*i+2]
+		if a!=b:
+			res+=1
+			x.union(a,b)
+			if x.size[x.find(524287)]==990000:
+				print(res)
+
+				break
+
+# pe186()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')
+
+print('\n--------------------------SOLUTION 3,  10 sec  --------------------------')
+t1  = time.time()
+
+# ==== Sat, 4 Jan 2014, 00:42, bobrovsky.serj, Russia
+# Elegant, concise and pythonic. Without disjoint-set.
+
+def euler186():
+    l = [(300007 * i ** 3 - 200003 * i + 100003) % 1000000 for i in range(1, 56)]
+    fr = [[i] for i in range(1000000)]
+    calls = k = v = 0
+
+    while len(fr[524287]) < 990000:
+        for i in range(2):
+            u, v, l[k], k = v, l[k], (l[k] + l[k - 24]) % 1000000, (k + 1) % 55
+
+        if u != v:
+            calls += 1
+            ufr, vfr = fr[u], fr[v]
+
+            if ufr is not vfr:
+                if len(ufr) < len(vfr):
+                    ufr, vfr = vfr, ufr
+                ufr.extend(vfr)
+                for i in vfr:
+                    fr[i] = ufr
+    return calls
+
+
+# print(euler186())
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1),6), 's\n\n')
+
+print('\n--------------------------SOLUTION 4,  35 sec  --------------------------')
+t1  = time.time()
+
+# ==== Mon, 15 Dec 2014, 07:35, wakkadojo, USA
+# I'm shocked my python code took so long. Well, at least I like the structure of the program.
+# I'm sure I could have tweaked it to speed it up, or just re-implemented in C to get the standard 150x speedup.
+
+class network:
+    def __init__ (self):
+        self.parents = [ i for i in range (1000000) ]
+        self.sizes = [ 1 for _ in range (1000000) ]
+        self.pm_number = 524287
+    def find (self, x):
+        if self.parents[x] != x:
+            self.parents[x] = self.find (self.parents[x])
+        return self.parents[x]
+    def size (self, x):
+        return self.sizes [self.find (x)]
+    def join (self, x, y):
+        xr, yr = self.find (x), self.find (y)
+        if xr != yr:
+            self.parents[yr], new_size = xr, self.size (xr) + self.size (yr)
+            self.sizes[xr] = self.sizes[yr] = new_size
+
+def calls ():
+    l1, l2, n, m = 55, 24, 0, 1000000
+    r = [ (100003 - 200003*k + 300007*k**3) % m for k in range (1, l1+1) ]
+    while True:
+        yield r[n % l1]
+        r[n % l1] = (r[(n-l2)%l1] + r[n % l1]) % m
+        n += 1
+
+def solution_4() :
+    n, c = network (), calls ()
+    num_calls = 0
+    while n.size (n.pm_number) < 990000:
+        n1, n2 = next (c), next (c)
+        if n1 != n2:
+            num_calls += 1
+            n.join (n1, n2)
+    return print (num_calls)
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 5,  48 sec , Union Find  --------------------------')
+t1  = time.time()
+
+# ===== Sat, 11 Jul 2015, 00:04, Arancaytar, Germany
+# A pure data structure problem for a change. Union Find to the rescue! :D
+# (38 seconds; I suspect something can be shaved off there but there's no way around looping over 2 million times.)
+
+from collections import deque
+
+def initfib(a, b):
+  return deque(((100003 - 200003*k + 300007*k**3) % 1000000) for k in range(a,b))
+
+def lfib():
+  q1 = initfib(1,56-24)
+  q2 = initfib(56-24,56)
+  while True:
+    a, b = q1.popleft(), q2.popleft()
+    q1.append(b)
+    q2.append((a+b) % 1000000)
+    yield a
+
+def chunks(k, z):
+  while True:
+    a = []
+    for i in range(k):
+      a.append(next(z))
+    yield tuple(a)
+
+class unionfind:
+  def __init__(self, n):
+    self.x = list(range(n))
+    self.sizes = [1]*n
+
+  def find(self, i):
+    if self.x[i] != i:
+      self.x[i] = self.find(self.x[i])
+      self.sizes[i] = self.sizes[self.x[i]]
+    return self.x[i]
+
+  def size(self, i):
+    return self.sizes[self.find(i)]
+
+  def unite(self, a, b):
+    a, b = min(a,b), max(a,b)
+    a, b = self.find(a), self.find(b)
+    if a != b:
+      self.sizes[a] += self.sizes[b]
+    self.x[b] = a
+
+def e186():
+  friends = unionfind(1000000)
+  calls = chunks(2, lfib())
+  ncalls = 0
+  while friends.size(524287) < 990000:
+    a, b = next(calls)
+    if a != b:
+      ncalls += 1
+      friends.unite(a,b)
+  return ncalls
+
+# print(e186())
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+
+print('\n--------------------------SOLUTION 6,   21 sec--------------------------')
+t1  = time.time()
+
+# ====Thu, 15 Jan 2009, 18:12, tolstopuz, Russia
+
+def f():
+    s = 55 * [0]
+    for k in range(55):
+        s[k] = (100003 - 200003 * (k + 1) + 300007 * (k + 1) ** 3) % 1000000
+        yield s[k]
+    while True:
+        s[:-1], s[-1] = s[1:], (s[-24] + s[-55]) % 1000000
+        yield s[-1]
+
+s = [[None, 1] for i in range(1000000)]
+
+def root(x):
+    while s[x][0] != None:
+        x = s[x][0]
+    return x
+
+def solution_6():
+    c = 0
+    n = 524287
+    m = 0
+
+    for x, y in zip(*[iter(f())]*2):
+        if x != y:
+            c += 1
+            rx, ry = root(x), root(y)
+            if s[ry][1] > s[rx][1]:
+                rx, ry = ry, rx
+            if rx != ry:
+                if ry == n:
+                    n = rx
+                s[ry][0] = rx
+                s[rx][1] += s[ry][1]
+                m += 1
+                if s[n][1] >= 990000:
+                    print(c)
+                    break
+
+solution_6()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+

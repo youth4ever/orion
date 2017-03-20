@@ -26,6 +26,17 @@ import functools, operator
 from decimal import *
 getcontext().prec = 50
 
+import numpy
+def prime_sieve_numpy(n):                       ### o(^_^)o  FASTEST  o(^_^)o  ###  Highly Efficient !!!
+    """ Input n>=6, Returns a array of primes, 2 <= p < n
+    http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188 """
+    sieve = numpy.ones(n//3 + (n%6==2), dtype=numpy.bool)
+    for i in range(1,int(n**0.5)//3+1):
+        if sieve[i]:
+            k=3*i+1|1
+            sieve[       k*k//3     ::2*k] = False
+            sieve[k*(k-2*(i&1)+4)//3::2*k] = False
+    return numpy.r_[2,3,((3*numpy.nonzero(sieve)[0][1:]+1)|1)]
 
 def pair_Factors(n):        # VERY EFFICIENT !!!! SUPER INTELLIGENT ALGORITHM
     todo, combis = [(n, 2, [])], []
@@ -80,6 +91,29 @@ def naive_gen(lim=100):
     N.sort()
     return N
 
+
+def inverse_farey( n, max_ratio ):      ####  o(^_^)o  FASTEST  ( ͡° ͜ʖ ͡°)  ### !!! Best Farey Sequence
+    ''':Description: Generates INCREASING FAREY SEQUENCE
+        taken from http://pythonfiddle.com/farey-series-generator/
+        Modified by Bogdan Trif @2017-02-28, 14:00     '''
+    F , asc = [], True
+    if asc:
+        a, b, c, d = 0, 1, 1, n
+    else:
+        a, b, c, d = 1, 1, n-1, n
+    i=1
+#     print ("%d/%d" % (a,b),)
+    while (asc and c <= n) or (not asc and a > 0):
+        k = int((n + b)/d)
+        a, b, c, d = c, d, k*c - a, k*d - b
+#         print ("%d/%d" % (a,b),end=' ')
+        if b/a <= max_ratio :
+            F.append((b,a))
+        i+=1
+    return F
+
+print(inverse_farey(18, 5 ) )
+
 print('\n--------------------------TESTS------------------------------')
 
 # SUMS as checks
@@ -88,34 +122,6 @@ print('\n--------------------------TESTS------------------------------')
 #                 10^8: 171436696
 
 t1  = time.time()
-
-def brute_force(lim = 10**2) :
-    R = set([r**2 for r in range(1, int(lim**(1/2)) )  ] + [r**3 for r in range(2, int(lim**(1/3)) )  ])
-    S=0
-
-    for i in range(100, lim) :
-        if i%10**5 ==0 : print(i)
-        if gmpy2.is_prime(i) == False :
-            if len(list(factorise(i))) >= 3:
-                n = i*i
-                for q in range( i-1 , i//6 , -1 ) :
-                    r = n%q
-                    if r in R :
-                        k = q/r
-                        d = (n-r)/q
-                        # print(n ,q, d, q/d, d/r )
-                        if d/q == q/r  :
-                            d=int(d)
-                            S += n
-                            print( str(i)+'.      q=',q, '     d=',d, '     r=' ,r , '  ; gcd(d, q)=',gcd(d, q) , '  ; gcd(r,q)=',gcd(r,q) ,' ;   gcd(i,r)=' ,gcd(i ,r),'  ;   gcd(n-r,q)=' ,gcd(n-r,q)  ,'      n=', n, '     r=', get_factors(r), ' ;  q=' ,get_factors(q),' ;  i=',get_factors(i),'   ;     k=', k )
-                            break
-
-    return print('\nBrute Force result : \t', S+9)
-
-# brute_force(lim = 10**4)              #   Completed in : 759.848461 s
-
-# Brute Force result for 10**5 === 10**10 : 	 21434391491
-
 
 
 # @ 2017-02-25, 20:00 . This is tooooo SLOW !!!!
@@ -127,71 +133,6 @@ def brute_force(lim = 10**2) :
 # Imagine that until 10**4 I need 80 seconds . So probably for 10**6 I would need at least 10 hours !!!
 
 
-
-
-t2  = time.time()
-print('\nCompleted in :', round((t2-t1), 6), 's\n')
-
-print('\n============  My First solution ==============\n')
-t1  = time.time()
-
-        #     n = q*d + r ,               n / d = q +r
-        #     58                ÷                9             =           6             and              4
-        # Dividend                         Divisor                  Quotient                  Remainder
-
-
-def square_progressive_numbers( up ) :
-    up_lim = up*2/3
-    R = set([r**2 for r in range(1, int( up**(1/2)) )  if r**2 <= up_lim ] + \
-                [r**3 for r in range(2, int(up**(1/3)) ) if r**3 <= up_lim  ] + [r**5 for r in range(2, int(up**(1/5)) ) if r**5 <= up_lim  ]  )
-    R = sorted(list(R))
-    N = naive_gen(100)
-    print(R,'\n\n')
-    S = set()
-    for r in R :
-        # for j in N :
-        for j in range(1, 100+1) :
-            if j <= 10 : o = 12
-            if 10 < j <= 30 : o = 2.5
-            if j > 30 : o = 1.5
-            for i in range( j+1, int(o*j)+1 ):
-                k = i/j
-                d =  r*k
-                # if i==23 and j == 18 and r == 5832  :
-                #     print('k: ', k, '    r:', r ,'     d : ', d, round(d) , '     error:',abs(d - round(d) )  )
-                if abs(d - round(d ) ) < 1e-9 :
-                    q = d*k
-                    n = q*d+r
-                    # if i==23 and j == 18 and r == 5832  :
-                    #     print('k: ', k, '    r:', r ,'     d : ', d, round(d) , '     error:',abs(d - round(d) ) ,' q: ' , q, '  n:',n , '   error n:', abs(n - round(n) ) )
-                    if abs(n - round(n) ) < 1e-6 :
-                        n = round(n)
-                        m = int(pow(n, 1/2))
-
-                        if gmpy2.is_square(n) :
-                            if n not in S : # and n < up**2 :
-                                S.add(n)
-                                d, q = int(d), int(q)
-                                print( str(m)+'.      r=',r, '     d=',d, '     q=' ,q , '  ; n=', n,'   ;     k=', k )
-
-    print('\nElements : \t',S)
-
-    return print('\nAnswer : \t', sum(S) )
-
-# square_progressive_numbers( up = 10**6)
-
-# Elements : 	 {97344, 6230016, 37344321, 36869184, 10404, 16900, 7322436, 70963776, 1361388609, 9, 9729849600, 547674002500, 1380568336, 576081, 12006225, 13855173264, 8534988225, 123383587600, 16394241600, 256160025}
-# TRIED :
-# Answer : 	 175067393955
-# # Answer : 	 722741396455
-# 3634933831057
-# 2764653810513
-# 1245952747000
-# 1036675204136
-# 1035044659736
-# 1036675204136
-
-
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1),6), 's\n\n')
 
@@ -200,7 +141,7 @@ print('\n--------------------------TESTS------------------------------')
 
 
 
-print('\n================  My FIRST SOLUTION,   ===============\n')
+print('\n================  SECOND BRUTE FORCE   ===============\n')
 t1  = time.time()
 
 def yet_another_brute_force(up) :
@@ -249,80 +190,161 @@ def yet_another_brute_force(up) :
 # yet_another_brute_force(10**6)
 
 
-def fifth_attempt_cubes(up) :
-    up_lim = up*2/3
-    R = set([r**2 for r in range(1, int( up**(1/2)) )  if r**2 <= up_lim ] +
-                [r**3 for r in range(2, int(up**(1/3)) ) if r**3 <= up_lim  ] +[ r**5 for r in range(2, int(up**(1/5)) ) if r**5 <= up_lim] )
-    R = sorted(list(R))
+def brute_force (up_bound) :
+    S = 0
 
-    print(len(R),'\n' ,R[:100] ,'\n\n')
-    S = set()
-    for m in range(3 , up) :
-    # for m in range(98640 , 98641) :
-    # for m in range(200000 , up) :
-        r_ind = binary_search(m//100, R  )
-        if m < 100 : r_ind = 0
-        # print(m, r_ind, R[r_ind])
-        for r in R[r_ind:] :
-        # for r in R :
-            if r >= m : break
-            n = m*m
-            # k = ( gmpy2.mpq((n-r),(r*r)) ** (1/3) )
-            k_3 =  (n-r) /(r*r)
-            if k_3 >1 :
-                d_6 = (n**3 - 3*r**5*k_3**2 - 3*r**4*k_3 -r**3 ) / (k_3)
-                if (n-r)**3 == k_3**3*r**6 :
-                    d = pow(d_6, 1/6)
-                    if abs( d- round(d) ) < 1e-2 :
-                        d_r = round(d)
-                        k = k_3**(1/3)
-                        q = round(k*d)
-                        if n == d*q+r :
-                            print( 'm='+str(m)+'.      r=',r, '     d=',d, '     q=' ,q , '  ; n=', round(n),'   ;     k=', k)# ,'     r=',get_factors(r), '    d=',get_factors(d) )
-                            if m not in S : # and n < up**2 :
-                                S.add(m)
-    print('\nElements : \t', S )
+    for d in range( 2, up_bound ) :
+        for r in range(d-1, 0, -1 ) :
+            if d/r >12 : break
+            n = d**3 /r + r
+            if  (n**(1/2)) % 1 != 0 : continue
+            if  (n**(1/2)) % 1 == 0 and n < up_bound**2 :
+                q , k  = d**2//r , d/r
+                S += n
+                print('   r =  ',r , '     d=',d , '       q=',q , '     n=',n,'     ratio =', k ,'       r = ', get_factors(r))
 
-    return print('\nAnswer : \t', sum([i**2 for i in S]) )
+    return print('\nAnswer : \t', S)
 
-
-fifth_attempt_cubes(10**4)
-
-
-
-
-
+# brute_force( 10**6  )
 
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)/60, 6), 'min\n\n')
 
 
-# print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
-# print('\n--------------------------SOLUTION 1,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 2,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
-# print('\n--------------------------SOLUTION 3,   --------------------------')
-# t1  = time.time()
-#
-#
-#
-# t2  = time.time()
-# print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
-#
+print('\n================  My FIRST SOLUTION,   ===============\n')
+t1  = time.time()
+
+
+def progressive_numbers(up) :
+    up_lim = up*3//5
+    # up_lim = up
+    R = set([r**2 for r in range(2, int( up_lim**(1/2) ) )  if r**2 <= up_lim ]  )
+
+    tmp=[]
+    for n in range(2, 10**3) :
+        for r in sorted(list(R)) :
+            if  n* r <  up_lim :
+                tmp.append(n*r)
+    R |= set(tmp)
+    R = sorted(list(R))
+    print(len(R),  max(R) ,R[:50], R[-50::]  , '\n')
+
+    S, cnt = 9, 1
+
+    for d in range( 2, 7*up//8) :
+
+    # for d in range( up*8//10,  up ) :
+        if d% 10**4 == 0 : print(d)
+        if gmpy2.is_prime(d) : continue
+        if d <= 10**4 : f = d//12
+        if  d > 10**4 : f = d//4
+        if  d > 5*10**5 : f = d//1.6
+        ind_r = binary_search(f, R)
+
+        for r in R[ind_r:] :
+        # for r in R :
+            if r > d  : break
+            if gcd (d , r) == 1 : continue
+            n = d**3 /r + r
+            if  (n**(1/2)) % 1 == 0 and n < up**2 :
+                q , k  = d**2/r , d/r
+                if q % 1 == 0 :
+                    S += n
+                    cnt+=1
+                    print(str(cnt)+'.     r =  ',r , '     d=',d , '       q=',q , '     n=',n,'     ratio =', k ,'       r = ', get_factors(r),'     ' , S)
+
+    return print('\nAnswer : \t', S )
+
+
+# progressive_numbers( 10**6  )
+# progressive_numbers( int((10**5)**(1/2) )+1  )
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)/60, 6), 'min\n\n')
+
+
+print('\n================  My SECOND SOLUTION,   ===============\n')
+t1  = time.time()
+
+def second_solution( lim ):
+    S = 0
+    cnt =  0
+
+    for a in range(2, lim + 1 ):
+        for b in range(1, a) :
+            if gcd(a,b) == 1 :
+                c= 1
+                while 1 :
+                    n = a**3*b*c**2 + b**2*c
+                    if n > 10**12 : break
+                    if gmpy2.is_square(n) :
+                        r , d, q, k = c*b**2, a*b*c, a**2*c,  a/b
+                        cnt+=1
+                        S+=n
+                        print(str(cnt)+'.     r =  ',r , '     d=',d , '       q=',q , '     n=',n,'     ratio =', k ,'       r = ', get_factors(r),'     ' , S , '        a,b,c = ',a,b,c)
+
+                    c+=1
+        if a%10**3 == 0 : print(a)
+
+    return print('\nAnswer : \t', S)
+
+# second_solution(10**4)              #       Answer : 	 878454337159
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)/60, 6), 'min\n\n')
+
+
+print('\n===============OTHER SOLUTIONS FROM THE EULER FORUM ==============')
+print('\n--------------------------SOLUTION 1,   --------------------------')
+t1  = time.time()
+
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 2,   --------------------------')
+t1  = time.time()
+
+# === Tue, 14 Jul 2015, 05:32, bukebuer, China
+# Reached n=k3t(c3+t)=m2n=k3t(c3+t)=m2 as most people.
+# Then using brute search, while having some generator techniques to accelerate the code.
+
+import math
+from itertools import takewhile, count
+
+def f(k, t, c):
+    return k*k*k * t * (c*c*c + t)
+
+def ep141():
+    N = 1000000000000
+    s = set([])
+    for k in takewhile(lambda k: f(k, 1, k+1) < N, count(1)):
+        for t in takewhile(lambda t: f(k, t, t*k+1) < N, count(1)):
+            for c in takewhile(lambda c: f(k, t, c) < N, count(t*k+1)):
+                n = f(k, t, c)
+                if n in s:
+                    continue
+                sn = int(math.sqrt(n))
+                if sn*sn == n:
+                    print (k*k*k*t*t, k*c*c, n)
+                    s.add(n)
+    return sum(s)
+
+ep141()
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+print('\n--------------------------SOLUTION 3,   --------------------------')
+t1  = time.time()
+
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
 # print('\n--------------------------SOLUTION 4,   --------------------------')
 # t1  = time.time()
 #

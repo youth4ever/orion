@@ -1,4 +1,4 @@
-
+import time
 
 ### MEHOD I
 # Determine a subset which has THE SUM  balanced with a second subset
@@ -27,13 +27,15 @@ s1 = set(s1)
 s2 = set(P)-s1
 print('Second Subset : \t', s2)
 
+
+
 ##### PROBLEM II
 # Given a set of non-negative integers, and a value sum, determine if there is a subset
 # of the given set with sum equal to given sum.
 
 # // Returns true if there is a subset of set[] with sun equal to given sum
-def  isSubsetSum(sett , n,  suma ) :
-
+def  isSubsetSum(sett , n,  suma ) :        ## ( ͡° ͜ʖ ͡°)  FASTEST  ( ͡° ͜ʖ ͡°)  ### !! FIRST FASTEST
+                                                                    ## !!!!!!!! ALGORITHM FAR MORE EFFICIENT !!!!!!
    # // Base Cases
     if (suma == 0) :
         return True
@@ -63,5 +65,33 @@ def main() :
   return 0
 
 main()
+
+
+
+# # #################### #####################
+
+# test_array, test_nr = [1, 2, 3, 6, 9, 13, 18, 23, 26, 39, 46, 69, 78, 117, 138, 207, 234, 299, 414, 598, 897, 1794, 2691], 4599
+test_array, test_nr = [1, 2, 3, 6, 9, 13, 18, 23, 26, 39, 46, 69, 78, 117, 138, 207, 234, 299, 414, 598, 897, 1794, 2691], 7913
+
+print('\n--------------- 1 ------------------')
+t1  = time.time()
+
+print( subsetsum(test_array, test_nr) )
+
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
+
+# # #################### #####################
+
+print('\n--------------- 2 --- SECOND ALGORITHM MUCH FASTER ---------------')
+t1  = time.time()
+
+print( isSubsetSum(test_array, len(test_array) ,test_nr) )
+
+
+t2  = time.time()
+print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
 
 

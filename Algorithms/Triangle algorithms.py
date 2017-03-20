@@ -99,3 +99,14 @@ for i in range(40):
     f = next(TPT60)
     print(f,'     angles : ', compute_triangle_angles(f))
 
+
+
+############ HERONIAN TRIANGLES ###################
+
+def Heron_area_perimeter(a,b,c):
+    s= (a+b+c)/2
+    return (s*(s-a)*(s-b)*(s-c))**(1/2), s*2
+
+from math import gcd
+def gcd3(a, b, c):
+    return gcd(gcd(a, b), c)

@@ -2,65 +2,61 @@
 # © Solved by Bogdan Trif @
 #The  Euler Project  https://projecteuler.net
 '''
-Finding numbers for which the sum of the squares of the digits is a square      -           Problem 171
+47-smooth triangular numbers            -       Problem 581
 
-For a positive integer n, let f(n) be the sum of the squares of the digits (in base 10) of n, e.g.
+A number is p-smooth if it has no prime factors larger than p.
+Let T be the sequence of triangular numbers, ie T(n)=n(n+1)/2.
 
-f(3) = 32 = 9,
-f(25) = 22 + 52 = 4 + 25 = 29,
-f(442) = 42 + 42 + 22 = 16 + 16 + 4 = 36
+Find the sum of all indices n such that T(n) is 47-smooth.
 
-Find the last nine digits of the sum of all n, 0 < n < 10**20,
-such that f(n) is a perfect square.
+
 '''
-import time, zzz, gmpy2
+import time, zzz
 
-def f(n):
-    l = sum([ int(i)**2 for i in str(n)])
-    return l
+def prime_sieve(n):       # SECOND FASTEST        o(^_^)o
+    sieve = [True] * n
+    for i in range(3, int(n**0.5)+1, 2):
+        if sieve[i]:
+            sieve[ i*i :: 2*i ] = [False] * ( (n-i*i-1) // (2*i) +1 )
+    return [2] + [i for i in range(3, n , 2) if sieve[i] ]
 
-print('test f : \t' , f(3) )
+def get_factors(n):       ### o(^_^)o  FASTEST  o(^_^)o  ###
+    ''' Decompose a factor in its prime factors. This function uses the pyprimes module. THE FASTEST  '''
+    from pyprimes import factorise
+    return [val for sublist in [[i[0]]*i[1] for i in factorise(n)] for val in sublist]
 
+def triangle_number_gen():
+    n=1
+    while True :
+        t = n*(n+1)//2
+        yield t
+        n+=1
 
-
-
-
+primes = prime_sieve(100)
+print(primes)
 
 print('\n--------------------------TESTS------------------------------')
 t1  = time.time()
 
-# # 2017-03-09 - APPROACH : I must identify for a given length of number which is the combination
-# of digits whose squares gives another square .
-# For example : for a length 2 I would immediately know that wa can use Pytagora. therefore :
-# 34, 43 gives the perfect square 25;    68, 86 gives 100, there are also the 10 multiples.
-#
-# Then we must go to the 3 digit numbers. We already have some from the two's and we add 0, like
-# 340 or 430 or 403 or 304 .
-#
-#
-# https://plus.maths.org/content/triples-and-quadruples
-# https://en.wikipedia.org/wiki/Pythagorean_quadruple
+### Understanding the principle ! @ 2017-03-12
+# We first try to understand with smaller case, and we take the biggest factor to be 5
+# Q : What is the LAST n for which T(n) has the biggest factor to be 5 !
+# A : From the brute force test it seems it is 80 !!!
+# Now we must analyze why and find the underlying cause for this
 
-## IMportant OBSERVATION : maximum number is 10**20 => 20 digits => maximum square will be :
-9**2 +....+ 9**2 = 81*20 = 1620
-Those numbers must be broken into 2,3,4,.... parts squares such that :
-So the problem reduces to ways to partition a square into squares :) NICE :)
+def brute_force_testing( prime ) :
+    S=0
+    TG = triangle_number_gen()
+    for n in range(1, 10**4) :
+        T = next(TG)
+        F = get_factors(T)
+        if max(F) <= prime :
+            print(str(n)+'.     ', T,'          ', F)
+            S+=n
 
-Example : in a 4 digit number, let's say that we have the result, the square is 169
-must broke into 4 squares : how we do it ?
-we try : 169 - 16 = 153 - 36 = 117 - 81 = 36. Therefore we obtained the digits : 4,6,9,4 .
-And from here we make permutations of that number. We must take for the zero case
-and permutate accordingly
+    return print('\nAnswer : \t', S)
 
-make a dictionary of squares
-
-
-for i in range(1,10**4) :
-    if gmpy2.is_square( f(i) ) :
-        print(str(i)+'.      ', f(i))
-
-
-
+brute_force_testing(7)
 
 t2  = time.time()
 print('\nCompleted in :', round((t2-t1)*1000,6), 'ms\n\n')
